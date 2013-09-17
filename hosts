@@ -1,5 +1,7 @@
+[compute-nodes]
+ubuntu-vm ansible_ssh_host=192.168.78.196
 
-[controllers]
+[controller-nodes]
 ubuntu-vm ansible_ssh_host=192.168.78.196
 
 [database-servers]
@@ -9,4 +11,7 @@ ubuntu-vm ansible_ssh_host=192.168.78.196
 ubuntu-vm ansible_ssh_host=192.168.78.196
 
 [glance]
+ubuntu-vm ansible_ssh_host=192.168.78.196
+
+[messaging]
 ubuntu-vm ansible_ssh_host=192.168.78.196

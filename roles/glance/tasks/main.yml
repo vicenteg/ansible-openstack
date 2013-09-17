@@ -1,4 +1,4 @@
-- name: install keystone packages
+- name: install glance packages
   apt: name={{item}} state=present
   with_items:
     - glance
@@ -74,6 +74,9 @@
   with_items:
     - glance-registry
     - glance-api
+
+- name: give the services a few seconds to settle
+  command: sleep 5
 
 - include: tests.yml
 

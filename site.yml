@@ -1,6 +1,7 @@
 ---
 # file: site.yml
   - include: database.yml
+  - include: messaging.yml
   - include: keystone.yml
   - include: glance.yml
-#  - include: controller-node.yml
+  - include: controller-nodes.yml

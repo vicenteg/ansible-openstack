@@ -1,3 +1,13 @@
-
-- name: install ubuntu-cloud-keyring
-  action: apt name=ubuntu-cloud-keyring state=present 
+- name: install nova-controller packages
+  apt: name={{item}} state=present
+  with_items:
+    - nova-novncproxy
+    - novnc
+    - nova-api
+    - nova-ajax-console-proxy
+    - nova-cert
+    - nova-conductor
+    - nova-consoleauth
+    - nova-doc
+    - nova-scheduler
+    - nova-network
