@@ -1,0 +1,6 @@
+- hosts: glance
+  sudo: yes
+
+  roles:
+    - common
+    - glance

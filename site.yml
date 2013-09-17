@@ -2,4 +2,5 @@
 # file: site.yml
   - include: database.yml
   - include: keystone.yml
-  - include: controller-node.yml
+  - include: glance.yml
+#  - include: controller-node.yml

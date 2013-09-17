@@ -1,0 +1,6 @@
+- name: create glance database
+  mysql_db: name=${glance_db} state=present login_host=${db_host} login_user=${db_root_user} login_password=${db_root_pw}
+
+- name: create glance database user
+  mysql_user: name=${glance_db_user} password=${glance_db_pw} state=present  priv=${glance_db}.*:ALL login_user=${db_root_user} login_password=${db_root_pw}
+
