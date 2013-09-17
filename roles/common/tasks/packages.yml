@@ -2,6 +2,7 @@
   action: apt name={{item}} state=present
   with_items:
     - ubuntu-cloud-keyring
+    - ntp
 
 - name: apt update
   command: apt-get update
