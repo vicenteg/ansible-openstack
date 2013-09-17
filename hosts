@@ -1,0 +1,9 @@
+
+[controllers]
+ubuntu-vm ansible_ssh_host=192.168.78.193
+
+[database-servers]
+ubuntu-vm ansible_ssh_host=192.168.78.193
+
+[keystone]
+ubuntu-vm ansible_ssh_host=192.168.78.193

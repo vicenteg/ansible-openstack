@@ -1,0 +1,11 @@
+- name: install keystone packages
+  apt: name={{item}} state=present
+  with_items:
+    - keystone
+    - python-keystone
+    - python-keystoneclient
+
+- name: remove the default keystone database file
+  file: state=absent path=/var/lib/keystone/keystone.db 
+
+- include: database.yml

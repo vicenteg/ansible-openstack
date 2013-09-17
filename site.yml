@@ -1,0 +1,5 @@
+---
+# file: site.yml
+  - include: database.yml
+  - include: keystone.yml
+  - include: controller-node.yml

@@ -1,0 +1,5 @@
+- name: create keystone database
+  mysql_db: name=${keystone_db} state=present login_host=${db_host} login_user=${db_root_user} login_password=${db_root_pw}
+
+- name: create keystone database user
+  mysql_user: name=${keystone_db_user} password=${keystone_db_password} state=present  priv=${keystone_db}.*:ALL login_user=${db_root_user} login_password=${db_root_pw}

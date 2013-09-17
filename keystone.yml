@@ -1,0 +1,6 @@
+- hosts: keystone
+  sudo: yes
+
+  roles:
+    - common
+    - keystone

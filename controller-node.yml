@@ -1,0 +1,6 @@
+- hosts: controllers
+  sudo: yes
+
+  roles:
+    - common
+    - controller-node

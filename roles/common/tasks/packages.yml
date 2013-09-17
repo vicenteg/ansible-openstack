@@ -1,0 +1,7 @@
+- name: ensure required packages are installed
+  action: apt name={{item}} state=present
+  with_items:
+    - ubuntu-cloud-keyring
+
+- name: apt update
+  command: apt-get update

@@ -1,0 +1,11 @@
+- name: install mysql
+  apt: name=mysql-server state=present
+
+- name: install python-mysqldb
+  apt: name=python-mysqldb state=present
+
+- name: ensure mysql is started and enabled
+  service: name=mysql state=started enabled=yes
+
+- name: create database root user and password
+  mysql_user: check_implicit_admin=yes login_host=${db_host} name=${db_root_user} password=${db_root_pw} login_user=${db_root_user} login_password=${db_root_pw} state=present

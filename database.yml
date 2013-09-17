@@ -1,0 +1,6 @@
+- hosts: database-servers
+  sudo: yes
+
+  roles:
+    - common
+    - database
