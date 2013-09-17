@@ -1,0 +1,3 @@
+[submodule "ansible-grizzly.wiki"]
+	path = ansible-grizzly.wiki
+	url = git@github.com:ecnivny/ansible-grizzly.wiki.git

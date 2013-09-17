@@ -1,0 +1,5 @@
+- name: restart keystone
+  action: service name=keystone state=restarted
+
+- name: create initial roles
+  command: /tmp/initial_data.sh
