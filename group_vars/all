@@ -1,3 +1,10 @@
 db_host: localhost
 db_root_user: root
 db_root_pw: root
+
+keystone_host: localhost
+
+os_username: admin
+os_password: secrete
+os_tenant_name: demo
+os_auth_url: http://${keystone_host}:35357/v2.0

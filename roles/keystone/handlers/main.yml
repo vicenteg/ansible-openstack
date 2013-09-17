@@ -1,5 +1,9 @@
 - name: restart keystone
   action: service name=keystone state=restarted
 
-- name: create initial roles
-  command: /tmp/initial_data.sh
+
+
+
+
+- name: create keystonerc for root
+  template: src=keystonerc.j2 dest=/root/keystonerc mode=0600

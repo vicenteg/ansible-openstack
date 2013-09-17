@@ -9,27 +9,31 @@
 
 - name: remove the default keystone database file
   file: state=absent path=/var/lib/keystone/keystone.db 
-  notify:
-    - restart keystone
-    - create initial roles
-
-- name: edit keystone.conf to point to database
-  lineinfile: state=present dest=/etc/keystone/keystone.conf regexp="^connection\s*=" line="connection = mysql://$keystone_db_user:$keystone_db_pw@$db_host/$keystone_db"
-  notify:
-    - create initial roles
-
-- name: edit keystone.conf to include a new admin token
-  lineinfile: state=present dest=/etc/keystone/keystone.conf regexp="^(#\s*)?admin_token\s*=" line="admin_token = $keystone_admin_token" insertafter="^[DEFAULT]"
-  notify:
-    - restart keystone
-
-- name: run keystone-manage pki_setup
-  command: keystone-manage pki_setup
-  notify:
-    - restart keystone
 
 - name: initialize the new keystone database
   command: keystone-manage db_sync
 
+- name: run keystone-manage pki_setup
+  command: keystone-manage pki_setup
+
+- name: edit keystone.conf to point to database
+  lineinfile: state=present dest=/etc/keystone/keystone.conf regexp="^connection\s*=" line="connection = mysql://$keystone_db_user:$keystone_db_pw@$db_host/$keystone_db"
+
+- name: edit keystone.conf to include a new admin token
+  lineinfile: state=present dest=/etc/keystone/keystone.conf regexp="^(#\s*)?admin_token\s*=" line="admin_token = $keystone_admin_token" insertafter="^[DEFAULT]"
+
+- name: use uuid token_format to make database output readable
+  lineinfile: state=present dest=/etc/keystone/keystone.conf regexp="^(#\s*)?token_format\s*=" line="token_format = UUID" insertafter="^[signing]"
+
+- name: restart keystone
+  service: name=keystone state=restarted
+
 - name: copy script that creates some initial roles/users
-  copy: src=initial_data.sh dest=/tmp/initial_data.sh mode=0700 owner=root group=root 
+  copy: src=initial_data.sh dest=/tmp/initial_data.sh mode=0700 owner=root group=root
+  notify:
+    - create keystonerc for root
+
+- name: create initial roles
+  command: /tmp/initial_data.sh
+
+- include: tests.yml

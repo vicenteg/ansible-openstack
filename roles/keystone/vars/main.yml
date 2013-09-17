@@ -4,3 +4,4 @@ keystone_db_pw: keystone
 # generate the admin token with something like:
 # openssl rand -hex 16
 keystone_admin_token: 5aa7f0aad3c51b62c330c7f955ffcb5b
+
