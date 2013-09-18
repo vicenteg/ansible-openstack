@@ -1,0 +1,6 @@
+- hosts: compute-nodes
+  sudo: yes
+
+  roles:
+    - common
+    - compute-node

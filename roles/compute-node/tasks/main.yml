@@ -1,0 +1,36 @@
+- name: install nova-compute packages
+  apt: name={{item}} state=present
+  with_items:
+    - nova-compute
+    - nova-network
+
+- name: copy nova.conf to compute nodes
+  template: src=nova.conf.j2 dest=/etc/nova/nova.conf
+
+- name: copy nova-paste.ini to compute nodes
+  template: src=nova-paste.ini.j2 dest=/etc/nova/nova-paste.ini
+
+- name: copy api-paste.ini to compute nodes
+  template: src=api-paste.ini.j2 dest=/etc/nova/api-paste.ini
+
+- include: database.yml
+
+- name: stop nova-compute services prior to initializing database
+  service: name={{item}} state=stopped
+  with_items:
+    - nova-compute
+    - nova-network
+
+- name: initialize nova database
+  command: nova-manage db sync
+
+- name: start nova-compute services
+  service: name={{item}} state=restarted
+  with_items:
+    - nova-api
+    - nova-scheduler
+    - nova-conductor
+    - nova-compute
+    - nova-network
+    - nova-cert
+    - nova-consoleauth

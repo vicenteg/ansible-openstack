@@ -1,0 +1,7 @@
+nova_db: nova
+nova_db_user: nova
+nova_db_pw: nova
+
+nova_user: nova
+nova_password: nova
+nova_tenant: service

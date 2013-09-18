@@ -11,3 +11,15 @@
     - nova-doc
     - nova-scheduler
     - nova-network
+
+- name: define the database connection
+  lineinfile: dest=/etc/nova/nova.conf regexp="^sql_connection" line="sql_connection = mysql://${nova_db_user}:${nova_db_pw}@${db_host}/${nova_db}"
+
+- name: set my_ip
+  lineinfile: dest=/etc/nova/nova.conf regexp="^my_ip" line="my_ip = ${ansible_eth0.ipv4.address}"
+
+- name: set vncserver listen address
+  lineinfile: dest=/etc/nova/nova.conf regexp="^vncserver_listen" line="vncserver_listen = $my_ip"
+
+- name: set vncserver proxy address
+  lineinfile: dest=/etc/nova/nova.conf regexp="^vncserver_proxyclient_address" line="vncserver_proxyclient_address = $my_ip"

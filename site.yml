@@ -4,4 +4,5 @@
   - include: messaging.yml
   - include: keystone.yml
   - include: glance.yml
+  - include: compute-nodes.yml
   - include: controller-nodes.yml

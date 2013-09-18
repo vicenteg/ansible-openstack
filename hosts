@@ -13,5 +13,5 @@ ubuntu-vm ansible_ssh_host=192.168.78.196
 [glance]
 ubuntu-vm ansible_ssh_host=192.168.78.196
 
-[messaging]
+[messaging-servers]
 ubuntu-vm ansible_ssh_host=192.168.78.196

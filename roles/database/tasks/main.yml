@@ -4,8 +4,19 @@
 - name: install python-mysqldb
   apt: name=python-mysqldb state=present
 
-- name: ensure mysql is started and enabled
-  service: name=mysql state=started enabled=yes
+- name: edit my.cnf to listen on eth0 - default is to listen only on loopback
+#  lineinfile: dest=/etc/mysql/my.cnf regexp="^bind-address" line="bind-address = ${ansible_eth0.ipv4.address}"
+  lineinfile: dest=/etc/mysql/my.cnf regexp="^bind-address" line="bind-address = 0.0.0.0"
+
+- name: ensure mysql is (re)started and enabled
+  service: name=mysql state=restarted enabled=yes
+
+- name: give mysql a couple seconds to settle
+  command: sleep 2
 
 - name: create database root user and password
-  mysql_user: check_implicit_admin=yes login_host=${db_host} name=${db_root_user} password=${db_root_pw} login_user=${db_root_user} login_password=${db_root_pw} state=present
+# skip if .my.cnf exists
+  command: creates=/root/.my.cnf mysqladmin -u ${db_root_user} password ${db_root_pw}
+
+- name: create .my.cnf for root
+  template: src=dot_my.cnf.j2 dest=/root/.my.cnf mode=0600

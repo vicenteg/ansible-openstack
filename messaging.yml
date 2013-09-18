@@ -1,0 +1,6 @@
+- hosts: messaging-servers
+  sudo: yes
+
+  roles:
+    - common
+    - messaging

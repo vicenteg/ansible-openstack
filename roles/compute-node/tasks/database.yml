@@ -1,0 +1,9 @@
+- name: create nova database
+  mysql_db: name=${nova_db} state=present
+
+- name: create nova database user
+  mysql_user: name=${nova_db_user} password=${nova_db_pw} state=present host={{item}} priv=${nova_db}.*:ALL login_user=${db_root_user} login_password=${db_root_pw}
+  with_items:
+    - ${ansible_eth0.ipv4.address}
+    - localhost
+    - \%

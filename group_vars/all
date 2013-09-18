@@ -1,4 +1,4 @@
-db_host: localhost
+db_host: 192.168.78.196
 db_root_user: root
 db_root_pw: root
 
@@ -8,3 +8,10 @@ os_username: admin
 os_password: secrete
 os_tenant_name: demo
 os_auth_url: http://${keystone_host}:35357/v2.0
+
+network_manager: nova.network.manager.FlatDHCPManager
+hypervisor: kvm
+glance_host: 192.168.78.196
+keystone_host: 192.168.78.196
+api_host: 192.168.78.196
+rabbit_host: 192.168.78.196
