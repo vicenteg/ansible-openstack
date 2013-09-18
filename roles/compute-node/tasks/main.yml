@@ -3,6 +3,11 @@
   with_items:
     - nova-compute
     - nova-network
+    - nova-api
+    - nova-scheduler
+    - nova-conductor
+    - nova-cert
+    - nova-consoleauth
 
 - name: copy nova.conf to compute nodes
   template: src=nova.conf.j2 dest=/etc/nova/nova.conf
@@ -27,10 +32,10 @@
 - name: start nova-compute services
   service: name={{item}} state=restarted
   with_items:
-    - nova-api
-    - nova-scheduler
-    - nova-conductor
     - nova-compute
     - nova-network
-    - nova-cert
-    - nova-consoleauth
+
+
+- name: give the services a couple seconds to settle
+  command: sleep 3
+

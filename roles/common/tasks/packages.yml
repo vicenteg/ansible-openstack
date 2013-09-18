@@ -1,8 +1,9 @@
 - name: ensure required packages are installed
   action: apt name={{item}} state=present
   with_items:
-    - ubuntu-cloud-keyring
+#    - ubuntu-cloud-keyring
     - ntp
+    - bridge-utils
 
 - name: apt update
   command: apt-get update

@@ -32,24 +32,24 @@ allow_resize_to_same_host=True
 
 # APIS
 osapi_compute_extension=nova.api.openstack.compute.contrib.standard_extensions
-ec2_dmz_host=${api_host}
-s3_host=${api_host}
+ec2_dmz_host={{api_host}}
+s3_host={{api_host}}
 enabled_apis=ec2,osapi_compute,metadata
 
 # RABBITMQ
-rabbit_host=${rabbit_host}
+rabbit_host={{rabbit_host}}
 
 # GLANCE
 image_service=nova.image.glance.GlanceImageService
 glance_api_servers=${glance_host}:9292
 
 # NETWORK
-network_manager=${network_manager}
+network_manager={{network_manager}}
 force_dhcp_release=True
 dhcpbridge_flagfile=/etc/nova/nova.conf
 firewall_driver=nova.virt.libvirt.firewall.IptablesFirewallDriver
 # Change my_ip to match each host
-my_ip=${ansible_eth0.ipv4.address}
+my_ip={{ansible_eth0.ipv4.address}}
 public_interface=eth0
 vlan_interface=eth0
 flat_network_bridge=br100

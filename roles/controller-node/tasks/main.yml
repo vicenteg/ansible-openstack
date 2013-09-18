@@ -12,14 +12,22 @@
     - nova-scheduler
     - nova-network
 
-- name: define the database connection
-  lineinfile: dest=/etc/nova/nova.conf regexp="^sql_connection" line="sql_connection = mysql://${nova_db_user}:${nova_db_pw}@${db_host}/${nova_db}"
+- name: copy nova.conf to compute nodes
+  template: src=nova.conf.j2 dest=/etc/nova/nova.conf
 
-- name: set my_ip
-  lineinfile: dest=/etc/nova/nova.conf regexp="^my_ip" line="my_ip = ${ansible_eth0.ipv4.address}"
+- name: copy nova-paste.ini to compute nodes
+  template: src=nova-paste.ini.j2 dest=/etc/nova/nova-paste.ini
 
-- name: set vncserver listen address
-  lineinfile: dest=/etc/nova/nova.conf regexp="^vncserver_listen" line="vncserver_listen = $my_ip"
+- name: copy api-paste.ini to compute nodes
+  template: src=api-paste.ini.j2 dest=/etc/nova/api-paste.ini
 
-- name: set vncserver proxy address
-  lineinfile: dest=/etc/nova/nova.conf regexp="^vncserver_proxyclient_address" line="vncserver_proxyclient_address = $my_ip"
+- name: restart controller services to pick up configuration
+  service: name={{item}} state=restarted
+  with_items:
+    - nova-novncproxy
+    - nova-api
+    - nova-cert
+    - nova-conductor
+    - nova-consoleauth
+    - nova-scheduler
+    - nova-network
