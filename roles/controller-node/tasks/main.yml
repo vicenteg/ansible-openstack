@@ -31,3 +31,5 @@
     - nova-consoleauth
     - nova-scheduler
     - nova-network
+
+- include: dashboard.yml

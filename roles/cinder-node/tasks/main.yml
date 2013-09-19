@@ -1,0 +1,19 @@
+- name: install cinder packages
+  apt: name={{item}} state=present
+  with_items:
+    - cinder-api
+    - cinder-scheduler
+    - cinder-volume
+    - open-iscsi
+    - python-cinderclient
+    - tgt
+
+- name: install cinder api-paste.ini
+  template: src=api-paste.ini.j2 dest=/etc/cinder/api-paste.ini
+  notify:
+    - restart cinder
+
+- include: database.yml
+
+- name: initialize cinder database
+  command: cinder-manage db sync

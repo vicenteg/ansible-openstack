@@ -1,0 +1,6 @@
+- hosts: cinder-nodes
+  sudo: yes
+
+  roles:
+    - common
+    - cinder-node

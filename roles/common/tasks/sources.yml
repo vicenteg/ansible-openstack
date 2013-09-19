@@ -1,2 +1,0 @@
-- name: add cloud archive sources
-  copy: content="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/grizzly main" dest=/etc/apt/sources.list.d/cloud-archive.list

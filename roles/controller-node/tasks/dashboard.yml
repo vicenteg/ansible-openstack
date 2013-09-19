@@ -1,0 +1,16 @@
+
+- name: install horizon packages
+  apt: name={{item}} state=present
+  with_items:
+    - git-core
+    - memcached
+    - libapache2-mod-wsgi
+    - openstack-dashboard
+
+- name: edit dashboard configuration to point to keystone
+  lineinfile: dest=/etc/openstack-dashboard/local_settings.py regexp="^OPENSTACK_HOST" line="OPENSTACK_HOST = '{{keystone_host}}'"
+
+- name: edit dashboard configuration with correct keystone port number
+  lineinfile: dest=/etc/openstack-dashboard/local_settings.py regexp="^OPENSTACK_KEYSTONE_URL" line="OPENSTACK_KEYSTONE_URL = \"http://%s:5000/v2.0\" % OPENSTACK_HOST"
+  notify:
+    - restart openstack-dashboard
