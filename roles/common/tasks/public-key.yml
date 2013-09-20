@@ -1,8 +1,8 @@
 - name: create ~/.ssh
-  file: path=${home}/.ssh state=directory mode=0700 owner=vince group=vince
+  file: path=/home/vince/.ssh state=directory mode=0700 owner=vince group=vince
 
 - name: write ~/.ssh/authorized_keys
-  lineinfile: create=yes dest=${home}/.ssh/authorized_keys mode=0600 line="${public_key}" regexp="ssh-dss.*" 
+  lineinfile: create=yes dest=/home/vince/.ssh/authorized_keys mode=0600 line="${public_key}" regexp="ssh-dss.*" 
 
 - name: change ownerships
   file: path=/home/vince/.ssh/authorized_keys owner=vince group=vince
