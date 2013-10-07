@@ -54,3 +54,5 @@ server0
 server1
 server16
 
+[logger]
+ubuntu-vm

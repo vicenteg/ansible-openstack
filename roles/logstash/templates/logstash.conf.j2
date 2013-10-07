@@ -1,0 +1,22 @@
+input {
+  syslog {
+    type => syslog
+    port => 5544
+  }
+}
+
+#input {
+#  rabbitmq {
+#    ack => true
+#    host => "{{rabbit_host}}"
+#    auto_delete => false
+#    durable => true
+#    exclusive => false
+#    queue => "{{logging_queue}}"
+#    exchange => "{{logging_queue}}" # This matches the exchange declared above
+#  }
+#}
+
+output {
+  elasticsearch { embedded => true }
+}

@@ -1,0 +1,6 @@
+- hosts: logger
+  sudo: yes
+
+  roles:
+    - common
+    - logstash

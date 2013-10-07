@@ -1,0 +1,24 @@
+    - name: create logstash user
+      action: user name=logstash home=/home/logstash shell=/bin/bash state=present
+
+    - name: create logstash directory
+      action: file state=directory path=/opt/logstash owner=logstash group=logstash mode=0755
+
+    - name: install java 
+      apt: name=default-jre state=present
+
+    - name: download logstash
+      action: command chdir=/opt/logstash creates=/opt/logstash/logstash-1.2.1-flatjar.jar wget https://download.elasticsearch.org/logstash/logstash/logstash-1.2.1-flatjar.jar
+    - name: copy logstash configuration file
+      action: template src=logstash.conf.j2 dest=/opt/logstash/logstash.conf mode=0600 owner=logstash group=logstash
+      notify:
+        restart logstash
+
+    - name: copy logstash upstart configuration
+      action: template src=logstash-agent.conf.j2 dest=/etc/init/logstash-agent.conf mode=0644 owner=root group=root
+
+    - name: touch logstash log file
+      copy: content="" dest=/var/log/logstash.log owner=logstash group=logstash mode=0644
+
+    - name: enable logstash
+      action: service name=logstash-agent state=started enabled=yes

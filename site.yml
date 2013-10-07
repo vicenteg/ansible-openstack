@@ -1,5 +1,6 @@
 ---
 # file: site.yml
+  - include: logstash.yml
   - include: database.yml
   - include: messaging.yml
   - include: keystone.yml
