@@ -3,6 +3,8 @@
   with_items:
     - ntp
     - bridge-utils
+    - python-pycurl
+    - python-mysqldb
 
 - name: use the cloud archive when running on 12.04
   apt: name=ubuntu-cloud-keyring state=present
@@ -13,4 +15,4 @@
   when: ansible_distribution_release == "precise"
 
 - name: apt update
-  command: apt-get update
+  apt: update_cache=yes

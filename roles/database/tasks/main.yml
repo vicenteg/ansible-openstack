@@ -1,22 +1,83 @@
-- name: install mysql
-  apt: name=mysql-server state=present
+- name: install packages for add-apt-repository
+  apt: name={{item}} state=present
+  with_items:
+    - python-software-properties
+    - software-properties-common
+
+- name: install apt-key for mariadb
+  command: apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+  #apt_key: state=present url=http://keyserver.ubuntu.com id=0xcbcb082a1bb943db
+
+- name: add mariadb repository
+  apt_repository: state=present repo="deb http://ftp.osuosl.org/pub/mariadb/repo/5.5/ubuntu precise main"
+
+- name: apt update
+  apt: update_cache=yes
+
+- name: install mariadb with galera and client
+  apt: name={{item}} state=present
+  with_items:
+    - mariadb-galera-server
+    - mariadb-client
 
 - name: install python-mysqldb
   apt: name=python-mysqldb state=present
 
-- name: edit my.cnf to listen on eth0 - default is to listen only on loopback
-#  lineinfile: dest=/etc/mysql/my.cnf regexp="^bind-address" line="bind-address = ${ansible_eth0.ipv4.address}"
-  lineinfile: dest=/etc/mysql/my.cnf regexp="^bind-address" line="bind-address = 0.0.0.0"
+- name: install our slightly modified my.cnf
+  template: dest=/etc/mysql/my.cnf src=my.cnf.j2 
 
-- name: ensure mysql is (re)started and enabled
+- name: ensure mariadb is (re)started and enabled
   service: name=mysql state=restarted enabled=yes
 
-- name: give mysql a couple seconds to settle
+- name: give the database a couple seconds to settle
   command: sleep 2
 
 - name: create database root user and password
-# skip if .my.cnf exists
+#  mysql_user: login_user=${db_root_user} login_password="" name=${db_root_user} password=${db_root_pw} state=present
+# skip if .my.cnf exists - this command does not create it, a subsequent one does.
   command: creates=/root/.my.cnf mysqladmin -u ${db_root_user} password ${db_root_pw}
 
 - name: create .my.cnf for root
   template: src=dot_my.cnf.j2 dest=/root/.my.cnf mode=0600
+
+- name: create glance database
+  mysql_db: name=${glance_db} state=present
+
+- name: create glance database user
+  mysql_user: name=${glance_db_user} password=${glance_db_pw} state=present  priv=${glance_db}.*:ALL host={{item}} login_user=${db_root_user} login_password=${db_root_pw}
+  with_items:
+    - ${ansible_eth0.ipv4.address}
+    - localhost
+    - \%
+
+- name: create keystone database
+  mysql_db: name=${keystone_db} state=present login_user=${db_root_user} login_password=${db_root_pw}
+
+- name: create keystone database user
+  mysql_user: name=${keystone_db_user} password=${keystone_db_pw} host={{item}} state=present priv=${keystone_db}.*:ALL
+  with_items:
+    - ${ansible_eth0.ipv4.address}
+    - ${keystone_host}
+    - localhost
+    - \%
+
+- name: create nova database
+  mysql_db: name=${nova_db} state=present
+
+- name: create nova database user
+  mysql_user: name=${nova_db_user} password=${nova_db_pw} state=present host={{item}} priv=${nova_db}.*:ALL login_user=${db_root_user} login_password=${db_root_pw}
+  with_items:
+    - ${ansible_eth0.ipv4.address}
+    - localhost
+    - \%
+
+- name: create quantum database
+  mysql_db: name=${quantum_db} state=present
+
+- name: create quantum database user
+  mysql_user: name=${quantum_db_user} password=${quantum_db_pw} state=present host={{item}} priv=${quantum_db}.*:ALL login_user=${db_root_user} login_password=${db_root_pw}
+  with_items:
+    - ${ansible_eth0.ipv4.address}
+    - localhost
+    - \%
+

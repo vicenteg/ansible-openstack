@@ -1,9 +1,0 @@
-- name: create glance database
-  mysql_db: name=${glance_db} state=present 
-
-- name: create glance database user
-  mysql_user: name=${glance_db_user} password=${glance_db_pw} state=present  priv=${glance_db}.*:ALL host={{item}} login_user=${db_root_user} login_password=${db_root_pw}
-  with_items:
-    - ${ansible_eth0.ipv4.address}
-    - localhost
-    - \%

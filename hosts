@@ -1,20 +1,56 @@
-[cinder-nodes]
 ubuntu-vm ansible_ssh_host=192.168.78.196
+database-vm ansible_ssh_host=192.168.78.183
+server0 ansible_ssh_host=10.1.1.100
+server1 ansible_ssh_host=10.1.1.101
+server16 ansible_ssh_host=10.1.1.116
+server17 ansible_ssh_host=10.1.1.117
+server32 ansible_ssh_host=10.1.1.132
 
-[compute-nodes]
-ubuntu-vm ansible_ssh_host=192.168.78.196
+[selab-env]
+controller-nodes
+cinder-nodes
+compute-nodes
+
+[vm-env]
+ubuntu-vm
+database-vm
 
 [controller-nodes]
-ubuntu-vm ansible_ssh_host=192.168.78.196
+server0
+server1
+server16
+ubuntu-vm
+
+[cinder-nodes]
+server32
+ubuntu-vm
+
+[compute-nodes]
+server17
+ubuntu-vm
 
 [database-servers]
-ubuntu-vm ansible_ssh_host=192.168.78.196
+database-vm
+server0
+server1
+server16
 
 [keystone]
-ubuntu-vm ansible_ssh_host=192.168.78.196
+ubuntu-vm
+server0
+server1
+server16
+
 
 [glance]
-ubuntu-vm ansible_ssh_host=192.168.78.196
+ubuntu-vm
+server0
+server1
+server16
 
 [messaging-servers]
-ubuntu-vm ansible_ssh_host=192.168.78.196
+ubuntu-vm 
+server0
+server1
+server16
+

@@ -6,8 +6,6 @@
 - name: remove default sqlite database file
   file: state=absent path=/var/lib/glance/glance.sqlite
 
-- include: database.yml
-
 - name: enable version 1 of the images API
   lineinfile: dest=/etc/glance/glance-api.conf regexp="^(#\s*)?enable_v1_api" line="enable_v1_api=true"
 

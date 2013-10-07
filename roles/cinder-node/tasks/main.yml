@@ -13,7 +13,5 @@
   notify:
     - restart cinder
 
-- include: database.yml
-
 - name: initialize cinder database
   command: cinder-manage db sync

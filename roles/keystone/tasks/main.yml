@@ -5,8 +5,6 @@
     - python-keystone
     - python-keystoneclient
 
-- include: database.yml
-
 - name: remove the default keystone database file
   file: state=absent path=/var/lib/keystone/keystone.db 
 

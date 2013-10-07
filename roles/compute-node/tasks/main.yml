@@ -2,7 +2,6 @@
   apt: name={{item}} state=present
   with_items:
     - nova-compute
-    - nova-network
     - nova-api
     - nova-scheduler
     - nova-conductor
@@ -18,24 +17,29 @@
 - name: copy api-paste.ini to compute nodes
   template: src=api-paste.ini.j2 dest=/etc/nova/api-paste.ini
 
-- include: database.yml
-
 - name: stop nova-compute services prior to initializing database
   service: name={{item}} state=stopped
   with_items:
     - nova-compute
-    - nova-network
+    - nova-api
+    - nova-scheduler
+    - nova-conductor
+    - nova-cert
+    - nova-consoleauth
 
 - name: initialize nova database
   command: nova-manage db sync
 
-- name: start nova-compute services
+- name: (re)start nova-compute services
   service: name={{item}} state=restarted
   with_items:
+    - libvirt-bin
     - nova-compute
-    - nova-network
-
+    - nova-api
+    - nova-scheduler
+    - nova-conductor
+    - nova-cert
+    - nova-consoleauth
 
 - name: give the services a couple seconds to settle
   command: sleep 3
-

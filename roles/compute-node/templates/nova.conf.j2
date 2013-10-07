@@ -11,6 +11,7 @@ rootwrap_config=/etc/nova/rootwrap.conf
 compute_scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler
 
 # VOLUMES
+volume_manager=cinder.volume.manager.VolumeManager
 volume_api_class=nova.volume.cinder.API
 volume_driver=nova.volume.driver.ISCSIDriver
 volume_group=cinder-volumes
@@ -21,7 +22,7 @@ iscsi_helper=tgtadm
 sql_connection=mysql://{{nova_db_user}}:{{nova_db_pw}}@{{db_host}}/{{nova_db}}
 
 # COMPUTE
-libvirt_type=qemu
+libvirt_type=kvm
 compute_driver=libvirt.LibvirtDriver
 instance_name_template=instance-%08x
 api_paste_config=/etc/nova/api-paste.ini
@@ -44,23 +45,37 @@ image_service=nova.image.glance.GlanceImageService
 glance_api_servers=${glance_host}:9292
 
 # NETWORK
-network_manager={{network_manager}}
-force_dhcp_release=True
-dhcpbridge_flagfile=/etc/nova/nova.conf
-firewall_driver=nova.virt.libvirt.firewall.IptablesFirewallDriver
+libvirt_use_virtio_for_bridges=True
+network_api_class=nova.network.quantumv2.api.API
+quantum_url=http://{{quantum_host}}:9696
+quantum_auth_strategy=keystone
+quantum_admin_tenant_name={{service_tenant_id}}
+quantum_admin_username={{quantum_user}}
+quantum_admin_password={{quantum_password}}
+quantum_admin_auth_url=http://{{keystone_host}}:35357/v2.0
+firewall_driver=nova.virt.firewall.NoopFirewallDriver
+security_group_api=quantum
+force_config_drive=True
+fixed_ip_disassociate_timeout=10
+
+#network_manager={{network_manager}}
+#force_dhcp_release=True
+#dhcpbridge_flagfile=/etc/nova/nova.conf
+#firewall_driver=nova.virt.libvirt.firewall.IptablesFirewallDriver
 # Change my_ip to match each host
-my_ip={{ansible_eth0.ipv4.address}}
-public_interface=eth0
-vlan_interface=eth0
-flat_network_bridge=br100
-flat_interface=eth0
-fixed_range=''
+#my_ip={{ansible_eth0.ipv4.address}}
+#public_interface=eth0
+#vlan_interface=eth0
+#flat_network_bridge=br100
+#flat_interface=eth0
+#fixed_range=''
 
 # NOVNC CONSOLE
 novncproxy_base_url=http://$my_ip:6080/vnc_auto.html
 # Change vncserver_proxyclient_address and vncserver_listen to match each compute host
 vncserver_proxyclient_address=$my_ip
 vncserver_listen=$my_ip
+novnc_enable=true
 
 # AUTHENTICATION
 auth_strategy=keystone
