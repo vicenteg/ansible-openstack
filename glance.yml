@@ -1,4 +1,4 @@
-- hosts: glance
+- hosts: glance-nodes
   sudo: yes
 
   roles:

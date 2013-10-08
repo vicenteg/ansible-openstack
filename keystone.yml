@@ -1,4 +1,4 @@
-- hosts: keystone
+- hosts: keystone-nodes
   sudo: yes
 
   roles:
