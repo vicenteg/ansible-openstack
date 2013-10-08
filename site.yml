@@ -3,8 +3,8 @@
   - include: logstash.yml
   - include: database.yml
   - include: messaging.yml
-  - include: keystone.yml
-  - include: glance.yml
+  - include: keystone-nodes.yml
+  - include: glance-nodes.yml
   - include: network-nodes.yml
   - include: cinder-nodes.yml
   - include: controller-nodes.yml
