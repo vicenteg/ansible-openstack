@@ -7,6 +7,8 @@ server17 ansible_ssh_host=10.1.1.117
 server32 ansible_ssh_host=10.1.1.132
 
 [selab-env]
+glance
+keystone
 controller-nodes
 cinder-nodes
 compute-nodes
@@ -42,7 +44,6 @@ ubuntu-vm
 server0
 server1
 server16
-
 
 [glance]
 ubuntu-vm
