@@ -1,3 +1,6 @@
+- name: create user vince
+  user: name=vince home=/home/vince shell=/bin/bash
+
 - name: create ~/.ssh
   #file: path=/home/vince/.ssh state=directory mode=0700 owner=vince group=vince
   file: path=.ssh state=directory mode=0700 owner={{username}} group={{username}}
