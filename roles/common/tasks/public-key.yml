@@ -6,7 +6,6 @@
   file: path=.ssh state=directory mode=0700 owner={{username}} group={{username}}
 
 - name: write ~/.ssh/authorized_keys
-  #lineinfile: create=yes dest=/home/vince/.ssh/authorized_keys mode=0600 line="${public_key}" regexp="ssh-dss.*" 
   lineinfile: create=yes dest=.ssh/authorized_keys mode=0600 line="${public_key}" regexp="ssh-dss.*" 
 
 - name: change ownerships
@@ -14,6 +13,8 @@
 
 - name: ensure ~root/.ssh exists
   file: path=/root/.ssh state=directory mode=0700 owner=root group=root
+  sudo: yes
 
 - name: add my public key to root's authorized_keys
   lineinfile: dest=/root/.ssh/authorized_keys create=yes owner=root group=root mode=0600 line="${public_key}" regexp="ssh-dss.*vince$"
+  sudo: yes

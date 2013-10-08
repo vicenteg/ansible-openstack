@@ -30,8 +30,8 @@ server16
 ubuntu-vm
 
 [database-servers]
+controller-nodes
 database-vm
-server16
 
 [keystone-nodes]
 ubuntu-vm
