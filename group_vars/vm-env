@@ -1,5 +1,6 @@
 proxy_env:
-
+  http_proxy: ""
+  https_proxy: ""
 
 
 db_host: 192.168.78.183

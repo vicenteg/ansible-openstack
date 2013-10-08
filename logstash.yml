@@ -1,4 +1,4 @@
-- hosts: logger
+- hosts: logger-nodes
   sudo: yes
 
   roles:
