@@ -10,6 +10,8 @@ server32 ansible_ssh_host=10.1.1.132
 controller-nodes
 cinder-nodes
 compute-nodes
+database-servers
+logger
 
 [vm-env]
 ubuntu-vm
