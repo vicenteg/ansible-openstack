@@ -1,7 +1,7 @@
 - name: download Cirros 0.3.1 image
-  command: creates=/tmp/cirros-0.3.1-x86_64-disk.img wget http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img
+  command: chdir=/tmp creates=/tmp/cirros-0.3.1-x86_64-disk.img wget http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img
   environment: proxy_env
-  
+
 - name: create a new image
   glance_image: name="Cirros 0.3.1"
                 container_format=bare disk_format=qcow2
@@ -11,4 +11,6 @@
                 login_username="${os_username}"
                 state=present
                 file=/tmp/cirros-0.3.1-x86_64-disk.img
-#                copy_from="http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img"
+
+- name: clean up downloaded file
+  file: state=absent path=/tmp/cirros-0.3.1-x86_64-disk.img
