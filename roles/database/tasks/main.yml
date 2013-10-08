@@ -5,8 +5,10 @@
     - software-properties-common
 
 - name: install apt-key for mariadb
-  command: apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-  #apt_key: state=present url=http://keyserver.ubuntu.com id=0xcbcb082a1bb943db
+#  command: apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+#  register: apt_key_result
+#  environment: proxy_env
+  apt_key: state=present data="{{ lookup('file', 'gpgkey.asc') }}"
 
 - name: add mariadb repository
   apt_repository: state=present repo="deb http://ftp.osuosl.org/pub/mariadb/repo/5.5/ubuntu precise main"
