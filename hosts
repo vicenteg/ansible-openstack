@@ -12,54 +12,37 @@ server1
 server16
 server17
 server32
-#glance-nodes
-#keystone-nodes
-#controller-nodes
-#cinder-nodes
-#compute-nodes
-#database-servers
-#logger-nodes
 
 [vm-env]
 ubuntu-vm
 database-vm
 
 [controller-nodes]
-server0
-server1
 server16
 ubuntu-vm
 
 [cinder-nodes]
-server32
+server16
 ubuntu-vm
 
 [compute-nodes]
-server17
+server16
 ubuntu-vm
 
 [database-servers]
 database-vm
-server0
-server1
 server16
 
 [keystone-nodes]
 ubuntu-vm
-server0
-server1
 server16
 
 [glance-nodes]
 ubuntu-vm
-server0
-server1
 server16
 
 [messaging-servers]
 ubuntu-vm 
-server0
-server1
 server16
 
 [logger-nodes]
