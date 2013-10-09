@@ -26,7 +26,7 @@
 
 - name: create /dev/sdb1
   shell: echo "0," | sfdisk /dev/sdb
-  when: ansible_devices.sdb is defined and ansible_devices.sdb.partitions == { } 
+  when: ansible_devices.sdb is defined and not ansible_devices.sdb.partitions 
 
 - name: create cinder volume group
   lvg: pvs=/dev/sdb1 vg={{cinder_volume_group}} state=present

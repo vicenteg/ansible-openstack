@@ -1,4 +1,4 @@
-all_in_one ansible_ssh_host=10.1.1.100
+all_in_one ansible_ssh_host=10.1.1.116
 
 [controller-nodes]
 all_in_one
