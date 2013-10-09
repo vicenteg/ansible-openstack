@@ -18,8 +18,8 @@
   notify:
     - restart cinder
 
-- name: ensure volume_api_class is set to cinder
-  lineinfile: dest=/etc/nova/nova.conf regexp="^volume_api_class" line="volume_api_class=nova.volume.cinder.API"
+#- name: ensure volume_api_class is set to cinder
+#  lineinfile: dest=/etc/nova/nova.conf regexp="^volume_api_class" line="volume_api_class=nova.volume.cinder.API"
 
 - name: initialize cinder database
   command: cinder-manage db sync
