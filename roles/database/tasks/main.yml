@@ -9,9 +9,8 @@
 
 - name: add mariadb repository
   apt_repository: state=present repo="deb http://ftp.osuosl.org/pub/mariadb/repo/5.5/ubuntu precise main"
-
-- name: apt update
-  apt: update_cache=yes
+  notify:
+    - apt update
 
 - name: install mariadb with galera and client
   apt: name={{item}} state=present

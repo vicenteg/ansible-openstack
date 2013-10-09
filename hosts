@@ -1,28 +1,28 @@
-all_in_one ansible_ssh_host=10.1.1.116
-
-[single-node]
-all_in_one
+all_in_one ansible_ssh_host=10.1.1.100
 
 [controller-nodes]
-single_node
+all_in_one
 
 [cinder-nodes]
-single_node
+all_in_one
 
 [compute-nodes]
-single_node
+all_in_one
 
 [database-servers]
-single_node
+all_in_one
 
 [keystone-nodes]
-single_node
+all_in_one
 
 [glance-nodes]
-single_node
+all_in_one
 
 [messaging-servers]
-single_node
+all_in_one
 
 [logger-nodes]
-single_node
+all_in_one
+
+[selab]
+all_in_one
