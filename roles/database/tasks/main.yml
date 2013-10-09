@@ -5,9 +5,6 @@
     - software-properties-common
 
 - name: install apt-key for mariadb
-#  command: apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-#  register: apt_key_result
-#  environment: proxy_env
   apt_key: state=present data="{{ lookup('file', 'gpgkey.asc') }}"
 
 - name: add mariadb repository
