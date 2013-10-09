@@ -21,4 +21,7 @@ keystone_admin_token: 5aa7f0aad3c51b62c330c7f955ffcb5b
 
 api_host: 10.1.1.116
 rabbit_host: 10.1.1.116
+rabbit_user: guest
+rabbit_password: guest
+rabbit_vhost: /
 logging_queue: openstack_logs

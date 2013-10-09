@@ -4,9 +4,3 @@
     - cinder-api
     - cinder-scheduler
     - cinder-volume
-
-- name: copy cinder.conf
-  template: src=cinder.conf.j2 dest=/etc/cinder/cinder.conf mode=0644
-
-- name: ensure volume_api_class is set to cinder
-  lineinfile: dest=/etc/nova/nova.conf regexp="^volume_api_class" line="volume_api_class=nova.volume.cinder.API"
