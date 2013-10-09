@@ -30,3 +30,5 @@
 
 - name: create cinder volume group
   lvg: pvs=/dev/sdb1 vg={{cinder_volume_group}} state=present
+  notify:
+    - restart cinder
