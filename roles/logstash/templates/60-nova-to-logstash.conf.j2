@@ -1,0 +1,31 @@
+$ModLoad imfile   # Load the imfile input module
+$ModLoad imklog   # for reading kernel log messages
+$ModLoad imuxsock # for reading local syslog messages
+
+# Watch /var/log/nova/nova-compute.log
+$InputFileName /var/log/nova/nova-compute.log
+$InputFileTag nova-compute-log:
+$InputFileStateFile state-nova-compute-log
+$InputRunFileMonitor
+
+# Watch /var/log/nova/nova-api.log
+$InputFileName /var/log/nova/nova-api.log
+$InputFileTag nova-api-log:
+$InputFileStateFile state-nova-api-log
+$InputRunFileMonitor
+
+# Watch /var/log/nova/nova-conductor.log
+$InputFileName /var/log/nova/nova-conductor.log
+$InputFileTag nova-conductor-log:
+$InputFileStateFile state-nova-conductor-log
+$InputRunFileMonitor
+
+# Watch /var/log/nova/nova-consoleauth.log
+$InputFileName /var/log/nova/nova-consoleauth.log
+$InputFileTag nova-consoleauth-log:
+$InputFileStateFile state-nova-consoleauth-log
+$InputRunFileMonitor
+
+
+# Send everything to a logstash server named 'myserver' on port 5544:
+*.* @@{{logstash_host}}:5544

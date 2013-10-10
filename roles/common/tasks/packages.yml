@@ -9,12 +9,11 @@
 - name: use the cloud archive when running on 12.04
   apt: name=ubuntu-cloud-keyring state=present
   when: ansible_distribution_release == "precise"
-  notify:
-    - apt update
 
 - name: install the cloud archive sources 
   lineinfile: dest=/etc/apt/sources.list regexp="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/grizzly main" line="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/grizzly main" 
   when: ansible_distribution_release == "precise"
-  notify:
-    - apt update
+
+- name: apt  update
+  apt: update_cache=yes
 

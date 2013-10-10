@@ -24,3 +24,11 @@
 
     - name: enable logstash
       action: service name=logstash-agent state=started enabled=yes
+
+    - name: add rsyslog configuration for reading nova/keystone logs
+      template: src=60-nova-to-logstash.conf dest=/etc/rsyslog.d/60-nova-to-logstash.conf mode=0644
+      notify:
+        restart rsyslog
+
+    - name: make /var/log/nova readable by syslog group
+      file: state=directory path=/var/log/nova group=syslog mode=0750
