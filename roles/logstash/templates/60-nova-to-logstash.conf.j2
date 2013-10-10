@@ -26,6 +26,23 @@ $InputFileTag nova-consoleauth-log:
 $InputFileStateFile state-nova-consoleauth-log
 $InputRunFileMonitor
 
+# Watch /var/log/cinder*
+$InputFileName /var/log/cinder/cinder-api.log
+$InputFileTag cinder-api-log:
+$InputFileStateFile state-cinder-api-log
+$InputRunFileMonitor
 
-# Send everything to a logstash server named 'myserver' on port 5544:
+# Watch /var/log/cinder*
+$InputFileName /var/log/cinder/cinder-scheduler.log
+$InputFileTag cinder-scheduler-log:
+$InputFileStateFile state-cinder-scheduler-log
+$InputRunFileMonitor
+
+# Watch /var/log/cinder*
+$InputFileName /var/log/cinder/cinder-volume.log
+$InputFileTag cinder-volume-log:
+$InputFileStateFile state-cinder-volume-log
+$InputRunFileMonitor
+
+# Send everything to a logstash server ({{logstash_host}}) on port 5544:
 *.* @@{{logstash_host}}:5544
