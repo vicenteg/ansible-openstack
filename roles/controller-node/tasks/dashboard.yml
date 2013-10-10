@@ -10,7 +10,11 @@
 - name: edit dashboard configuration to point to keystone
   lineinfile: dest=/etc/openstack-dashboard/local_settings.py regexp="^OPENSTACK_HOST" line="OPENSTACK_HOST = '{{keystone_host}}'"
 
+- name: remove ubuntu branding
+  apt: name=openstack-dashboard-ubuntu-theme state=absent
+
 - name: edit dashboard configuration with correct keystone port number
   lineinfile: dest=/etc/openstack-dashboard/local_settings.py regexp="^OPENSTACK_KEYSTONE_URL" line="OPENSTACK_KEYSTONE_URL = \"http://%s:5000/v2.0\" % OPENSTACK_HOST"
   notify:
     - restart openstack-dashboard
+
