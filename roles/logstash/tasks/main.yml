@@ -26,7 +26,7 @@
       action: service name=logstash-agent state=started enabled=yes
 
     - name: add rsyslog configuration for reading nova/keystone logs
-      template: src=60-nova-to-logstash.conf dest=/etc/rsyslog.d/60-nova-to-logstash.conf mode=0644
+      template: src=60-nova-to-logstash.conf.j2 dest=/etc/rsyslog.d/60-nova-to-logstash.conf mode=0644
       notify:
         restart rsyslog
 

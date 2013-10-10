@@ -45,3 +45,5 @@ rabbit_user: guest
 rabbit_password: guest
 rabbit_vhost: /
 logging_queue: openstack_logs
+
+logstash_host: 10.1.1.116
