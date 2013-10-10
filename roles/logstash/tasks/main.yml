@@ -19,8 +19,8 @@
     - name: copy logstash upstart configuration
       action: template src=logstash-agent.conf.j2 dest=/etc/init/logstash-agent.conf mode=0644 owner=root group=root
 
-    - name: touch logstash log file
-      copy: content="" dest=/var/log/logstash.log owner=logstash group=logstash mode=0644
+#    - name: touch logstash log file
+#      copy: content="" dest=/var/log/logstash.log owner=logstash group=logstash mode=0644
 
     - name: enable logstash
       action: service name=logstash-agent state=started enabled=yes
