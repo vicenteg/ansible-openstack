@@ -1,4 +1,4 @@
-
+my_ip: {{ansible_eth0.ipv4.address}}
 os_username: admin
 os_password: secrete
 os_tenant_name: demo
@@ -22,16 +22,16 @@ cinder_db_user: cinder
 cinder_db_pw: cinder
 
 
-db_host: 10.1.1.116
+db_host: {{my_ip}}
 db_root_user: root
 db_root_pw: root
 
-glance_host: 10.1.1.116
+glance_host: {{my_ip}}
 glance_db: glance
 glance_db_user: glance
 glance_db_pw: glance
 
-keystone_host: 10.1.1.116
+keystone_host: {{my_ip}}
 keystone_db: keystone
 keystone_db_user: keystone
 keystone_db_pw: keystone
@@ -39,11 +39,11 @@ keystone_db_pw: keystone
 # openssl rand -hex 16
 keystone_admin_token: 5aa7f0aad3c51b62c330c7f955ffcb5b
 
-api_host: 10.1.1.116
-rabbit_host: 10.1.1.116
+api_host: {{my_ip}}
+rabbit_host: {{my_ip}}
 rabbit_user: guest
 rabbit_password: guest
 rabbit_vhost: /
 logging_queue: openstack_logs
 
-logstash_host: 10.1.1.116
+logstash_host: {{my_ip}}
