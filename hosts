@@ -2,34 +2,44 @@ vagrant ansible_ssh_host=192.168.33.10
 db1 ansible_ssh_host=192.168.78.187
 db2 ansible_ssh_host=192.168.78.183
 db3 ansible_ssh_host=192.168.78.196
-all_in_one ansible_ssh_host=10.1.1.116
+server16
+server0
 
 [controller-nodes]
-all_in_one
+server16
+server0
 
 [cinder-nodes]
-all_in_one
+server16
+server0
 
 [compute-nodes]
-all_in_one
+server16
+server0
 
 [database-servers]
 db1
 db2
 db3
-all_in_one
+server16
+server0
 
 [keystone-nodes]
-all_in_one
+server16
+server0
 
 [glance-nodes]
-all_in_one
+server16
+server0
 
 [messaging-servers]
-all_in_one
+server16
+server0
 
 [logger-nodes]
-all_in_one
+server16
+server0
 
 [selab]
-all_in_one
+server16
+server0
