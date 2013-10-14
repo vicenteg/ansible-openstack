@@ -8,14 +8,17 @@ server0
 [controller-nodes]
 server16
 server0
+vagrant
 
 [cinder-nodes]
 server16
 server0
+vagrant
 
 [compute-nodes]
 server16
 server0
+vagrant
 
 [database-servers]
 db1
@@ -23,23 +26,30 @@ db2
 db3
 server16
 server0
+vagrant
 
 [keystone-nodes]
 server16
 server0
+vagrant
 
 [glance-nodes]
 server16
 server0
+vagrant
 
 [messaging-servers]
 server16
 server0
+vagrant
 
 [logger-nodes]
 server16
 server0
+vagrant
 
 [selab]
 server16
 server0
+
+
