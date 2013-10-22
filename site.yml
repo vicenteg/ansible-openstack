@@ -1,5 +1,6 @@
 ---
 # file: site.yml
+  accelerated: true
   - include: logstash.yml
   - include: database.yml
   - include: messaging.yml
