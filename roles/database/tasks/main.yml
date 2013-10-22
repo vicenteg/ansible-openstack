@@ -32,51 +32,8 @@
   command: sleep 2
 
 - name: create database root user and password
-#  mysql_user: login_user=${db_root_user} login_password="" name=${db_root_user} password=${db_root_pw} state=present
-# skip if .my.cnf exists - this command does not create it, a subsequent one does.
   command: creates=/root/.my.cnf mysqladmin -u ${db_root_user} password ${db_root_pw}
 
 - name: create .my.cnf for root
   template: src=dot_my.cnf.j2 dest=/root/.my.cnf mode=0600
-
-- name: create glance database
-  mysql_db: name=${glance_db} state=present
-
-- name: create glance database user
-  mysql_user: name=${glance_db_user} password=${glance_db_pw} state=present  priv=${glance_db}.*:ALL host={{item}} login_user=${db_root_user} login_password=${db_root_pw}
-  with_items:
-    - ${ansible_eth0.ipv4.address}
-    - localhost
-    - \%
-
-- name: create keystone database
-  mysql_db: name=${keystone_db} state=present login_user=${db_root_user} login_password=${db_root_pw}
-
-- name: create keystone database user
-  mysql_user: name=${keystone_db_user} password=${keystone_db_pw} host={{item}} state=present priv=${keystone_db}.*:ALL
-  with_items:
-    - ${ansible_eth0.ipv4.address}
-    - ${keystone_host}
-    - localhost
-    - \%
-
-- name: create nova database
-  mysql_db: name=${nova_db} state=present
-
-- name: create nova database user
-  mysql_user: name=${nova_db_user} password=${nova_db_pw} state=present host={{item}} priv=${nova_db}.*:ALL login_user=${db_root_user} login_password=${db_root_pw}
-  with_items:
-    - ${ansible_eth0.ipv4.address}
-    - localhost
-    - \%
-
-- name: create quantum database
-  mysql_db: name=${quantum_db} state=present
-
-- name: create quantum database user
-  mysql_user: name=${quantum_db_user} password=${quantum_db_pw} state=present host={{item}} priv=${quantum_db}.*:ALL login_user=${db_root_user} login_password=${db_root_pw}
-  with_items:
-    - ${ansible_eth0.ipv4.address}
-    - localhost
-    - \%
 

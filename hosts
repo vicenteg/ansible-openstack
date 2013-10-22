@@ -1,9 +1,7 @@
 vagrant ansible_ssh_host=192.168.33.10
-db1 ansible_ssh_host=192.168.78.187
-db2 ansible_ssh_host=192.168.78.183
-db3 ansible_ssh_host=192.168.78.196
 server16
 server0
+atom[0:3]
 
 [controller-nodes]
 server16
@@ -21,12 +19,8 @@ server0
 vagrant
 
 [database-servers]
-db1
-db2
-db3
-server16
-server0
 vagrant
+atom[0:3]
 
 [keystone-nodes]
 server16
@@ -51,5 +45,6 @@ vagrant
 [selab]
 server16
 server0
+atom[0:3]
 
 
