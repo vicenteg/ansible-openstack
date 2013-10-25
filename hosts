@@ -1,26 +1,26 @@
 [controller-nodes]
-server1
-
-[cinder-nodes]
-server1
-
-[compute-nodes]
 server0
 
-[database-servers]
+[cinder-nodes]
+server0
+
+[compute-nodes]
 server1
+
+[database-servers]
+server0
 
 [keystone-nodes]
-server1
+server0
 
 [glance-nodes]
-server1
+server0
 
 [messaging-servers]
-server1
+server0
 
 [logger-nodes]
-server1
+server0
 
 [selab]
 server[0:1]
