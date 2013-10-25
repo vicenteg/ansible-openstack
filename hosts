@@ -1,50 +1,26 @@
-vagrant ansible_ssh_host=192.168.33.10
-server16
-server0
-atom[0:3]
-
 [controller-nodes]
-server16
-server0
-vagrant
+server1
 
 [cinder-nodes]
-server16
-server0
-vagrant
+server1
 
 [compute-nodes]
-server16
 server0
-vagrant
 
 [database-servers]
-vagrant
-atom[0:3]
+server1
 
 [keystone-nodes]
-server16
-server0
-vagrant
+server1
 
 [glance-nodes]
-server16
-server0
-vagrant
+server1
 
 [messaging-servers]
-server16
-server0
-vagrant
+server1
 
 [logger-nodes]
-server16
-server0
-vagrant
+server1
 
 [selab]
-server16
-server0
-atom[0:3]
-
-
+server[0:1]

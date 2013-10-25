@@ -1,5 +1,13 @@
-user: root
-proxy_env:
-  http_proxy: http://10.1.1.254:3128
-  https_proxy: http://10.1.1.254:3128
+db_host: server1
+glance_host: server1
+keystone_host: server1
+# generate the admin token with something like:
+# openssl rand -hex 16
+keystone_admin_token: 5aa7f0aad3c51b62c330c7f955ffcb5b
+api_host: server1
+rabbit_host: server1
+logstash_host: server1
 
+proxy_env:
+  http_proxy: "http://10.1.1.254:3128"
+  https_proxy: "http://10.1.1.254:3128"

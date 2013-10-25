@@ -1,5 +1,5 @@
 - hosts: compute-nodes
-  sudo: yes
+  user: root
 
   roles:
     - common
