@@ -11,10 +11,14 @@ hypervisor: kvm
 nova_db: nova
 nova_db_user: nova
 nova_db_pw: nova
+nova_user: nova
+nova_password: nova
 
 quantum_db: quantum
 quantum_db_user: quantum
 quantum_db_pw: quantum
+quantum_user: quantum
+quantum_password: quantum
 
 cinder_db: cinder
 cinder_db_user: cinder

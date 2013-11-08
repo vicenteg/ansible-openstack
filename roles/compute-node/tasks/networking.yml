@@ -1,0 +1,22 @@
+- name: install openvswitch
+  apt: name={{item}} state=present
+  with_items:
+    - openvswitch-switch
+
+- name: start openvswitch
+  service: name=openvswitch-switch state=started
+
+- name: create internal bridge
+  command: ovs-vsctl add-br br-int
+
+- name: install quantum-plugin-openvswitch-agent
+  apt: name=quantum-plugin-openvswitch-agent
+
+- name: install quantum.conf
+  template: src=quantum.conf.j2 dest=/etc/quantum.conf mode=0644
+
+- name: copy quantum plugin configuration
+  template: src=ovs_quantum_plugin.ini.j2 dest=/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini mode=0644
+
+- name: start the agent
+  service: name=quantum-plugin-openvswitch-agent state=restarted

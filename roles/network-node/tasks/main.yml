@@ -35,6 +35,9 @@
 - name: copy quantum configuration
   template: src=quantum.conf.j2 dest=/etc/quantum/quantum.conf mode=0644
 
+- name: copy quantum metadata configuration
+  template: src=metadata_agent.ini.j2 dest=/etc/quantum/metadata_agent.ini mode=0644
+
 - name: restart openvswitch
   service: name=openvswitch-switch state=restarted
 

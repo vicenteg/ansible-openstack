@@ -1,5 +1,6 @@
 - hosts: compute-nodes
   user: root
+  serial: 1
 
   roles:
     - common

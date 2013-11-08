@@ -101,7 +101,7 @@ paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory
 auth_host = {{keystone_host}}
 auth_port = 35357
 auth_protocol = http
-admin_tenant_name = {{nova_tenant}}
+admin_tenant_name = {{service_tenant_id}}
 admin_user = {{nova_user}}
 admin_password = {{nova_password}}
 # signing_dir is configurable, but the default behavior of the authtoken

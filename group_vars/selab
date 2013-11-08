@@ -1,12 +1,19 @@
-db_host: server1
-glance_host: server1
-keystone_host: server1
+db_host: server0
+glance_host: server0
+keystone_host: server0
 # generate the admin token with something like:
 # openssl rand -hex 16
 keystone_admin_token: 5aa7f0aad3c51b62c330c7f955ffcb5b
-api_host: server1
-rabbit_host: server1
-logstash_host: server1
+api_host: server0
+rabbit_host: server0
+logstash_host: server0
+quantum_host: server0
+
+# variables for initial_data.sh (roles/keystone/templates/initial_data.sh.j2)
+keystone_data:
+  CONTROLLER_PUBLIC_ADDRESS: ${keystone_host}
+  CONTROLLER_INTERNAL_ADDRESS: ${keystone_host}
+  CONTROLLER_ADMIN_ADDRESS: ${keystone_host}
 
 proxy_env:
   http_proxy: "http://10.1.1.254:3128"

@@ -1,5 +1,5 @@
 - hosts: cinder-nodes
-  sudo: yes
+  user: root
 
   roles:
     - common

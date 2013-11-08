@@ -1,9 +1,5 @@
 [DEFAULT]
-# Default log level is INFO
-# verbose and debug has the same result.
-# One of them will set DEBUG log level output
-# debug = False
-# verbose = False
+verbose = True
 
 # Where to store Quantum state files.  This directory must be writable by the
 # user executing the agent.
@@ -107,9 +103,6 @@ auth_strategy = keystone
 # AMQP exchange to connect to if using RabbitMQ or QPID
 control_exchange = quantum
 
-# If passed, use a fake RabbitMQ provider
-# fake_rabbit = False
-
 # Configuration options if sending notifications via kombu rpc (these are
 # the defaults)
 # SSL version to use (valid only if SSL enabled)
@@ -121,11 +114,11 @@ control_exchange = quantum
 # SSL certification authority file (valid only if SSL enabled)'
 # kombu_ssl_ca_certs =
 # IP address of the RabbitMQ installation
-# rabbit_host = localhost
+rabbit_host = {{rabbit_host}}
 # Password of the RabbitMQ server
-# rabbit_password = guest
+rabbit_password = guest
 # Port where RabbitMQ server is running/listening
-# rabbit_port = 5672
+rabbit_port = 5672
 # RabbitMQ single or HA cluster (host:port pairs i.e: host1:5672, host2:5672)
 # rabbit_hosts is defaulted to '$rabbit_host:$rabbit_port'
 # rabbit_hosts = localhost:5672
@@ -141,34 +134,6 @@ control_exchange = quantum
 # Use HA queues in RabbitMQ (x-ha-policy: all).You need to
 # wipe RabbitMQ database when changing this option. (boolean value)
 # rabbit_ha_queues = false
-
-# QPID
-# rpc_backend=quantum.openstack.common.rpc.impl_qpid
-# Qpid broker hostname
-# qpid_hostname = localhost
-# Qpid broker port
-# qpid_port = 5672
-# Qpid single or HA cluster (host:port pairs i.e: host1:5672, host2:5672)
-# qpid_hosts is defaulted to '$qpid_hostname:$qpid_port'
-# qpid_hosts = localhost:5672
-# Username for qpid connection
-# qpid_username = ''
-# Password for qpid connection
-# qpid_password = ''
-# Space separated list of SASL mechanisms to use for auth
-# qpid_sasl_mechanisms = ''
-# Seconds between connection keepalive heartbeats
-# qpid_heartbeat = 60
-# Transport to use, either 'tcp' or 'ssl'
-# qpid_protocol = tcp
-# Disable Nagle algorithm
-# qpid_tcp_nodelay = True
-
-# ZMQ
-# rpc_backend=quantum.openstack.common.rpc.impl_zmq
-# ZeroMQ bind address. Should be a wildcard (*), an ethernet interface, or IP.
-# The "host" option should point or resolve to this address.
-# rpc_zmq_bind_address = *
 
 # ============ Notification System Options =====================
 

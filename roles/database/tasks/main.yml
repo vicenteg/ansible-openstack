@@ -13,15 +13,6 @@
 - name: apt update
   apt: update_cache=yes
 
-#- name: ensure conficting mysql packages aren't there
-#  apt: name={{item}} state=absent
-#  with_items:
-#    - libmysqlclient18
-#    - mysql-common
-#    - python-mysqldb
-#    - mysql-server-core-5.1
-#    - mysql-client-5.1
-
 - name: install mariadb with galera and client
   apt: name={{item}} state=present
   with_items:
@@ -41,23 +32,6 @@
 
 - name: give the database a couple seconds to settle
   command: sleep 2
-
-#- name: check if we can get database status locally with no password
-#  command: mysql --host {{db_host}} -u {{db_root_user}} -e "show status"
-#  register: mysql_root_password_not_set
-#  ignore_errors: yes
-
-#- name: create .my.cnf for root
-#  template: src=dot_my.cnf.j2 dest=/root/.my.cnf mode=0600
-
-#- name: create database root user via local socket
-#  mysql_user: name=root password={{db_root_pw}} state=present  priv=*.*:ALL host={{item}} login_unix_socket=/var/run/mysqld/mysqld.sock
-#  with_items:
-#    - $ansible_hostname
-#    - 127.0.0.1
-#    - ::1
-#    - \%
-#  when: mysql_root_password_not_set.rc == 0
 
 - name: create glance database
   mysql_db: name={{glance_db}} state=present login_user={{db_root_user}} login_password={{db_root_pw}}

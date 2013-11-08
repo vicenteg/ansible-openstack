@@ -1,25 +1,10 @@
 - name: install python-mysqldb
   apt: name=python-mysqldb state=present 
 
-- name: create nova database
-  mysql_db: name={{nova_db}} state=present login_host={{groups['database-servers'][0]}} login_user={{db_root_user}} login_password={{db_root_pw}}
-
-- name: create nova database user
-  mysql_user: name={{nova_db_user}} password={{nova_db_pw}} state=present host={{item}} priv={{nova_db}}.*:ALL login_user={{db_root_user}} login_password={{db_root_pw}}
-  with_items:
-    - ${ansible_eth0.ipv4.address}
-    - localhost
-    - \%
-
 - name: install nova-compute packages
   apt: name={{item}} state=present
   with_items:
     - nova-compute
-    - nova-api
-    - nova-scheduler
-    - nova-conductor
-    - nova-cert
-    - nova-consoleauth
 
 - name: copy nova.conf to compute nodes
   template: src=nova.conf.j2 dest=/etc/nova/nova.conf
@@ -34,11 +19,6 @@
   service: name={{item}} state=stopped
   with_items:
     - nova-compute
-    - nova-api
-    - nova-scheduler
-    - nova-conductor
-    - nova-cert
-    - nova-consoleauth
 
 - name: initialize nova database
   command: nova-manage db sync
@@ -48,11 +28,8 @@
   with_items:
     - libvirt-bin
     - nova-compute
-    - nova-api
-    - nova-scheduler
-    - nova-conductor
-    - nova-cert
-    - nova-consoleauth
 
-- name: give the services a couple seconds to settle
-  command: sleep 3
+- name: copy openrc to /root
+  template: src=openrc.j2 dest=/root/openrc mode=0600
+
+- include: networking.yml

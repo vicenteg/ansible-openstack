@@ -63,7 +63,7 @@ fixed_ip_disassociate_timeout=10
 #dhcpbridge_flagfile=/etc/nova/nova.conf
 #firewall_driver=nova.virt.libvirt.firewall.IptablesFirewallDriver
 # Change my_ip to match each host
-#my_ip={{ansible_eth0.ipv4.address}}
+my_ip={{ansible_eth0.ipv4.address}}
 #public_interface=eth0
 #vlan_interface=eth0
 #flat_network_bridge=br100
@@ -83,7 +83,7 @@ auth_strategy=keystone
 auth_host = {{keystone_host}}
 auth_port = 35357
 auth_protocol = http
-admin_tenant_name = {{nova_tenant}}
+admin_tenant_name = {{service_tenant_id}}
 admin_user = {{nova_user}}
 admin_password = {{nova_password}}
 signing_dirname = /tmp/keystone-signing-nova
