@@ -49,7 +49,7 @@ libvirt_use_virtio_for_bridges=True
 network_api_class=nova.network.quantumv2.api.API
 quantum_url=http://{{quantum_host}}:9696
 quantum_auth_strategy=keystone
-quantum_admin_tenant_name={{service_tenant_id}}
+quantum_admin_tenant_name={{service_tenant}}
 quantum_admin_username={{quantum_user}}
 quantum_admin_password={{quantum_password}}
 quantum_admin_auth_url=http://{{keystone_host}}:35357/v2.0
@@ -58,17 +58,7 @@ security_group_api=quantum
 force_config_drive=True
 fixed_ip_disassociate_timeout=10
 
-#network_manager={{network_manager}}
-#force_dhcp_release=True
-#dhcpbridge_flagfile=/etc/nova/nova.conf
-#firewall_driver=nova.virt.libvirt.firewall.IptablesFirewallDriver
-# Change my_ip to match each host
 my_ip={{ansible_eth0.ipv4.address}}
-#public_interface=eth0
-#vlan_interface=eth0
-#flat_network_bridge=br100
-#flat_interface=eth0
-#fixed_range=''
 
 # NOVNC CONSOLE
 novncproxy_base_url=http://$my_ip:6080/vnc_auto.html
@@ -83,7 +73,7 @@ auth_strategy=keystone
 auth_host = {{keystone_host}}
 auth_port = 35357
 auth_protocol = http
-admin_tenant_name = {{service_tenant_id}}
+admin_tenant_name = {{service_tenant}}
 admin_user = {{nova_user}}
 admin_password = {{nova_password}}
 signing_dirname = /tmp/keystone-signing-nova

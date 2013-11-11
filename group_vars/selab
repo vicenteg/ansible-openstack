@@ -9,6 +9,12 @@ rabbit_host: server0
 logstash_host: server0
 quantum_host: server0
 
+# network node IP information
+# The network should be routable by the upstream network gear.
+br_ex_ip_address: 10.5.0.2
+br_ex_netmask: 255.255.255.0
+br_ex_gateway: 10.5.0.1
+
 # variables for initial_data.sh (roles/keystone/templates/initial_data.sh.j2)
 keystone_data:
   CONTROLLER_PUBLIC_ADDRESS: ${keystone_host}

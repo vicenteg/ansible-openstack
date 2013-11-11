@@ -1,3 +1,15 @@
+- name: disable reverse path filtering per http://docs.openstack.org/grizzly/basic-install/apt/content/basic-install_compute.html
+  lineinfile: dest=/etc/sysctl.conf regexp="^#net.ipv4.conf.default.rp_filter=1" line=net.ipv4.conf.default.rp_filter=0 state=present
+
+- name: disable reverse path filtering per http://docs.openstack.org/grizzly/basic-install/apt/content/basic-install_compute.html
+  lineinfile: dest=/etc/sysctl.conf regexp="^#net.ipv4.conf.all.rp_filter=1" line=net.ipv4.conf.all.rp_filter=0 state=present
+
+- name: restart networking
+  service: name=networking state=restarted
+
+- name: reload sysctl
+  command: sysctl -e -p /etc/sysctl.conf
+
 - name: install openvswitch
   apt: name={{item}} state=present
   with_items:
@@ -6,8 +18,14 @@
 - name: start openvswitch
   service: name=openvswitch-switch state=started
 
-- name: create internal bridge
+- name: check for br-int
+  command: ovs-vsctl br-exists br-int
+  register: int_result
+  ignore_errors: true
+
+- name: create the internal openvswitch bridge
   command: ovs-vsctl add-br br-int
+  when: int_result|failed
 
 - name: install quantum-plugin-openvswitch-agent
   apt: name=quantum-plugin-openvswitch-agent
@@ -18,5 +36,7 @@
 - name: copy quantum plugin configuration
   template: src=ovs_quantum_plugin.ini.j2 dest=/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini mode=0644
 
-- name: start the agent
-  service: name=quantum-plugin-openvswitch-agent state=restarted
+- name: restart ovs agent plugin
+  service: name={{item}} state=restarted
+  with_items:
+    - quantum-plugin-openvswitch-agent

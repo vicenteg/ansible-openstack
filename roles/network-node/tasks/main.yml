@@ -1,14 +1,26 @@
-- name: ensure eth1 is configured
-  lineinfile: dest=/etc/network/interfaces regexp="^auto eth1" line="auto eth1"
+- name: install sysctl.conf per http://docs.openstack.org/grizzly/basic-install/apt/content/basic-install_network.html
+  copy: src=sysctl.conf dest=/etc/sysctl.conf mode=0644 backup=yes
 
-- name: ensure eth1 configuration is set to manual (assumes eth1 exists)
-  lineinfile: dest=/etc/network/interfaces regexp="^iface eth1" line="iface eth1 inet manual"
+- name: restart networking
+  service: name=networking state=restarted
 
-- name: ensure eth1 has an "up" action
-  lineinfile: dest=/etc/network/interfaces regexp="^\s+up ip link set $IFACE up" line="  up ip link set $IFACE up"
+- name: reload sysctl
+  command: sysctl -e -p /etc/sysctl.conf
 
-- name: ensure eth1 has a "down" action
-  lineinfile: dest=/etc/network/interfaces regexp="^\s+down ip link set $IFACE down" line="  down ip link set $IFACE down"
+- name: copy /etc/network/interfaces into place
+  template: src=interfaces.j2 dest=/etc/network/interfaces mode=0644 
+
+#- name: ensure eth1 is configured
+#  lineinfile: dest=/etc/network/interfaces regexp="^auto eth1" line="auto eth1"
+
+#- name: ensure eth1 configuration is set to manual (assumes eth1 exists)
+#  lineinfile: dest=/etc/network/interfaces regexp="^iface eth1" line="iface eth1 inet manual"
+
+#- name: ensure eth1 has an "up" action
+#  lineinfile: dest=/etc/network/interfaces regexp="^\s+up ip link set $IFACE up" line="  up ip link set $IFACE up"
+
+#- name: ensure eth1 has a "down" action
+#  lineinfile: dest=/etc/network/interfaces regexp="^\s+down ip link set $IFACE down" line="  down ip link set $IFACE down"
 
 - name: bring eth1 up
   command: ifup eth1

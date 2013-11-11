@@ -1,31 +1,9 @@
 [DEFAULT]
 verbose = True
 
-# Where to store Quantum state files.  This directory must be writable by the
-# user executing the agent.
-# state_path = /var/lib/quantum
-
-# Where to store lock files
 lock_path = $state_path/lock
-
 # log_format = %(asctime)s %(levelname)8s [%(name)s] %(message)s
 # log_date_format = %Y-%m-%d %H:%M:%S
-
-# use_syslog                           -> syslog
-# log_file and log_dir                 -> log_dir/log_file
-# (not log_file) and log_dir           -> log_dir/{binary_name}.log
-# use_stderr                           -> stderr
-# (not user_stderr) and (not log_file) -> stdout
-# publish_errors                       -> notification system
-
-# use_syslog = False
-# syslog_log_facility = LOG_USER
-
-# use_stderr = True
-# log_file =
-# log_dir =
-
-# publish_errors = False
 
 # Address to bind the API server
 bind_host = 0.0.0.0
@@ -33,92 +11,23 @@ bind_host = 0.0.0.0
 # Port the bind the API server to
 bind_port = 9696
 
-# Path to the extensions.  Note that this can be a colon-separated list of
-# paths.  For example:
-# api_extensions_path = extensions:/path/to/more/extensions:/even/more/extensions
-# The __path__ of quantum.extensions is appended to this, so if your
-# extensions are in there you don't need to specify them here
-# api_extensions_path =
-
-# Quantum plugin provider module
-# core_plugin =
 core_plugin = quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2
-
-# Advanced service modules
-# service_plugins =
 
 # Paste configuration file
 api_paste_config = /etc/quantum/api-paste.ini
 
-# The strategy to be used for auth.
-# Supported values are 'keystone'(default), 'noauth'.
-# auth_strategy = keystone
 auth_strategy = keystone
 
-# Base MAC address. The first 3 octets will remain unchanged. If the
-# 4h octet is not 00, it will also used. The others will be
-# randomly generated.
-# 3 octet
-# base_mac = fa:16:3e:00:00:00
-# 4 octet
-# base_mac = fa:16:3e:4f:00:00
-
-# Maximum amount of retries to generate a unique MAC address
-# mac_generation_retries = 16
-
-# DHCP Lease duration (in seconds)
-# dhcp_lease_duration = 120
-
-# Allow sending resource operation notification to DHCP agent
-# dhcp_agent_notification = True
-
-# Enable or disable bulk create/update/delete operations
-# allow_bulk = True
-# Enable or disable pagination
-# allow_pagination = False
-# Enable or disable sorting
-# allow_sorting = False
-# Enable or disable overlapping IPs for subnets
-# Attention: the following parameter MUST be set to False if Quantum is
-# being used in conjunction with nova security groups and/or metadata service.
-# allow_overlapping_ips = False
-# Ensure that configured gateway is on subnet
-# force_gateway_on_subnet = False
-
-
-# RPC configuration options. Defined in rpc __init__
-# The messaging module to use, defaults to kombu.
-# rpc_backend = quantum.openstack.common.rpc.impl_kombu
-# Size of RPC thread pool
-# rpc_thread_pool_size = 64,
-# Size of RPC connection pool
-# rpc_conn_pool_size = 30
-# Seconds to wait for a response from call or multicall
-# rpc_response_timeout = 60
-# Seconds to wait before a cast expires (TTL). Only supported by impl_zmq.
-# rpc_cast_timeout = 30
-# Modules of exceptions that are permitted to be recreated
-# upon receiving exception data from an rpc call.
-# allowed_rpc_exception_modules = quantum.openstack.common.exception, nova.exception
 # AMQP exchange to connect to if using RabbitMQ or QPID
 control_exchange = quantum
 
-# Configuration options if sending notifications via kombu rpc (these are
-# the defaults)
-# SSL version to use (valid only if SSL enabled)
-# kombu_ssl_version =
-# SSL key file (valid only if SSL enabled)
-# kombu_ssl_keyfile =
-# SSL cert file (valid only if SSL enabled)
-# kombu_ssl_certfile =
-# SSL certification authority file (valid only if SSL enabled)'
-# kombu_ssl_ca_certs =
 # IP address of the RabbitMQ installation
 rabbit_host = {{rabbit_host}}
 # Password of the RabbitMQ server
 rabbit_password = guest
 # Port where RabbitMQ server is running/listening
 rabbit_port = 5672
+
 # RabbitMQ single or HA cluster (host:port pairs i.e: host1:5672, host2:5672)
 # rabbit_hosts is defaulted to '$rabbit_host:$rabbit_port'
 # rabbit_hosts = localhost:5672
@@ -249,7 +158,7 @@ root_helper = sudo quantum-rootwrap /etc/quantum/rootwrap.conf
 auth_host = {{keystone_host}}
 auth_port = 35357
 auth_protocol = http
-admin_tenant_name = {{service_tenant_id}}
+admin_tenant_name = {{service_tenant}}
 admin_user = {{quantum_user}}
 admin_password = {{quantum_password}}
 signing_dir = /var/lib/quantum/keystone-signing

@@ -10,6 +10,7 @@ server0
 
 [compute-nodes]
 server1
+server16
 
 [database-servers]
 server0

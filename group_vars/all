@@ -3,7 +3,7 @@ os_password: secrete
 os_tenant_name: demo
 os_auth_url: http://${keystone_host}:35357/v2.0
 
-service_tenant_id: service
+service_tenant: service
 
 network_manager: nova.network.manager.FlatDHCPManager
 hypervisor: kvm
