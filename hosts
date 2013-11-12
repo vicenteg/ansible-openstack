@@ -2,6 +2,7 @@ server0 ansible_ssh_user=root
 server1 ansible_ssh_user=root
 server16 ansible_ssh_user=root
 xeon-chassis ansible_ssh_host=selab ansible_ssh_user=admin ansible_ssh_pass=seamicro
+
 [controller-nodes]
 server0
 
@@ -30,3 +31,6 @@ server0
 [selab]
 server[0:1]
 server16
+
+[seamicro-chassis]
+xeon-chassis

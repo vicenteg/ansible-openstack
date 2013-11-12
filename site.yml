@@ -9,3 +9,4 @@
   - include: cinder-nodes.yml
   - include: controller-nodes.yml
   - include: compute-nodes.yml
+  - include: reboot-all.yml

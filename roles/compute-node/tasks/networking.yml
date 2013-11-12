@@ -31,7 +31,7 @@
   apt: name=quantum-plugin-openvswitch-agent
 
 - name: install quantum.conf
-  template: src=quantum.conf.j2 dest=/etc/quantum.conf mode=0644
+  template: src=quantum.conf.j2 dest=/etc/quantum/quantum.conf mode=0644
 
 - name: copy quantum plugin configuration
   template: src=ovs_quantum_plugin.ini.j2 dest=/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini mode=0644
