@@ -9,6 +9,10 @@ rabbit_host: server0
 logstash_host: server0
 quantum_host: server0
 
+# the block device to use underneath cinder-volume.
+# /dev/mapper/mpath0 will use a multipathed device.
+cinder_device: /dev/mapper/mpath0
+
 # network node IP information
 # The network should be routable by the upstream network gear.
 br_ex_ip_address: 10.5.0.2

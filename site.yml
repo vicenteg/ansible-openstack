@@ -6,6 +6,7 @@
   - include: keystone-nodes.yml
   - include: glance-nodes.yml
   - include: network-nodes.yml
+  - include: mpio.yml
   - include: cinder-nodes.yml
   - include: controller-nodes.yml
   - include: compute-nodes.yml

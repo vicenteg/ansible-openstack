@@ -1,0 +1,67 @@
+# This is gonna need some variables pulled out
+- hosts: controller-nodes[0]
+  user: root
+
+  tasks:
+    - name: download Cirros 0.3.1 image
+      command: chdir=/tmp creates=/tmp/cirros-0.3.1-x86_64-disk.img wget http://download.cirros-cloud.net/0.3.1/cirros-0.3.1-x86_64-disk.img
+      environment: proxy_env
+
+    - name: create a new image
+      glance_image: name="Cirros 0.3.1"
+                container_format=bare disk_format=qcow2
+                login_tenant_name=${os_tenant_name}
+                auth_url="http://${keystone_host}:35357/v2.0/"
+                login_password="${os_password}"
+                login_username="${os_username}"
+                state=present
+                file=/tmp/cirros-0.3.1-x86_64-disk.img
+      register: new_image
+
+    - name: clean up downloaded file
+      file: state=absent path=/tmp/cirros-0.3.1-x86_64-disk.img
+      
+    - name: create a tenant network
+      quantum_network: name=demo-net1 tenant_name=demo state=present
+                   login_username=admin login_password=secrete login_tenant_name=demo
+      register: tenant_network
+
+    - name: dump tenant_network info
+      debug: msg="Tenant network {{tenant_network.id}}"
+
+    - name: create a public/external network
+      quantum_network: name=external shared=yes tenant_name=service router_external=yes state=present
+                   login_username=admin login_password=secrete login_tenant_name=demo
+      register: public_network
+
+    - name: create tenant subnet
+      quantum_subnet: state=present network_name=demo-net1 name=demo-net1-subnet1 cidr="172.16.0.0/24"
+                   login_username=admin login_password=secrete login_tenant_name=demo
+
+    - name: create public/external subnet
+      quantum_subnet: state=present tenant_name=service network_name=external name=public cidr="10.5.0.0/24"
+                   login_username=admin login_password=secrete login_tenant_name=demo
+
+    - name: create a router
+      quantum_router: name=demo-router state=present
+                   login_username=admin login_password=secrete login_tenant_name=demo
+
+    - name: set gateway
+      quantum_router_gateway: state=present router_name=demo-router network_name=external
+                   login_username=admin login_password=secrete login_tenant_name=demo
+
+    - name: add new subnet to router
+      quantum_router_interface: state=present router_name=demo-router subnet_name=demo-net1-subnet1
+                   login_username=admin login_password=secrete login_tenant_name=demo
+
+    - name: create a few instances 
+      nova_compute: 
+        image_id: "{{new_image.id}}"
+        name: test1
+        state: present 
+        nics: 
+          - net-id: "{{tenant_network.id}}"
+        login_username: admin 
+        login_password: secrete 
+        login_tenant_name: demo
+ 
