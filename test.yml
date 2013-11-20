@@ -39,7 +39,7 @@
                    login_username=admin login_password=secrete login_tenant_name=demo
 
     - name: create public/external subnet
-      quantum_subnet: state=present tenant_name=service network_name=external name=public cidr="10.5.0.0/24"
+      quantum_subnet: state=present tenant_name=service network_name=external name=public cidr="10.20.0.0/21"
                    login_username=admin login_password=secrete login_tenant_name=demo
 
     - name: create a router
