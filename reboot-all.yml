@@ -1,0 +1,9 @@
+- hosts: all:!seamicro-chassis
+  user: root
+
+  tasks:
+    - name: rebooting all servers - press ctrl-C if you do not want this
+      pause: seconds=15
+
+    - name: reboot!
+      command: shutdown -r now

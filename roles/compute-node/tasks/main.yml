@@ -1,12 +1,10 @@
+- name: install python-mysqldb
+  apt: name=python-mysqldb state=present 
+
 - name: install nova-compute packages
   apt: name={{item}} state=present
   with_items:
     - nova-compute
-    - nova-api
-    - nova-scheduler
-    - nova-conductor
-    - nova-cert
-    - nova-consoleauth
 
 - name: copy nova.conf to compute nodes
   template: src=nova.conf.j2 dest=/etc/nova/nova.conf
@@ -21,11 +19,6 @@
   service: name={{item}} state=stopped
   with_items:
     - nova-compute
-    - nova-api
-    - nova-scheduler
-    - nova-conductor
-    - nova-cert
-    - nova-consoleauth
 
 - name: initialize nova database
   command: nova-manage db sync
@@ -35,11 +28,8 @@
   with_items:
     - libvirt-bin
     - nova-compute
-    - nova-api
-    - nova-scheduler
-    - nova-conductor
-    - nova-cert
-    - nova-consoleauth
 
-- name: give the services a couple seconds to settle
-  command: sleep 3
+- name: copy openrc to /root
+  template: src=openrc.j2 dest=/root/openrc mode=0600
+
+- include: networking.yml

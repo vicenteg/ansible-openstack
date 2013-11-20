@@ -1,4 +1,5 @@
 - hosts: database-servers
+  user: root
   roles:
     - common
     - loadbalancer

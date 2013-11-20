@@ -1,6 +1,5 @@
 - hosts: cinder-nodes
   user: root
-
   roles:
-    - common
-    - cinder-node
+    - mpio    
+

@@ -1,0 +1,13 @@
+- name: install multipath-tools and sg3-utils
+  apt: name={{item}} state=present
+  with_items:
+    - multipath-tools
+    - sg3-utils
+
+- name: install multipath.conf
+  template: dest=/etc/multipath.conf src=multipath.conf.j2
+  register: multipath_conf
+
+- name: restart multpath-tools
+  service: name=multipath-tools state=restarted
+  when: multipath_conf.changed == True
