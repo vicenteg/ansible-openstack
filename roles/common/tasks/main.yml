@@ -1,3 +1,2 @@
-
-- include: public-key.yml
 - include: packages.yml
+- include: rsyslog.yml

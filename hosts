@@ -1,50 +1,36 @@
-vagrant ansible_ssh_host=192.168.33.10
-server16
-server0
-atom[0:3]
+server0 ansible_ssh_user=root
+server1 ansible_ssh_user=root
+server16 ansible_ssh_user=root
+xeon-chassis ansible_ssh_host=selab ansible_ssh_user=admin ansible_ssh_pass=seamicro
 
 [controller-nodes]
-server16
 server0
-vagrant
 
 [cinder-nodes]
-server16
 server0
-vagrant
 
 [compute-nodes]
+server1
 server16
-server0
-vagrant
 
 [database-servers]
-vagrant
-atom[0:3]
+server0
 
 [keystone-nodes]
-server16
 server0
-vagrant
 
 [glance-nodes]
-server16
 server0
-vagrant
 
 [messaging-servers]
-server16
 server0
-vagrant
 
 [logger-nodes]
-server16
 server0
-vagrant
 
 [selab]
+server[0:1]
 server16
-server0
-atom[0:3]
 
-
+[seamicro-chassis]
+xeon-chassis
