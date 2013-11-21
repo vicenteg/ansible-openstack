@@ -1,5 +1,0 @@
-cinder_user: cinder
-cinder_password: cinder
-cinder_tenant_name: service
-
-cinder_volume_group: cinder-volumes

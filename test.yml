@@ -38,8 +38,14 @@
       quantum_subnet: state=present network_name=demo-net1 name=demo-net1-subnet1 cidr="172.16.0.0/24"
                    login_username=admin login_password=secrete login_tenant_name=demo
 
+    - name: debug public_network
+      debug: msg="{{public_network_cidr}}"
+
+    - name: pause
+      pause: seconds=10
+
     - name: create public/external subnet
-      quantum_subnet: state=present tenant_name=service network_name=external name=public cidr="10.20.0.0/21"
+      quantum_subnet: state=present tenant_name=service network_name=external name=public cidr="{{public_network_cidr}}"
                    login_username=admin login_password=secrete login_tenant_name=demo
 
     - name: create a router

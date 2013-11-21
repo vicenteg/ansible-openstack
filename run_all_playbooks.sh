@@ -22,4 +22,18 @@ if [ $ANSIBLE_PING_RC != 0 ]; then
 fi
 
 # having added the public key, perform the install.
-ansible-playbook -i hosts site.yml
+time ansible-playbook -i hosts site.yml 
+
+# if the above succeeded, poll the servers using a ping before 
+# continuting on to the test playbook.
+if [ "$?" == 0 ]; then
+	while :;
+	do
+	  ansible openstack-cluster -m ping -u root 
+	  [ "$?" -eq 0 ] && break
+	  sleep 2
+	done
+fi
+
+# do some quantum, nova operations to validate the basic env
+time ansible-playbook -i hosts test.yml

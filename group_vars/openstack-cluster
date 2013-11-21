@@ -1,11 +1,14 @@
 # network node IP information
 # The network should be routable by the upstream network gear.
-br_ex_ip_address: 10.20.0.254
-br_ex_netmask: 255.255.248.0
-br_ex_gateway: 10.20.0.1
+br_ex_ip_address: 10.5.0.2
+br_ex_netmask:    255.255.255.0
+br_ex_gateway:    10.5.0.1
+public_network_cidr:   10.5.0.0/24
 
 # the block device to use underneath cinder-volume.
 # /dev/mapper/mpath0 will use a multipathed device.
+# Set this to /dev/sdb or some such if not using
+# MPIO.
 cinder_device: /dev/mapper/mpath0
 
 # Configure HTTP and HTTPS proxies here if needed.
@@ -13,22 +16,75 @@ proxy_env:
   # foo: bar is fake placeholder to make this a valid dictionary in case
   # we don't need/want to populate http_proxy. 
   foo: bar
-#  http_proxy:
-#  https_proxy:
+  http_proxy: http://10.1.1.254:3128
+  https_proxy: $http_proxy
 
 
-###  Do not edit!  ###
-controller_address: ${hostvars.controller1.ansible_eth0.ipv4.address}
-db_host: $controller_address
-glance_host: $controller_address
-keystone_host: $controller_address
+###  Do not edit below unless you're pretty sure. ###
+
+os_username: admin
+os_password: secrete
+os_tenant_name: demo
+os_auth_url: http://${keystone_host}:35357/v2.0
+
+service_tenant: service
+
+hypervisor: kvm
+
+nova_db: nova
+nova_db_user: nova
+nova_db_pw: nova
+nova_user: nova
+nova_password: nova
+
+quantum_db: quantum
+quantum_db_user: quantum
+quantum_db_pw: quantum
+quantum_user: quantum
+quantum_password: quantum
+
+cinder_db: cinder
+cinder_db_user: cinder
+cinder_db_pw: cinder
+cinder_user: cinder
+cinder_password: cinder
+cinder_volume_group: cinder-volumes
+
+
+db_root_user: root
+db_root_pw: ""
+
+glance_db: glance
+glance_db_user: glance
+glance_db_pw: glance
+
+keystone_db: keystone
+keystone_db_user: keystone
+keystone_db_pw: keystone
 # generate the admin token with something like:
 # openssl rand -hex 16
 keystone_admin_token: 5aa7f0aad3c51b62c330c7f955ffcb5b
+
+rabbit_user: guest
+rabbit_password: guest
+rabbit_vhost: /
+logging_queue: openstack_logs
+
+# Use the eth0 IP address to contact the controller.
+controller_address: ${hostvars.controller1.ansible_eth0.ipv4.address}
+
+# All the below services live on the controller.
+db_host: $controller_address
+glance_host: $controller_address
+keystone_host: $controller_address
 api_host: $controller_address
 rabbit_host: $controller_address
 logstash_host: $controller_address
 quantum_host: $controller_address
+
+# generate the admin token with something like:
+# openssl rand -hex 16
+keystone_admin_token: 5aa7f0aad3c51b62c330c7f955ffcb5b
 
 # variables for initial_data.sh (roles/keystone/templates/initial_data.sh.j2)
 keystone_data:

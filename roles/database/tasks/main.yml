@@ -16,8 +16,10 @@
 - name: install mariadb with galera and client
   apt: name={{item}} state=present
   with_items:
-    - libmysqlclient18=5.5.33a+maria-1~precise
-    - mysql-common=5.5.33a+maria-1~precise
+    #- libmysqlclient18=5.5.33a+maria-1~precise
+    #- mysql-common=5.5.33a+maria-1~precise
+    - libmysqlclient18
+    - mysql-common
     - mariadb-galera-server
     - mariadb-client
 

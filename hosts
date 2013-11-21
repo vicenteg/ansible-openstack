@@ -1,7 +1,9 @@
-controller1 ansible_ssh_host=10.20.0.136
-compute1 ansible_ssh_host=10.20.0.137
-compute2 ansible_ssh_host=10.20.0.138
+# Edit the IP addresses, but do not edit the names.
+controller1 ansible_ssh_host=server0
+compute1 ansible_ssh_host=server1
+compute2 ansible_ssh_host=server16
 
+# Do not edit below this line unless you're pretty sure.
 [controller-nodes]
 controller1
 

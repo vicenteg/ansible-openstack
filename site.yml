@@ -1,6 +1,5 @@
 ---
   - include: logstash.yml
-#  - include: mpio.yml
   - include: database.yml
   - include: messaging.yml
   - include: keystone-nodes.yml

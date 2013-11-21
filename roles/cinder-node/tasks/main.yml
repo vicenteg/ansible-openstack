@@ -26,7 +26,12 @@
   when: ansible_devices.sdb is defined 
   #when: ansible_devices.sdb is defined and not ansible_devices.sdb.holders.mpath0 
 
+- name: see if we have any cinder-volumes existing
+  command: vgdisplay {{cinder_volume_group}}
+  register: vgdisplay
+
 - name: create cinder volume group
-  lvg: pvs={{cinder_device}}-part1 vg={{cinder_volume_group}} state=present
+  lvg: pvs={{cinder_device}}-part1 vg={{cinder_volume_group}} state=present force=yes
+  when: vgdisplay.rc != 0
   notify:
     - restart cinder
