@@ -1,5 +1,24 @@
-controller_address: ${hostvars.controller1.ansible_eth0.ipv4.address}
+# network node IP information
+# The network should be routable by the upstream network gear.
+br_ex_ip_address: 10.20.0.254
+br_ex_netmask: 255.255.248.0
+br_ex_gateway: 10.20.0.1
 
+# the block device to use underneath cinder-volume.
+# /dev/mapper/mpath0 will use a multipathed device.
+cinder_device: /dev/mapper/mpath0
+
+# Configure HTTP and HTTPS proxies here if needed.
+proxy_env:
+  # foo: bar is fake placeholder to make this a valid dictionary in case
+  # we don't need/want to populate http_proxy. 
+  foo: bar
+#  http_proxy:
+#  https_proxy:
+
+
+###  Do not edit!  ###
+controller_address: ${hostvars.controller1.ansible_eth0.ipv4.address}
 db_host: $controller_address
 glance_host: $controller_address
 keystone_host: $controller_address
@@ -11,25 +30,9 @@ rabbit_host: $controller_address
 logstash_host: $controller_address
 quantum_host: $controller_address
 
-# the block device to use underneath cinder-volume.
-# /dev/mapper/mpath0 will use a multipathed device.
-cinder_device: /dev/mapper/mpath0
-
-# network node IP information
-# The network should be routable by the upstream network gear.
-br_ex_ip_address: 10.20.0.254
-br_ex_netmask: 255.255.248.0
-br_ex_gateway: 10.20.0.1
-
 # variables for initial_data.sh (roles/keystone/templates/initial_data.sh.j2)
 keystone_data:
   CONTROLLER_PUBLIC_ADDRESS: ${keystone_host}
   CONTROLLER_INTERNAL_ADDRESS: ${keystone_host}
   CONTROLLER_ADMIN_ADDRESS: ${keystone_host}
 
-proxy_env:
-# fake placeholder to make this a valid dictionary in case
-# we don't want to populate http_proxy
-  foo: bar
-#  http_proxy:
-#  https_proxy:
