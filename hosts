@@ -1,50 +1,35 @@
-vagrant ansible_ssh_host=192.168.33.10
-server16
-server0
-atom[0:3]
+# Edit the IP addresses, but do not edit the names.
+controller1 ansible_ssh_host=server0
+compute1 ansible_ssh_host=server1
+compute2 ansible_ssh_host=server16
 
+# Do not edit below this line unless you're pretty sure.
 [controller-nodes]
-server16
-server0
-vagrant
+controller1
 
 [cinder-nodes]
-server16
-server0
-vagrant
+controller1
 
 [compute-nodes]
-server16
-server0
-vagrant
+compute1
+compute2
 
 [database-servers]
-vagrant
-atom[0:3]
+controller1
 
 [keystone-nodes]
-server16
-server0
-vagrant
+controller1
 
 [glance-nodes]
-server16
-server0
-vagrant
+controller1
 
 [messaging-servers]
-server16
-server0
-vagrant
+controller1
 
 [logger-nodes]
-server16
-server0
-vagrant
+controller1
 
-[selab]
-server16
-server0
-atom[0:3]
-
-
+[openstack-cluster]
+controller1
+compute1
+compute2

@@ -10,15 +10,13 @@
     - nova-consoleauth
     - nova-doc
     - nova-scheduler
-    - nova-network
+#    Keep nova-network around in case quantum/neutron doesn't work out
+#    - nova-network
 
-- name: copy nova.conf to compute nodes
+- name: install nova.conf
   template: src=nova.conf.j2 dest=/etc/nova/nova.conf
 
-- name: copy nova-paste.ini to compute nodes
-  template: src=nova-paste.ini.j2 dest=/etc/nova/nova-paste.ini
-
-- name: copy api-paste.ini to compute nodes
+- name: copy api-paste.ini 
   template: src=api-paste.ini.j2 dest=/etc/nova/api-paste.ini
 
 - name: restart controller services to pick up configuration
@@ -30,6 +28,7 @@
     - nova-conductor
     - nova-consoleauth
     - nova-scheduler
-    - nova-network
+#    Keep nova-network around in case quantum/neutron doesn't work out
+#    - nova-network
 
 - include: dashboard.yml

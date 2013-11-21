@@ -1,5 +1,5 @@
 - hosts: keystone-nodes
-  sudo: yes
+  user: root
 
   roles:
     - common

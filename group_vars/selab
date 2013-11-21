@@ -1,5 +1,0 @@
-user: root
-proxy_env:
-  http_proxy: http://10.1.1.254:3128
-  https_proxy: http://10.1.1.254:3128
-

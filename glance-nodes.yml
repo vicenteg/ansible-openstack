@@ -1,5 +1,5 @@
 - hosts: glance-nodes
-  sudo: yes
+  user: root
 
   roles:
     - common

@@ -24,11 +24,12 @@
   service: name=keystone state=restarted
 
 - name: copy script that creates some initial roles/users
-  copy: src=initial_data.sh dest=/tmp/initial_data.sh mode=0700 owner=root group=root
+  template: src=initial_data.sh.j2 dest=/tmp/initial_data.sh mode=0700 owner=root group=root
   notify:
     - create keystonerc for root
 
 - name: create initial roles
   command: /tmp/initial_data.sh
+  environment: keystone_data
 
 - include: tests.yml
