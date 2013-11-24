@@ -45,7 +45,15 @@
       pause: seconds=10
 
     - name: create public/external subnet
-      quantum_subnet: state=present tenant_name=service network_name=external name=public cidr="{{public_network_cidr}}"
+      quantum_subnet:
+        state=present 
+        tenant_name=service 
+        network_name=external 
+        name=public 
+        cidr="{{public_network_cidr}}"
+        gateway="{{public_network_gateway}}"
+        allocation_pool_start="{{floatingip_range_start}}"
+        allocation_pool_end="{{floatingip_range_end}}"
                    login_username=admin login_password=secrete login_tenant_name=demo
 
     - name: create a router
