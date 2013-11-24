@@ -1,9 +1,11 @@
-# network node IP information
 # The network should be routable by the upstream network gear.
 br_ex_ip_address: 10.5.0.2
 br_ex_netmask:    255.255.255.0
 br_ex_gateway:    10.5.0.1
+public_network_gateway: ${br_ex_gateway}
 public_network_cidr:   10.5.0.0/24
+floatingip_range_start: 10.5.0.10
+floatingip_range_end: 10.5.0.100
 
 # the block device to use underneath cinder-volume.
 # /dev/mapper/mpath0 will use a multipathed device.
