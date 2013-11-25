@@ -22,8 +22,8 @@
       file: state=absent path=/tmp/cirros-0.3.1-x86_64-disk.img
       
     - name: create a tenant network
-      quantum_network: name=demo-net1 tenant_name=demo state=present
-                   login_username=admin login_password=secrete login_tenant_name=demo
+      quantum_network: name={{os_tenant_name}}-net1 tenant_name={{os_tenant_name}} state=present
+                   login_username={{os_username}} login_password={{os_password}} login_tenant_name={{os_tenant_name}}
       register: tenant_network
 
     - name: dump tenant_network info
@@ -31,12 +31,12 @@
 
     - name: create a public/external network
       quantum_network: name=external shared=yes tenant_name=service router_external=yes state=present
-                   login_username=admin login_password=secrete login_tenant_name=demo
+                   login_username={{os_username}} login_password={{os_password}} login_tenant_name={{os_tenant_name}}
       register: public_network
 
     - name: create tenant subnet
-      quantum_subnet: state=present network_name=demo-net1 name=demo-net1-subnet1 cidr="172.16.0.0/24"
-                   login_username=admin login_password=secrete login_tenant_name=demo
+      quantum_subnet: state=present network_name={{os_tenant_name}}-net1 name={{os_tenant_name}}-net1-subnet1 cidr="172.16.0.0/24"
+                   login_username={{os_username}} login_password={{os_password}} login_tenant_name={{os_tenant_name}}
 
     - name: debug public_network
       debug: msg="{{public_network_cidr}}"
@@ -54,28 +54,28 @@
         gateway_ip="{{public_network_gateway}}"
         allocation_pool_start="{{floatingip_range_start}}"
         allocation_pool_end="{{floatingip_range_end}}"
-                   login_username=admin login_password=secrete login_tenant_name=demo
+                   login_username={{os_username}} login_password={{os_password}} login_tenant_name={{os_tenant_name}}
 
     - name: create a router
-      quantum_router: name=demo-router state=present
-                   login_username=admin login_password=secrete login_tenant_name=demo
+      quantum_router: name={{os_tenant_name}}-router state=present
+                   login_username={{os_username}} login_password={{os_password}} login_tenant_name={{os_tenant_name}}
 
     - name: set gateway
-      quantum_router_gateway: state=present router_name=demo-router network_name=external
-                   login_username=admin login_password=secrete login_tenant_name=demo
+      quantum_router_gateway: state=present router_name={{os_tenant_name}}-router network_name=external
+                   login_username={{os_username}} login_password={{os_password}} login_tenant_name={{os_tenant_name}}
 
     - name: add new subnet to router
-      quantum_router_interface: state=present router_name=demo-router subnet_name=demo-net1-subnet1
-                   login_username=admin login_password=secrete login_tenant_name=demo
+      quantum_router_interface: state=present router_name={{os_tenant_name}}-router subnet_name={{os_tenant_name}}-net1-subnet1
+                   login_username={{os_username}} login_password={{os_password}} login_tenant_name={{os_tenant_name}}
 
-    - name: create a few instances 
+    - name: create an instance
       nova_compute: 
         image_id: "{{new_image.id}}"
         name: test1
         state: present 
         nics: 
           - net-id: "{{tenant_network.id}}"
-        login_username: admin 
-        login_password: secrete 
-        login_tenant_name: demo
+        login_username: {{os_username}} 
+        login_password: {{os_password}} 
+        login_tenant_name: {{os_tenant_name}}
  
