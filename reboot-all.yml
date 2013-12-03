@@ -7,6 +7,3 @@
 
     - name: reboot!
       command: shutdown -r now
-
-    - name: wait patiently while systems reboot.
-      pause: seconds=45
