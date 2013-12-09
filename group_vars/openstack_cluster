@@ -2,6 +2,7 @@
 br_ex_ip_address: 10.5.0.2
 br_ex_netmask:    255.255.255.0
 br_ex_gateway:    10.5.0.1
+haproxy_vip:      10.1.1.99
 public_network_gateway: ${br_ex_gateway}
 public_network_cidr:   10.5.0.0/24
 floatingip_range_start: 10.5.0.10
@@ -60,6 +61,8 @@ db_root_pw: root
 glance_db: glance
 glance_db_user: glance
 glance_db_pw: glance
+glance_user: glance
+glance_password: glance
 
 keystone_db: keystone
 keystone_db_user: keystone

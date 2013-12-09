@@ -6,75 +6,20 @@
 - name: remove default sqlite database file
   file: state=absent path=/var/lib/glance/glance.sqlite
 
-- name: enable version 1 of the images API
-  lineinfile: dest=/etc/glance/glance-api.conf regexp="^(#\s*)?enable_v1_api" line="enable_v1_api=true"
+- name: copy glance-api.conf
+  template: src=glance-api.conf.j2 dest=/etc/glance/glance-api.conf mode=0644 owner=root group=root
 
-- name: enable version 2 of the images API
-  lineinfile: dest=/etc/glance/glance-api.conf regexp="^(#\s*)?enable_v2_api" line="enable_v2_api=true"
+- name: copy glance-registry.conf
+  template: src=glance-registry.conf.j2 dest=/etc/glance/glance-registry.conf mode=0644 owner=root group=root
 
-- name: edit the admin tenant name in glance-api.conf
-  lineinfile: dest={{item}} regexp="^admin_tenant_name" line="admin_tenant_name = service"
-  with_items:
-    - /etc/glance/glance-api.conf
-    - /etc/glance/glance-registry.conf
-
-- name: edit the admin user name in glance-api.conf
-  lineinfile: dest={{item}} regexp="^admin_user" line="admin_user = glance"
-  with_items:
-    - /etc/glance/glance-api.conf
-    - /etc/glance/glance-registry.conf  
-
-- name: edit the admin password in glance-api.conf
-  lineinfile: dest={{item}} regexp="^admin_password" line="admin_password = glance"
-  with_items:
-    - /etc/glance/glance-api.conf
-    - /etc/glance/glance-registry.conf
-
-- name: enable the paste_deploy config file
-  lineinfile: dest=/etc/glance/glance-api.conf regexp="^(#\s*)?config_file" line="config_file = /etc/glance/glance-api-paste.ini" insertafter="^[paste_deploy]"
-
-- name: enable the paste_deploy config file
-  lineinfile: dest=/etc/glance/glance-registry.conf regexp="^(#\s*)?config_file" line="config_file = /etc/glance/glance-registry-paste.ini" insertafter="^[paste_deploy]"
-
-- name: set flavor=keystone
-  lineinfile: dest={{item}} regexp="^(#\s*)?flavor" line="flavor = keystone"
-  with_items:
-    - /etc/glance/glance-api.conf
-    - /etc/glance/glance-registry.conf
-
-- name: ensure sql_connection points to mysql
-  lineinfile: dest={{item}} regexp="^sql_connection" line="sql_connection = mysql://${glance_db_user}:${glance_db_pw}@${db_host}/${glance_db}"
-  with_items:
-    - /etc/glance/glance-api.conf
-    - /etc/glance/glance-registry.conf
-
-- name: add the keystone pipeline section for glance-registry-paste
-  lineinfile: dest=/etc/glance/glance-registry-paste.ini regexp="^\[pipeline:glance-registry-keystone\]" line="[pipeline:glance-registry-keystone]"
-
-- name: add the pipeline definition for glance-registry-paste
-  lineinfile: dest=/etc/glance/glance-registry-paste.ini regexp="^pipeline = authtoken context registryapp" line="pipeline = authtoken context registryapp" insertafter="^\[pipeline:glance-registry-keystone\]"
-
+- name: copy glance-registry-paste.ini 
+  template: src=glance-registry-paste.ini.j2 dest=/etc/glance/glance-registry-paste.ini mode=0644 owner=root group=root
 
 - name: restart glance-api
   service: name=glance-api state=restarted
 
-- name: configure glance to use the Identity service
-  lineinfile: dest=/etc/glance/glance-registry-paste.ini regexp="^pipeline =" line="pipeline = authtoken context registryapp"
-
 - name: restart glance-registry 
   service: name=glance-registry state=restarted
-
-- name: populate the database
-  command: glance-manage db_sync
-
-- name: restart glance registry and api services
-  service: name={{item}} state=restarted
-  with_items:
-    - glance-registry
-    - glance-api
-
-- name: give the services a few seconds to settle
-  command: sleep 5
 
 - include: tests.yml
 

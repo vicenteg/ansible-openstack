@@ -3,7 +3,7 @@
 admin_token = {{keystone_admin_token}}
 
 # The IP address of the network interface to listen on
-# bind_host = 0.0.0.0
+bind_host = {{ansible_eth0.ipv4.address}}
 
 # The port number which the public service listens on
 # public_port = 5000

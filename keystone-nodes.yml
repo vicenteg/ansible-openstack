@@ -11,9 +11,6 @@
   - name: initialize the new keystone database
     command: keystone-manage db_sync
 
-  - name: run keystone-manage pki_setup
-    command: keystone-manage pki_setup
-
   - name: restart keystone again to complete configuration changes
     service: name=keystone state=restarted
 
@@ -24,5 +21,8 @@
 - hosts: keystone_nodes
   user: root
   tasks:
+  - name: run keystone-manage pki_setup
+    command: keystone-manage pki_setup
+
   - name: restart keystone
     service: name=keystone state=restarted

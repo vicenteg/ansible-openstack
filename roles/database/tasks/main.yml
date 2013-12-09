@@ -1,41 +1,52 @@
 - name: create glance database
-  mysql_db: name={{glance_db}} state=present login_user={{db_root_user}} login_password={{db_root_pw}}
+  mysql_db: name={{glance_db}} state=present login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
 
 - name: create glance database user
-  mysql_user: name=${glance_db_user} password=${glance_db_pw} state=present  priv=${glance_db}.*:ALL host={{item}} login_user={{db_root_user}} login_password={{db_root_pw}}
+  mysql_user: name={{glance_db_user}} password={{glance_db_pw}} state=present  priv={{glance_db}}.*:ALL host={{item}} login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
   with_items:
-    - ${ansible_eth0.ipv4.address}
+    - "{{ansible_eth0.ipv4.address}}"
+    - localhost
+    - \%
+
+- name: create cinder database
+  mysql_db: name={{cinder_db}} state=present login_user="{{db_root_user}}" login_password="{{db_root_pw}}" 
+
+- name: create cinder user
+  mysql_user: name={{cinder_db_user}} password={{cinder_db_pw}} host={{item}} state=present priv={{cinder_db}}.*:ALL
+  with_items:
+    - "{{ansible_eth0.ipv4.address}}"
+    - "{{keystone_host}}"
     - localhost
     - \%
 
 - name: create keystone database
-  mysql_db: name=${keystone_db} state=present login_user={{db_root_user}} login_password={{db_root_pw}}
+  mysql_db: name={{keystone_db}} state=present login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
 
 - name: create keystone database user
-  mysql_user: name=${keystone_db_user} password=${keystone_db_pw} host={{item}} state=present priv=${keystone_db}.*:ALL
+  mysql_user: name={{keystone_db_user}} password={{keystone_db_pw}} host={{item}} state=present priv={{keystone_db}}.*:ALL
   with_items:
-    - ${ansible_eth0.ipv4.address}
-    - ${keystone_host}
+    - "{{ansible_eth0.ipv4.address}}"
+    - "{{keystone_host}}"
     - localhost
     - \%
 
 - name: create nova database
-  mysql_db: name=${nova_db} state=present
+  mysql_db: name={{nova_db}} state=present
 
 - name: create nova database user
-  mysql_user: name=${nova_db_user} password=${nova_db_pw} state=present host={{item}} priv=${nova_db}.*:ALL login_user={{db_root_user}} login_password={{db_root_pw}}
+  mysql_user: name={{nova_db_user}} password={{nova_db_pw}} state=present host={{item}} priv={{nova_db}}.*:ALL login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
   with_items:
-    - ${ansible_eth0.ipv4.address}
+    - "{{ansible_eth0.ipv4.address}}"
     - localhost
     - \%
 
 - name: create quantum database
-  mysql_db: name=${quantum_db} state=present
+  mysql_db: name={{quantum_db}} state=present
 
 - name: create quantum database user
-  mysql_user: name=${quantum_db_user} password=${quantum_db_pw} state=present host={{item}} priv=${quantum_db}.*:ALL login_user={{db_root_user}} login_password={{db_root_pw}}
+  mysql_user: name={{quantum_db_user}} password={{quantum_db_pw}} state=present host={{item}} priv={{quantum_db}}.*:ALL login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
   with_items:
-    - ${ansible_eth0.ipv4.address}
+    - "{{ansible_eth0.ipv4.address}}"
     - localhost
     - \%
 

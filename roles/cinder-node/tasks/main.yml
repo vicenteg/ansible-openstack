@@ -18,9 +18,6 @@
   notify:
     - restart cinder
 
-#- name: initialize cinder database
-#  command: cinder-manage db sync
-
 - name: create partition on selected device
   shell: echo "0," | sfdisk {{cinder_device}}
   when: ansible_devices.sdb is defined 

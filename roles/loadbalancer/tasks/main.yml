@@ -1,3 +1,14 @@
+- name: install keepalived
+  apt: name=keepalived state=present
+
+- name: ensure non-local IPs can be bound
+  lineinfile: dest=/etc/sysctl.conf regexp="net.ipv4.ip_nonlocal_bind" line="net.ipv4.ip_nonlocal_bind=1"
+  notify:
+  - reload sysctl
+
+- name: copy keepalived.conf 
+  template: src=keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf mode=0644 owner=root group=root
+
 - name: install haproxy
   apt: name=haproxy state=present
   notify: restart haproxy

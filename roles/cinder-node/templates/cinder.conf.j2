@@ -1,4 +1,5 @@
 [DEFAULT]
+sql_connection=mysql://{{cinder_db_user}}:{{cinder_db_pw}}@{{db_host}}/cinder
 rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_confg = /etc/cinder/api-paste.ini
 iscsi_helper = tgtadm
@@ -15,3 +16,11 @@ rabbit_port = 5672
 rabbit_userid = {{rabbit_user}}
 rabbit_password = {{rabbit_password}}
 rabbit_virtual_host = {{rabbit_vhost}}
+
+enabled_backends=lvmdriver-1
+[lvmdriver-1]
+volume_group=cinder-volumes
+volume_driver=cinder.volume.drivers.lvm.LVMISCSIDriver
+volume_backend_name=LVM_iSCSI
+
+scheduler_driver=cinder.scheduler.filter_scheduler.FilterScheduler

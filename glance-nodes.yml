@@ -1,7 +1,21 @@
 - hosts: glance_nodes
   user: root
-  serial: 1
 
   roles:
     - common
     - glance
+
+- hosts: glance_nodes[0]
+  user: root
+  tasks:
+  - name: initialize glance database
+    command: glance-manage db_sync
+
+- hosts: glance_nodes
+  user: root
+  tasks:
+  - name: restart glance registry and api services
+    service: name={{item}} state=restarted
+    with_items:
+      - glance-registry
+      - glance-api
