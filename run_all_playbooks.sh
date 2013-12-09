@@ -36,4 +36,4 @@ if [ "$?" == 0 ]; then
 fi
 
 # do some quantum, nova operations to validate the basic env
-time ansible-playbook -i hosts test.yml
+time ansible-playbook -i hosts playbooks/test.yml
