@@ -18,8 +18,8 @@
   notify:
     - restart cinder
 
-- name: initialize cinder database
-  command: cinder-manage db sync
+#- name: initialize cinder database
+#  command: cinder-manage db sync
 
 - name: create partition on selected device
   shell: echo "0," | sfdisk {{cinder_device}}
@@ -29,6 +29,7 @@
 - name: see if we have any cinder-volumes existing
   command: vgdisplay {{cinder_volume_group}}
   register: vgdisplay
+  ignore_errors: yes
 
 - name: create cinder volume group
   lvg: pvs={{cinder_device}}-part1 vg={{cinder_volume_group}} state=present force=yes

@@ -1,4 +1,4 @@
-- hosts: all:!seamicro-chassis
+- hosts: all:!seamicro_chassis
   user: root
 
   tasks:

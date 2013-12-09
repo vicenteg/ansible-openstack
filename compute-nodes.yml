@@ -1,4 +1,4 @@
-- hosts: compute-nodes
+- hosts: compute_nodes
   user: root
   serial: 1
 

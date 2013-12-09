@@ -1,4 +1,4 @@
-- hosts: controller-nodes
+- hosts: controller_nodes
   user: root
   serial: 1
 

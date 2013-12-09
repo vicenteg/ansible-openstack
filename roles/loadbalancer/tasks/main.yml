@@ -1,5 +1,11 @@
 - name: install haproxy
   apt: name=haproxy state=present
+  notify: restart haproxy
 
 - name: install haproxy.cfg
-  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg mode=06000 owner=haproxy group=haproxy
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg mode=0600 owner=haproxy group=haproxy
+  notify: restart haproxy
+
+- name: enable haproxy
+  lineinfile: regexp="^ENABLED=" line="ENABLED=1" dest=/etc/default/haproxy state=present
+  notify: restart haproxy

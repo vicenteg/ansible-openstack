@@ -11,25 +11,13 @@
 - name: copy the keystone configuration file
   template: src=keystone.conf.j2 dest=/etc/keystone/keystone.conf mode=0644
 
-- name: restart keystone to use the mysql database
-  service: name=keystone state=restarted
-
-- name: initialize the new keystone database
-  command: keystone-manage db_sync
-
-- name: run keystone-manage pki_setup
-  command: keystone-manage pki_setup
-
-- name: restart keystone again to complete configuration changes
-  service: name=keystone state=restarted
-
 - name: copy script that creates some initial roles/users
   template: src=initial_data.sh.j2 dest=/root/initial_data.sh mode=0700 owner=root group=root
   notify:
     - create keystonerc for root
 
-- name: create initial roles
-  command: /root/initial_data.sh
-  environment: keystone_data
+#- name: create initial roles
+#  command: /root/initial_data.sh
+#  environment: keystone_data
 
 - include: tests.yml

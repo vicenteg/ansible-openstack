@@ -1,7 +1,4 @@
 - hosts: controller_nodes
   user: root
-  serial: 1
-
   roles:
-    - common
-    - network-node
+    - loadbalancer

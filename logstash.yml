@@ -1,4 +1,4 @@
-- hosts: logger-nodes
+- hosts: logger_nodes
   user: root
 
   roles:

@@ -6,42 +6,45 @@ compute1 ansible_ssh_host=server17
 compute2 ansible_ssh_host=server32
 
 # Do not edit below this line unless you're pretty sure.
-[controller-nodes]
+
+local ansible_connection=local
+
+[controller_nodes]
 controller1
 controller2
 controller3
 
-[cinder-nodes]
+[cinder_nodes]
 controller1
 controller2
 controller3
 
-[compute-nodes]
+[compute_nodes]
 compute1
 compute2
 
-[database-servers]
+[database_servers]
 controller1
 controller2
 controller3
 
-[keystone-nodes]
+[keystone_nodes]
 controller1
 controller2
 controller3
 
-[glance-nodes]
+[glance_nodes]
 controller1
 controller2
 controller3
 
-[messaging-servers]
+[messaging_servers]
 controller1
 
-[logger-nodes]
+[logger_nodes]
 controller1
 
-[openstack-cluster]
+[openstack_cluster]
 controller1
 controller2
 controller3

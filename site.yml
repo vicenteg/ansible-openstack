@@ -1,5 +1,7 @@
 ---
   - include: logstash.yml
+  - include: loadbalancer.yml
+  - include: galera.yml
   - include: database.yml
   - include: messaging.yml
   - include: keystone-nodes.yml

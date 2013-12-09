@@ -1,7 +1,7 @@
 # per http://docs.openstack.org/grizzly/openstack-compute/install/apt/content/verifying-identity-install.html
 # verify that authorization works
 - name: verify that authorization works for the admin user (XXX make variables of the username/password)
-  command: keystone --os-username=${os_username} --os-password=${os_password} --os-auth-url=http://localhost:35357/v2.0 token-get
+  command: keystone --os-username={{os_username}} --os-password={{os_password}} --os-auth-url=http://localhost:35357/v2.0 token-get
 
 - name: verify that authorization works for the demo tenant (XXX make variables of the username/password)
-  command: keystone --os-username=${os_username} --os-password=${os_password}  --os-tenant-name=${os_tenant_name} --os-auth-url=http://localhost:35357/v2.0 token-get
+  command: keystone --os-username={{os_username}} --os-password={{os_password}}  --os-tenant-name={{os_tenant_name}} --os-auth-url=http://localhost:35357/v2.0 token-get

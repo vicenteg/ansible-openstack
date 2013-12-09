@@ -1,4 +1,4 @@
-- hosts: messaging-servers
+- hosts: messaging_servers
   user: root
 
   roles:
