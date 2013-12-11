@@ -51,7 +51,7 @@ paste.filter_factory = cinder.api.middleware.auth:CinderKeystoneContext.factory
 [filter:authtoken]
 paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory
 service_protocol = http
-service_host = {{keystone_host}}
+service_host = {{ansible_default_ipv4.address}}
 service_port = 5000
 auth_host = {{keystone_host}}
 auth_port = 35357

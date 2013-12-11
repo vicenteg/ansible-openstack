@@ -7,6 +7,16 @@
     - libapache2-mod-wsgi
     - openstack-dashboard
 
+- name: update apache config to listen only on default ipv4 interface
+  template: dest=/etc/apache2/ports.conf src=ports.conf.j2 mode=0644 owner=root group=root
+  notify:
+    - restart openstack-dashboard
+
+- name: update apache virtual host config
+  template: dest=/etc/apache2/sites-enabled/000-default src=000-default.j2 mode=0644 owner=root group=root
+  notify:
+    - restart openstack-dashboard
+
 - name: edit dashboard configuration to point to keystone
   lineinfile: dest=/etc/openstack-dashboard/local_settings.py regexp="^OPENSTACK_HOST" line="OPENSTACK_HOST = '{{keystone_host}}'"
 

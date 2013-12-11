@@ -1,0 +1,14 @@
+- name: install keepalived
+  apt: name=keepalived state=present
+
+- name: ensure non-local IPs can be bound
+  lineinfile: dest=/etc/sysctl.conf regexp="net.ipv4.ip_nonlocal_bind" line="net.ipv4.ip_nonlocal_bind=1"
+
+- name: reload sysctl
+  command: sysctl -p
+
+- name: copy keepalived.conf 
+  template: src=keepalived.conf.j2 dest=/etc/keepalived/keepalived.conf mode=0644 owner=root group=root
+
+- name: start keepalived
+  service: name=keepalived state=started enabled=yes

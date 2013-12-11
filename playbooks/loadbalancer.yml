@@ -5,6 +5,7 @@
 - hosts: controller_nodes[0]:controller_nodes[1]
   user: root
   roles:
+    - keepalived
     - loadbalancer
 
 - hosts: controller_nodes[0]
@@ -13,9 +14,8 @@
   - name: update priority of backup
     lineinfile: dest=/etc/keepalived/keepalived.conf regexp="priority" line="priority 100" state=present
 
-
 - hosts: controller_nodes[0]:controller_nodes[1]
   user: root
   tasks:
   - name: start keeplived
-    service: name=keepalived state=started
+    service: name=keepalived state=started enabled=yes

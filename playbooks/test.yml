@@ -9,6 +9,7 @@
 
     - name: download Ubuntu 12.04.3 image
       command: chdir=/tmp creates=/tmp/precise-server-cloudimg-amd64-disk1.img wget http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
+      environment: proxy_env
 
     - name: create Cirros image
       glance_image: name="Cirros 0.3.1"

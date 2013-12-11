@@ -6,7 +6,7 @@ reconnect_interval = 2
 tenant_network_type = gre
 enable_tunneling = True
 tunnel_id_ranges = 1:1000
-local_ip = {{ansible_eth0.ipv4.address}}
+local_ip = {{ansible_default_ipv4.address}}
 
 # Default: bridge_mappings =
 # Example: bridge_mappings = physnet1:br-eth1

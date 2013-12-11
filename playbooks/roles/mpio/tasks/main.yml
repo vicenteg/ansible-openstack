@@ -22,7 +22,7 @@
 - name: debug multipath output
   debug: msg={{multipath_ll.stdout_lines}}
 
-- name: reboot server if multipath output is empty
-  command: shutdown -r now
-  when: multipath_ll.stdout_lines == [ ]
-  register: reboot
+#- name: reboot server if multipath output is empty
+#  command: shutdown -r now
+#  when: multipath_ll.stdout_lines == [ ]
+#  register: reboot

@@ -21,5 +21,3 @@
 - name: restart glance-registry 
   service: name=glance-registry state=restarted
 
-- include: tests.yml
-

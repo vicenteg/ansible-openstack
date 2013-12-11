@@ -63,5 +63,16 @@ $InputFileTag quantum-server-log:
 $InputFileStateFile quantum-server-log:
 $InputRunFileMonitor
 
+$InputFileName /var/log/glance/api.log
+$InputFileTag glance-api-log:
+$InputFileStateFile glance-api-log:
+$InputRunFileMonitor
+
+$InputFileName /var/log/glance/registry.log
+$InputFileTag glance-registry-log:
+$InputFileStateFile glance-registry-log:
+$InputRunFileMonitor
+
+
 # Send everything to a logstash server ({{logstash_host}}) on port 5544:
 *.* @@{{logstash_host}}:5544

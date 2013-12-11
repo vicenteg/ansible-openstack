@@ -58,7 +58,7 @@ security_group_api=quantum
 force_config_drive=True
 fixed_ip_disassociate_timeout=10
 
-my_ip={{ansible_eth0.ipv4.address}}
+my_ip={{ansible_default_ipv4.address}}
 
 # NOVNC CONSOLE
 novncproxy_base_url=http://$my_ip:6080/vnc_auto.html

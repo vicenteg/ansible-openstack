@@ -77,22 +77,22 @@ rabbit_vhost: /
 logging_queue: openstack_logs
 
 # Use the eth0 IP address to contact the controller.
-controller_address: ${hostvars.controller1.ansible_eth0.ipv4.address}
+controller_address: ${hostvars.controller1.ansible_default_ipv4.address}
 
 # All the below services live on the controller.
-db_host: $controller_address
+db_host: "{{haproxy_vip}}"
 db_port: 33306
 db_lb_port: 3306
 datadir: /var/lib/mysql/data
 galera_cache_size: 512M
 innodb_buffer_pool_size: 512M
 clustername: galera
-glance_host: $controller_address
-keystone_host: $controller_address
-api_host: $controller_address
-rabbit_host: $controller_address
-logstash_host: $controller_address
-quantum_host: $controller_address
+glance_host: "{{haproxy_vip}}"
+keystone_host: "{{haproxy_vip}}"
+api_host: "{{haproxy_vip}}"
+rabbit_host: "{{controller_address}}"
+logstash_host: "{{controller_address}}"
+quantum_host: "{{haproxy_vip}}"
 
 # generate the admin token with something like:
 # openssl rand -hex 16

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+trap "echo Stopping; exit" SIGHUP SIGINT SIGTERM
+
+
 PUBLIC_KEY_PATH="$HOME/.ssh/id_dsa.pub"
 test -f $PUBLIC_KEY_PATH || echo nope
 KEY=`cat $PUBLIC_KEY_PATH`
@@ -21,19 +24,25 @@ if [ $ANSIBLE_PING_RC != 0 ]; then
 	ansible openstack_cluster -m authorized_key -u root -i hosts -k -c paramiko -a "user=root key='$KEY'"
 fi
 
+# It's the final countdown!
+echo "Ready to begin in T-10 seconds."
+for i in `seq 1 10 | sort -rn `; do echo -n "$i "; sleep 1; done
+
 # having added the public key, perform the install.
-time ansible-playbook -i hosts site.yml 
+ansible-playbook -i hosts playbooks/site.yml 
 
 # if the above succeeded, poll the servers using a ping before 
 # continuting on to the test playbook.
 if [ "$?" == 0 ]; then
 	while :;
 	do
-	  ansible openstack-cluster -m ping -u root 
+	  ansible openstack_cluster -m ping -u root 
 	  [ "$?" -eq 0 ] && break
 	  sleep 2
 	done
-fi
 
-# do some quantum, nova operations to validate the basic env
-time ansible-playbook -i hosts playbooks/test.yml
+	# do some quantum, nova operations to validate the basic env
+	if [ "$?" == 0 ]; then
+		time ansible-playbook -i hosts playbooks/test.yml
+	fi
+fi

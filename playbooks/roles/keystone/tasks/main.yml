@@ -20,4 +20,4 @@
 #  command: /root/initial_data.sh
 #  environment: keystone_data
 
-- include: tests.yml
+#- include: tests.yml

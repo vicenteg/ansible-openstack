@@ -14,11 +14,11 @@ innodb_flush_log_at_trx_commit=2
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
 wsrep_provider_options="gcache.size={{galera_cache_size}}"
 wsrep_cluster_address=gcomm://{% for host,vars in hostvars.items() -%}
-  {{vars['ansible_eth0']['ipv4']['address']}},
+  {{vars['ansible_default_ipv4']['address']}},
 {%- endfor %}
 
 wsrep_cluster_name='{{clustername}}'
-wsrep_node_address='{{ansible_eth0.ipv4.address}}'
+wsrep_node_address='{{ansible_default_ipv4.address}}'
 wsrep_node_name='{{ansible_hostname}}'
 #wsrep_sst_method=mysqldump
 #wsrep_sst_auth=root:rootpa$$
@@ -32,7 +32,7 @@ datadir     = {{datadir}}
 tmpdir      = /tmp
 lc-messages-dir = /usr/share/mysql
 skip-external-locking
-bind-address = 0.0.0.0
+bind-address = '{{ansible_default_ipv4.address}}'
 key_buffer_size      = 16M
 max_allowed_packet  = 16M
 thread_stack        = 192K

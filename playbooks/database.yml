@@ -1,4 +1,5 @@
-- hosts: database_servers
+# only needs to be run from one node of the cluster.
+- hosts: database_servers[0]
   user: root
   roles:
     - database
