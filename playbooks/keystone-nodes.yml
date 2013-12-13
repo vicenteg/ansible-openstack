@@ -1,6 +1,5 @@
 - hosts: keystone_nodes
   user: root
-
   roles:
     - common
     - keystone
@@ -21,8 +20,5 @@
 - hosts: keystone_nodes
   user: root
   tasks:
-  - name: run keystone-manage pki_setup
-    command: keystone-manage pki_setup
-
   - name: restart keystone
     service: name=keystone state=restarted

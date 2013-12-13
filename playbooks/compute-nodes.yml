@@ -5,3 +5,21 @@
   roles:
     - common
     - compute-node
+
+- hosts: compute_nodes[0]
+  user: root
+  tasks:
+    - name: initialize nova database
+      command: nova-manage db sync
+
+- hosts: compute_nodes
+  user: root
+  tasks:
+    - name: (re)start nova-compute services
+      service: name={{item}} state=restarted
+      with_items:
+        - libvirt-bin
+        - nova-compute
+
+    #- name: copy openrc to /root
+    #  template: src=openrc.j2 dest=/root/openrc mode=0600

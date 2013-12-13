@@ -64,3 +64,5 @@
 - name: install a modified init script with a longer timeout
   copy: src=mysql.init.sh dest=/etc/init.d/mysql mode=0755 owner=root group=root
 
+- name: make sure mysql starts on boot
+  command: update-rc.d mysql defaults

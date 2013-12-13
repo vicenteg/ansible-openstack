@@ -1,6 +1,5 @@
-- hosts: controller_nodes
+- hosts: controller_nodes[0]
   user: root
-  serial: 1
 
   roles:
     - common

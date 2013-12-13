@@ -8,11 +8,9 @@
   user: root
   roles:
     - galera-bootstrap
-#    - galera-sysbench
 
 # start up the other nodes, joining the cluster
 - hosts: database_servers[1]:database_servers[2]
   user: root
   roles:
     - galera-nodes
-#    - galera-sysbench
