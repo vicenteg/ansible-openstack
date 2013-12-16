@@ -2,5 +2,5 @@
   user: root
 
   roles:
-    - common
+#    - common
     - logstash
