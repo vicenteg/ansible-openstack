@@ -16,7 +16,7 @@
       when: ansible_distribution_release == "precise"
 
     - name: install the cloud archive sources
-      lineinfile: dest=/etc/apt/sources.list regexp="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/grizzly main" line="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/grizzly main"
+      lineinfile: dest=/etc/apt/sources.list regexp="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main" line="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main"
       when: ansible_distribution_release == "precise"
 
     - name: update apt
@@ -34,4 +34,4 @@
 - include: cinder-nodes.yml
 - include: controller-nodes.yml
 - include: compute-nodes.yml
-#  - include: reboot-all.yml
+- include: restart-services.yml
