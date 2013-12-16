@@ -1,9 +1,6 @@
 - hosts: compute_nodes
   user: root
-  serial: 1
-
   roles:
-    - common
     - compute-node
 
 - hosts: compute_nodes[0]
@@ -21,5 +18,3 @@
         - libvirt-bin
         - nova-compute
 
-    #- name: copy openrc to /root
-    #  template: src=openrc.j2 dest=/root/openrc mode=0600
