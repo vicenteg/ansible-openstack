@@ -2,7 +2,7 @@
   user: root
 
   roles:
-    - common
+#    - common
     - cinder-node
 
 - hosts: cinder_nodes[0]
