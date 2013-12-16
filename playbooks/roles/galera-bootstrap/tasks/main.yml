@@ -22,6 +22,12 @@
   mysql_user: name=root password={{db_root_pw}} host={{item}} state=present priv="*.*:ALL,GRANT"
   with_items:
     - "{{ansible_hostname}}"
+    - "{{hostvars.controller1.ansible_fqdn}}"
+    - "{{hostvars.controller2.ansible_fqdn}}"
+    - "{{hostvars.controller3.ansible_fqdn}}"
+    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
     - 127.0.0.1
     - ::1
     - localhost
