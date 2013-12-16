@@ -1,10 +1,18 @@
+- name: create haproxy user for checks
+  mysql_user: name=haproxy password=haproxy login_user='{{db_root_user}}' login_password='{{db_root_pw}}' state=present
+
 - name: create glance database
   mysql_db: name={{glance_db}} state=present login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
 
 - name: create glance database user
   mysql_user: name={{glance_db_user}} password={{glance_db_pw}} state=present  priv={{glance_db}}.*:ALL host={{item}} login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
   with_items:
-    - "{{ansible_eth0.ipv4.address}}"
+    - "{{hostvars.controller1.ansible_fqdn}}"
+    - "{{hostvars.controller2.ansible_fqdn}}"
+    - "{{hostvars.controller3.ansible_fqdn}}"
+    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
     - localhost
     - \%
 
@@ -14,7 +22,12 @@
 - name: create cinder user
   mysql_user: name={{cinder_db_user}} password={{cinder_db_pw}} host={{item}} state=present priv={{cinder_db}}.*:ALL
   with_items:
-    - "{{ansible_eth0.ipv4.address}}"
+    - "{{hostvars.controller1.ansible_fqdn}}"
+    - "{{hostvars.controller2.ansible_fqdn}}"
+    - "{{hostvars.controller3.ansible_fqdn}}"
+    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
     - "{{keystone_host}}"
     - localhost
     - \%
@@ -25,7 +38,12 @@
 - name: create keystone database user
   mysql_user: name={{keystone_db_user}} password={{keystone_db_pw}} host={{item}} state=present priv={{keystone_db}}.*:ALL
   with_items:
-    - "{{ansible_eth0.ipv4.address}}"
+    - "{{hostvars.controller1.ansible_fqdn}}"
+    - "{{hostvars.controller2.ansible_fqdn}}"
+    - "{{hostvars.controller3.ansible_fqdn}}"
+    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
     - "{{keystone_host}}"
     - localhost
     - \%
@@ -36,7 +54,12 @@
 - name: create nova database user
   mysql_user: name={{nova_db_user}} password={{nova_db_pw}} state=present host={{item}} priv={{nova_db}}.*:ALL login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
   with_items:
-    - "{{ansible_eth0.ipv4.address}}"
+    - "{{hostvars.controller1.ansible_fqdn}}"
+    - "{{hostvars.controller2.ansible_fqdn}}"
+    - "{{hostvars.controller3.ansible_fqdn}}"
+    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
     - localhost
     - \%
 
@@ -46,7 +69,12 @@
 - name: create quantum database user
   mysql_user: name={{quantum_db_user}} password={{quantum_db_pw}} state=present host={{item}} priv={{quantum_db}}.*:ALL login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
   with_items:
-    - "{{ansible_eth0.ipv4.address}}"
+    - "{{hostvars.controller1.ansible_fqdn}}"
+    - "{{hostvars.controller2.ansible_fqdn}}"
+    - "{{hostvars.controller3.ansible_fqdn}}"
+    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
     - localhost
     - \%
 
