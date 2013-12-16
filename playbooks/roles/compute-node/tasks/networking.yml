@@ -28,15 +28,15 @@
   when: int_result|failed
 
 - name: install quantum-plugin-openvswitch-agent
-  apt: name=quantum-plugin-openvswitch-agent
+  apt: name='{{neutron}}-plugin-openvswitch-agent'
 
 - name: install quantum.conf
-  template: src=quantum.conf.j2 dest=/etc/quantum/quantum.conf mode=0644
+  template: src='{{neutron}}.conf.j2' dest='/etc/{{neutron}}/{{neutron}}.conf' mode=0644
 
 - name: copy quantum plugin configuration
-  template: src=ovs_quantum_plugin.ini.j2 dest=/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini mode=0644
+  template: src='ovs_{{neutron}}_plugin.ini.j2' dest='/etc/{{neutron}}/plugins/openvswitch/ovs_{{neutron}}_plugin.ini' mode=0644
 
 - name: restart ovs agent plugin
   service: name={{item}} state=restarted
   with_items:
-    - quantum-plugin-openvswitch-agent
+    - '{{neutron}}-plugin-openvswitch-agent'

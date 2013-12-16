@@ -21,6 +21,7 @@ iscsi_helper=tgtadm
 # DATABASE
 sql_connection=mysql://{{nova_db_user}}:{{nova_db_pw}}@{{db_host}}/{{nova_db}}
 
+
 # COMPUTE
 libvirt_type=kvm
 compute_driver=libvirt.LibvirtDriver
@@ -32,6 +33,9 @@ api_paste_config=/etc/nova/api-paste.ini
 allow_resize_to_same_host=True
 
 # APIS
+osapi_compute_listen={{ansible_default_ipv4.address}}
+osapi_compute_listen_port=8774
+
 osapi_compute_extension=nova.api.openstack.compute.contrib.standard_extensions
 ec2_dmz_host={{api_host}}
 s3_host={{api_host}}
@@ -43,6 +47,10 @@ rabbit_host={{rabbit_host}}
 # GLANCE
 image_service=nova.image.glance.GlanceImageService
 glance_api_servers=${glance_host}:9292
+
+# METADATA
+metadata_listen={{ansible_default_ipv4.address}}
+metadata_listen_port=8775
 
 # NETWORK
 libvirt_use_virtio_for_bridges=True
@@ -77,3 +85,4 @@ admin_tenant_name = {{service_tenant}}
 admin_user = {{nova_user}}
 admin_password = {{nova_password}}
 signing_dirname = /tmp/keystone-signing-nova
+
