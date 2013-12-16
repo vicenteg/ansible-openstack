@@ -3,5 +3,4 @@
   serial: 1
 
   roles:
-#    - common
     - controller-node
