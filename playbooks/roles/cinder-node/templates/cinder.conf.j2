@@ -1,4 +1,6 @@
 [DEFAULT]
+osapi_volume_listen = {{ansible_default_ipv4.address}}
+
 sql_connection=mysql://{{cinder_db_user}}:{{cinder_db_pw}}@{{db_host}}/cinder
 rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_confg = /etc/cinder/api-paste.ini
