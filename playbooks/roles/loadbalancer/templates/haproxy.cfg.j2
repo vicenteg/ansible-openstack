@@ -31,17 +31,23 @@ listen dashboard_cluster
   option  tcpka
   option  httpchk
   option  tcplog
-{% for host,vars in hostvars.items() %}
-  server {{host}} {{vars['ansible_default_ipv4']['address']}}:80 check inter 2000 rise 2 fall 5
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:80 check inter 2000 rise 2 fall 5
 {% endfor %}
 
 listen galera_cluster 
   bind {{haproxy_vip}}:3306
   mode tcp
-  balance source
-  #option  httpchk
-{% for host,vars in hostvars.items() %}
-  server {{host}} {{vars['ansible_default_ipv4']['address']}}:33306 check inter 2000 rise 2 fall 5
+  option tcpka
+  balance roundrobin
+  retries 3
+  option redispatch
+  timeout connect 5000ms
+  timeout client 50000ms
+  timeout server 50000ms
+  option mysql-check user haproxy
+{% for host in groups['database_servers'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:33306 check inter 3000 maxconn 20 rise 2 fall 5
 {% endfor %}
 
 listen glance_api_cluster 
@@ -50,8 +56,8 @@ listen glance_api_cluster
   option  tcpka
   option  httpchk
   option  tcplog
-{% for host,vars in hostvars.items() %}
-  server {{host}} {{vars['ansible_default_ipv4']['address']}}:9292 check inter 2000 rise 2 fall 5
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:9292 check inter 2000 rise 2 fall 5
 {% endfor %}
 
 listen glance_registry_cluster 
@@ -59,8 +65,8 @@ listen glance_registry_cluster
   balance  source
   option  tcpka
   option  tcplog
-{% for host,vars in hostvars.items() %}
-  server {{host}} {{vars['ansible_default_ipv4']['address']}}:9191 check inter 2000 rise 2 fall 5
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:9191 check inter 2000 rise 2 fall 5
 {% endfor %}
 
 listen keystone_admin_cluster 
@@ -69,8 +75,8 @@ listen keystone_admin_cluster
   option  tcpka
   option  httpchk
   option  tcplog
-{% for host,vars in hostvars.items() %}
-  server {{host}} {{vars['ansible_default_ipv4']['address']}}:35357 check inter 2000 rise 2 fall 5
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:35357 check inter 2000 rise 2 fall 5
 {% endfor %}
 
 listen keystone_public_internal_cluster 
@@ -80,7 +86,7 @@ listen keystone_public_internal_cluster
   option  httpchk
   option  tcplog
 {% for host,vars in hostvars.items() %}
-  server {{host}} {{vars['ansible_default_ipv4']['address']}}:5000 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{vars['ansible_default_ipv4']['address']}}:5000 check inter 2000 rise 2 fall 5
 {% endfor %}
 
 #listen nova_ec2_api_cluster 
@@ -89,26 +95,26 @@ listen keystone_public_internal_cluster
 #  option  tcpka
 #  option  tcplog
 #{% for host,vars in hostvars.items() %}
-#  server {{host}} {{vars['ansible_default_ipv4']['address']}}:8773 check inter 2000 rise 2 fall 5
+#  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{vars['ansible_default_ipv4']['address']}}:8773 check inter 2000 rise 2 fall 5
 #{% endfor %}
 
-#listen nova_compute_api_cluster 
-#  bind {{haproxy_vip}}:8774
-#  balance  source
-#  option  tcpka
-#  option  httpchk
-#  option  tcplog
-#{% for host,vars in hostvars.items() %}
-#  server {{host}} {{vars['ansible_default_ipv4']['address']}}:8774 check inter 2000 rise 2 fall 5
-#{% endfor %}
-##
+listen nova_compute_api_cluster 
+  bind {{haproxy_vip}}:8774
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:8774 check inter 2000 rise 2 fall 5
+{% endfor %}
+
 #listen nova_metadata_api_cluster 
 #  bind {{haproxy_vip}}:8775
 #  balance  source
 #  option  tcpka
 #  option  tcplog
 #{% for host,vars in hostvars.items() %}
-#  server {{host}} {{vars['ansible_default_ipv4']['address']}}:8775 check inter 2000 rise 2 fall 5
+#  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{vars['ansible_default_ipv4']['address']}}:8775 check inter 2000 rise 2 fall 5
 #{% endfor %}
 
 listen cinder_api_cluster 
@@ -117,8 +123,8 @@ listen cinder_api_cluster
   option  tcpka
   option  httpchk
   option  tcplog
-{% for host,vars in hostvars.items() %}
-  server {{host}} {{vars['ansible_default_ipv4']['address']}}:8776 check inter 2000 rise 2 fall 5
+{% for host in groups['cinder_nodes'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:8776 check inter 2000 rise 2 fall 5
 {% endfor %}
 
 #listen ceilometer_api_cluster
@@ -144,8 +150,8 @@ listen neutron_api_cluster
   option  tcpka
   option  httpchk
   option  tcplog
-{% for host,vars in hostvars.items() %}
-  server {{host}} {{vars['ansible_default_ipv4']['address']}}:9696 check inter 2000 rise 2 fall 5
+{% for host in groups['network_nodes'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:9696 check inter 2000 rise 2 fall 5
 {% endfor %}
 
 #listen swift_proxy_cluster
