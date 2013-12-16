@@ -1,0 +1,44 @@
+- hosts: controller_nodes
+  user: root
+  serial: 1
+  tasks:
+    - name: restart controller services
+      service: name={{item}} state=restarted
+      with_items:
+        - nova-conductor
+        - nova-api
+        - nova-cert
+        - nova-consoleauth
+        - nova-scheduler
+        - nova-novncproxy
+
+- hosts: network_nodes
+  user: root
+  tasks:
+    - name: restart network services
+      service: name={{item}} state=restarted
+      with_items:
+        - quantum-server
+        - quantum-l3-agent
+        - quantum-openvswitch-agent
+
+- hosts: cinder_nodes
+  user: root
+  serial: 1
+  tasks:
+    - name: restart cinder
+      service: name={{item}} state=restarted
+      with_items:
+        - cinder-api
+        - cinder-volume
+        - cinder-scheduler
+
+- hosts: compute_nodes
+  user: root
+  serial: 1
+  tasks:
+    - name: restart compute
+      service: name={{item}} state=restarted
+      with_items:
+        - nova-compute
+
