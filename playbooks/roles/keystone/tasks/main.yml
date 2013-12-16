@@ -15,3 +15,4 @@
   template: src=initial_data.sh.j2 dest=/root/initial_data.sh mode=0700 owner=root group=root
   notify:
     - create keystonerc for root
+  environment: keystone_data
