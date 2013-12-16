@@ -1,3 +1,7 @@
+# Toggle debugging in horizon. True will cause useful tracebacks to appear in the browser.
+# Not production friendly to say True here!
+horizon_debug: True
+
 # The network should be routable by the upstream network gear.
 br_ex_ip_address: 10.5.0.2
 br_ex_netmask:    255.255.255.0
