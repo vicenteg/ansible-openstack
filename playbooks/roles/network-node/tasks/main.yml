@@ -1,7 +1,5 @@
-# Don't overwrite sysctl.conf - add lines instead.
-#- name: install sysctl.conf per http://docs.openstack.org/grizzly/basic-install/apt/content/basic-install_network.html
-#  copy: src=sysctl.conf dest=/etc/sysctl.conf mode=0644 backup=yes
-
+# NB: lineinfile is tedious but a better idea for sysctl.conf. Don't want to wholesale replace the file if
+# other plays are updating lines. 
 - name: configure ip forwarding in sysctl.conf
   lineinfile: dest=/etc/sysctl.conf regexp="net.ipv4.ip_forward" line="net.ipv4.ip_forward = 1"
 
@@ -41,27 +39,27 @@
 - name: install openvswitch
   apt: name=openvswitch-switch state=present
 
-- name: install quantum packages
+- name: install quantum/neutron packages
   apt: name={{item}} state=present
   with_items:
-     - quantum-server
-     - quantum-plugin-openvswitch
+     - '{{neutron}}-server'
+     - '{{neutron}}-plugin-openvswitch'
 
-- name: install quantum agents
+- name: install neutron agents
   apt: name={{item}} state=present
   with_items:
-     - quantum-plugin-openvswitch-agent
-     - quantum-dhcp-agent 
-     - quantum-l3-agent
+     - '{{neutron}}-plugin-openvswitch-agent'
+     - '{{neutron}}-dhcp-agent'
+     - '{{neutron}}-l3-agent'
 
-- name: copy quantum plugin configuration
-  template: src=ovs_quantum_plugin.ini.j2 dest=/etc/quantum/plugins/openvswitch/ovs_quantum_plugin.ini mode=0644
+- name: copy neutron plugin configuration
+  template: src=ovs_{{neutron}}_plugin.ini.j2 dest='/etc/{{neutron}}/plugins/openvswitch/ovs_{{neutron}}_plugin.ini' mode=0644
 
-- name: copy quantum configuration
-  template: src=quantum.conf.j2 dest=/etc/quantum/quantum.conf mode=0644
+- name: copy neutron configuration
+  template: src={{neutron}}.conf.j2 dest=/etc/{{neutron}}/{{neutron}}.conf mode=0644
 
-- name: copy quantum metadata configuration
-  template: src=metadata_agent.ini.j2 dest=/etc/quantum/metadata_agent.ini mode=0644
+- name: copy neutron metadata configuration
+  template: src=metadata_agent.ini.j2 dest=/etc/{{neutron}}/metadata_agent.ini mode=0644
 
 - name: restart openvswitch
   service: name=openvswitch-switch state=restarted
@@ -93,10 +91,10 @@
   command: ovs-vsctl add-port br-ex eth1
   when: eth1_in_bridge|failed
 
-- name: restart quantum services
+- name: restart neutron services
   service: name={{item}} state=restarted
   with_items:
-    - quantum-server
-    - quantum-plugin-openvswitch-agent
-    - quantum-dhcp-agent
-    - quantum-l3-agent
+    - '{{neutron}}-server'
+    - '{{neutron}}-plugin-openvswitch-agent'
+    - '{{neutron}}-dhcp-agent'
+    - '{{neutron}}-l3-agent'
