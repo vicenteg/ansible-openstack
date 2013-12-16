@@ -18,9 +18,9 @@
     - name: restart network services
       service: name={{item}} state=restarted
       with_items:
-        - quantum-server
-        - quantum-l3-agent
-        - quantum-openvswitch-agent
+        - '{{neutron}}-server'
+        - '{{neutron}}-l3-agent'
+        - '{{neutron}}-plugin-openvswitch-agent'
 
 - hosts: cinder_nodes
   user: root
