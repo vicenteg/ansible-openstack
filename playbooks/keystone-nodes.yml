@@ -1,7 +1,7 @@
 - hosts: keystone_nodes
   user: root
   roles:
-    - common
+#    - common
     - keystone
 
 - hosts: keystone_nodes[0]

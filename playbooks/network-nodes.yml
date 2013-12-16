@@ -1,6 +1,4 @@
-- hosts: controller_nodes[0]
+- hosts: network_nodes
   user: root
-
   roles:
-    - common
     - network-node

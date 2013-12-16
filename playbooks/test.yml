@@ -37,11 +37,6 @@
         file: '/tmp/precise-server-cloudimg-amd64-disk1.img'
       register: ubuntu_image
 
-    - name: clean up downloaded file
-      file:
-        state: absent
-        path: '/tmp/cirros-0.3.1-x86_64-disk.img'
-      
     - name: create a tenant network
       quantum_network: name="{{os_tenant_name}}"-net1 tenant_name="{{os_tenant_name}}" state=present
                 auth_url="http://${keystone_host}:35357/v2.0/"
