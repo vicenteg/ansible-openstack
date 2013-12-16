@@ -23,6 +23,9 @@ controller3
 compute1
 compute2
 
+[network_nodes]
+controller1
+
 [database_servers]
 controller1
 controller2
