@@ -11,15 +11,15 @@ bind_host = {{ansible_default_ipv4.address}}
 # Port the bind the API server to
 bind_port = 9696
 
-core_plugin = quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2
+core_plugin = {{neutron}}.plugins.openvswitch.ovs_{{neutron}}_plugin.OVS{{neutron|capitalize}}PluginV2
 
 # Paste configuration file
-api_paste_config = /etc/quantum/api-paste.ini
+api_paste_config = /etc/{{neutron}}/api-paste.ini
 
 auth_strategy = keystone
 
 # AMQP exchange to connect to if using RabbitMQ or QPID
-control_exchange = quantum
+control_exchange = {{neutron}}
 
 # IP address of the RabbitMQ installation
 rabbit_host = {{rabbit_host}}
@@ -53,11 +53,11 @@ rabbit_port = 5672
 
 # Notification_driver can be defined multiple times
 # Do nothing driver
-# notification_driver = quantum.openstack.common.notifier.no_op_notifier
+# notification_driver = {{neutron}}.openstack.common.notifier.no_op_notifier
 # Logging driver
-# notification_driver = quantum.openstack.common.notifier.log_notifier
+# notification_driver = {{neutron}}.openstack.common.notifier.log_notifier
 # RPC driver. DHCP agents needs it.
-notification_driver = quantum.openstack.common.notifier.rpc_notifier
+notification_driver = {{neutron}}.openstack.common.notifier.rpc_notifier
 
 # default_notification_level is used to form actual topic name(s) or to set logging level
 default_notification_level = INFO
@@ -93,17 +93,17 @@ notification_topics = notifications
 
 # =========== items for agent scheduler extension =============
 # Driver to use for scheduling network to DHCP agent
-# network_scheduler_driver = quantum.scheduler.dhcp_agent_scheduler.ChanceScheduler
+# network_scheduler_driver = {{neutron}}.scheduler.dhcp_agent_scheduler.ChanceScheduler
 # Driver to use for scheduling router to a default L3 agent
-# router_scheduler_driver = quantum.scheduler.l3_agent_scheduler.ChanceScheduler
+# router_scheduler_driver = {{neutron}}.scheduler.l3_agent_scheduler.ChanceScheduler
 
 # Allow auto scheduling networks to DHCP agent. It will schedule non-hosted
 # networks to first DHCP agent which sends get_active_networks message to
-# quantum server
+# {{neutron}} server
 # network_auto_schedule = True
 
 # Allow auto scheduling routers to L3 agent. It will schedule non-hosted
-# routers to first L3 agent which sends sync_routers message to quantum server
+# routers to first L3 agent which sends sync_routers message to {{neutron}} server
 # router_auto_schedule = True
 # ===========  end of items for agent scheduler extension =====
 
@@ -130,7 +130,7 @@ notification_topics = notifications
 # quota_security_group_rule = 100
 
 # default driver to use for quota checks
-# quota_driver = quantum.quota.ConfDriver
+# quota_driver = {{neutron}}.quota.ConfDriver
 
 [DEFAULT_SERVICETYPE]
 # Description of the default service type (optional)
@@ -141,11 +141,11 @@ notification_topics = notifications
 # <service>:<plugin>[:driver]
 
 [AGENT]
-# Use "sudo quantum-rootwrap /etc/quantum/rootwrap.conf" to use the real
+# Use "sudo {{neutron}}-rootwrap /etc/{{neutron}}/rootwrap.conf" to use the real
 # root filter facility.
 # Change to "sudo" to skip the filtering and just run the comand directly
 # root_helper = sudo
-root_helper = sudo quantum-rootwrap /etc/quantum/rootwrap.conf
+root_helper = sudo {{neutron}}-rootwrap /etc/{{neutron}}/rootwrap.conf
 
 # =========== items for agent management extension =============
 # seconds between nodes reporting state to server, should be less than
@@ -161,4 +161,4 @@ auth_protocol = http
 admin_tenant_name = {{service_tenant}}
 admin_user = {{quantum_user}}
 admin_password = {{quantum_password}}
-signing_dir = /var/lib/quantum/keystone-signing
+signing_dir = /var/lib/{{neutron}}/keystone-signing

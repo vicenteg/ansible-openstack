@@ -44,6 +44,8 @@
   with_items:
      - '{{neutron}}-server'
      - '{{neutron}}-plugin-openvswitch'
+     - 'openvswitch-datapath-lts-raring-dkms'
+     - 'python-quantumclient' # for ansible's quantum module
 
 - name: install neutron agents
   apt: name={{item}} state=present
@@ -69,7 +71,7 @@
   register: int_result
   ignore_errors: true
 
-- name: create the internal openvswitch bridge
+- name: create the openvswitch integration bridge
   command: ovs-vsctl add-br br-int
   when: int_result|failed
 
