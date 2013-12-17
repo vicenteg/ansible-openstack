@@ -14,16 +14,17 @@
   apt: name={{item}} state=present
   with_items:
     - openvswitch-switch
+    - openvswitch-datapath-lts-raring-dkms
 
 - name: start openvswitch
-  service: name=openvswitch-switch state=started
+  service: name=openvswitch-switch state=started enabled=yes
 
 - name: check for br-int
   command: ovs-vsctl br-exists br-int
   register: int_result
   ignore_errors: true
 
-- name: create the internal openvswitch bridge
+- name: create the openvswitch integration bridge
   command: ovs-vsctl add-br br-int
   when: int_result|failed
 
