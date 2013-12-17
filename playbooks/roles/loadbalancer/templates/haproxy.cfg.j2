@@ -85,8 +85,8 @@ listen keystone_public_internal_cluster
   option  tcpka
   option  httpchk
   option  tcplog
-{% for host,vars in hostvars.items() %}
-  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{vars['ansible_default_ipv4']['address']}}:5000 check inter 2000 rise 2 fall 5
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:5000 check inter 2000 rise 2 fall 5
 {% endfor %}
 
 #listen nova_ec2_api_cluster 
@@ -94,8 +94,8 @@ listen keystone_public_internal_cluster
 #  balance  source
 #  option  tcpka
 #  option  tcplog
-#{% for host,vars in hostvars.items() %}
-#  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{vars['ansible_default_ipv4']['address']}}:8773 check inter 2000 rise 2 fall 5
+#{% for host in groups['controller_nodes'] %}
+#  server {{hostvars[host]['ansible_default_ipv4']['address']}} {{hostvars[host]['ansible_default_ipv4']['address']}}:8773 check inter 2000 rise 2 fall 5
 #{% endfor %}
 
 listen nova_compute_api_cluster 
