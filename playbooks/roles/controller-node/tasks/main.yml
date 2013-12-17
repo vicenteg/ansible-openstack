@@ -10,6 +10,7 @@
     - nova-consoleauth
     - nova-doc
     - nova-scheduler
+    - python-novaclient
 #    Keep nova-network around in case quantum/neutron doesn't work out
 #    - nova-network
 
