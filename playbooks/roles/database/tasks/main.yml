@@ -1,5 +1,14 @@
 - name: create haproxy user for checks
-  mysql_user: name=haproxy password=haproxy login_user='{{db_root_user}}' login_password='{{db_root_pw}}' state=present
+  mysql_user: name=haproxy host={{item}} password="" login_user='{{db_root_user}}' login_password='{{db_root_pw}}' state=present
+  with_items:
+    - "{{hostvars.controller1.ansible_fqdn}}"
+    - "{{hostvars.controller2.ansible_fqdn}}"
+    - "{{hostvars.controller3.ansible_fqdn}}"
+    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
+    - localhost
+    - \%
 
 - name: create glance database
   mysql_db: name={{glance_db}} state=present login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
