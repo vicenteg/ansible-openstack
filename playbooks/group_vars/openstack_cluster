@@ -3,11 +3,12 @@
 horizon_debug: True
 
 # The network should be routable by the upstream network gear.
+# We assume that the public network, associated with the external bridge, is on eth1.
 br_ex_ip_address: 10.5.0.2
 br_ex_netmask:    255.255.255.0
 br_ex_gateway:    10.5.0.1
 haproxy_vip:      10.1.1.99
-public_network_gateway: ${br_ex_gateway}
+public_network_gateway: '{{br_ex_gateway}}'
 public_network_cidr:   10.5.0.0/24
 floatingip_range_start: 10.5.0.10
 floatingip_range_end: 10.5.0.100
