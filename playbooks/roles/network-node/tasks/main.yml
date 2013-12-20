@@ -20,7 +20,7 @@
 
 - name: copy /etc/network/interfaces into place
   template: src=interfaces.j2 dest=/etc/network/interfaces mode=0644
-  when: ansible_eth1.active == True and ansible_eth1.ipv4.address
+  when: ansible_eth1.ipv4.address is defined
 
 #- name: ensure eth1 is configured
 #  lineinfile: dest=/etc/network/interfaces regexp="^auto eth1" line="auto eth1"
@@ -59,7 +59,7 @@
   template: src=ovs_{{neutron}}_plugin.ini.j2 dest='/etc/{{neutron}}/plugins/openvswitch/ovs_{{neutron}}_plugin.ini' mode=0644
 
 - name: copy neutron configuration
-  template: src={{neutron}}.conf.j2 dest=/etc/{{neutron}}/{{neutron}}.conf mode=0644
+  template: src='{{neutron}}.conf.j2' dest='/etc/{{neutron}}/{{neutron}}.conf' mode=0644
 
 - name: copy neutron metadata configuration
   template: src=metadata_agent.ini.j2 dest=/etc/{{neutron}}/metadata_agent.ini mode=0644
