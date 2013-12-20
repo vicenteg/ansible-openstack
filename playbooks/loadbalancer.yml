@@ -1,7 +1,9 @@
 - hosts: controller_nodes
   user: root
   tasks:
-  
+  - name: get facts
+    setup:
+
 - hosts: controller_nodes[0]:controller_nodes[1]
   user: root
   roles:

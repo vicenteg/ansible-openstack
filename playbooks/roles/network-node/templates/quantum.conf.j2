@@ -6,7 +6,7 @@ lock_path = $state_path/lock
 # log_date_format = %Y-%m-%d %H:%M:%S
 
 # Address to bind the API server
-bind_host = {{ansible_default_ipv4.address}}
+bind_host = {{ansible_eth2.ipv4.address}}
 
 # Port the bind the API server to
 bind_port = 9696

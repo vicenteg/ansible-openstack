@@ -27,7 +27,7 @@ default_store = file
 #image_size_cap = 1099511627776
 
 # Address to bind the API server
-bind_host = {{ansible_default_ipv4.address}}
+bind_host = {{ansible_eth2.ipv4.address}}
 
 # Port the bind the API server to
 bind_port = 9292
@@ -107,7 +107,7 @@ enable_v2_api=true
 # ============ Registry Options ===============================
 
 # Address to find the registry server
-registry_host = {{ansible_default_ipv4.address}}
+registry_host = {{ansible_eth2.ipv4.address}}
 
 # Port the registry server is listening on
 registry_port = 9191

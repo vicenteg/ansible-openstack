@@ -9,7 +9,7 @@
   ignore_errors: yes
 
 - name: wait for mysql to become available
-  wait_for: host="{{ansible_default_ipv4.address}}" port="{{db_port}}"
+  wait_for: host="{{ansible_eth2.ipv4.address}}" port="{{db_port}}"
 
 - name: check status
   shell: mysql -e "show status like 'wsrep_cluster_size'" | grep cluster | awk '{print $2}'

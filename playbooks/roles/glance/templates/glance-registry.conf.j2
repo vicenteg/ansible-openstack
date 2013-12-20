@@ -6,7 +6,7 @@
 #debug = False
 
 # Address to bind the registry server
-bind_host = {{ansible_default_ipv4.address}}
+bind_host = {{ansible_eth2.ipv4.address}}
 
 # Port the bind the registry server to
 bind_port = 9191

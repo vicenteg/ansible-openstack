@@ -3,13 +3,10 @@ sql_connection = mysql://{{quantum_db_user}}:{{quantum_db_pw}}@{{db_host}}/{{qua
 reconnect_interval = 2
 
 [OVS]
-tenant_network_type = gre
-enable_tunneling = True
-tunnel_id_ranges = 1:1000
-local_ip = {{ansible_default_ipv4.address}}
-
-# Default: bridge_mappings =
-# Example: bridge_mappings = physnet1:br-eth1
+network_vlan_ranges = default:2000:3999
+tunnel_id_ranges =
+integration_bridge = br-int
+bridge_mappings = default:br-eth1
 
 [AGENT]
 # Agent's polling interval in seconds

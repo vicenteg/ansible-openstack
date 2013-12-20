@@ -85,14 +85,14 @@
   command: ovs-vsctl add-br br-ex
   when: ex_result|failed
 
-- name: check whether eth1 is attached to a bridge
-  command: ovs-vsctl iface-to-br eth1
-  register: eth1_in_bridge
+- name: check whether eth0 is attached to a bridge
+  command: ovs-vsctl iface-to-br eth0
+  register: eth0_in_bridge
   ignore_errors: true
 
-- name: add eth1 to the external bridge
-  command: ovs-vsctl add-port br-ex eth1
-  when: eth1_in_bridge|failed
+- name: add eth0 to the external bridge
+  command: ovs-vsctl add-port br-ex eth0
+  when: eth0_in_bridge|failed
 
 - name: restart neutron services
   service: name={{item}} state=restarted

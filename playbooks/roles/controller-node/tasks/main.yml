@@ -11,8 +11,6 @@
     - nova-doc
     - nova-scheduler
     - python-novaclient
-#    Keep nova-network around in case quantum/neutron doesn't work out
-#    - nova-network
 
 - name: install nova.conf
   template: src=nova.conf.j2 dest=/etc/nova/nova.conf
@@ -29,7 +27,5 @@
     - nova-conductor
     - nova-consoleauth
     - nova-scheduler
-#    Keep nova-network around in case quantum/neutron doesn't work out
-#    - nova-network
 
 - include: dashboard.yml

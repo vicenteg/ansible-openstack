@@ -4,9 +4,9 @@
     - "{{hostvars.controller1.ansible_fqdn}}"
     - "{{hostvars.controller2.ansible_fqdn}}"
     - "{{hostvars.controller3.ansible_fqdn}}"
-    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller1.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller2.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller3.ansible_eth2.ipv4.address}}"
     - localhost
     - \%
 
@@ -19,9 +19,9 @@
     - "{{hostvars.controller1.ansible_fqdn}}"
     - "{{hostvars.controller2.ansible_fqdn}}"
     - "{{hostvars.controller3.ansible_fqdn}}"
-    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller1.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller2.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller3.ansible_eth2.ipv4.address}}"
     - localhost
     - \%
 
@@ -34,9 +34,9 @@
     - "{{hostvars.controller1.ansible_fqdn}}"
     - "{{hostvars.controller2.ansible_fqdn}}"
     - "{{hostvars.controller3.ansible_fqdn}}"
-    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller1.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller2.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller3.ansible_eth2.ipv4.address}}"
     - "{{keystone_host}}"
     - localhost
     - \%
@@ -50,9 +50,9 @@
     - "{{hostvars.controller1.ansible_fqdn}}"
     - "{{hostvars.controller2.ansible_fqdn}}"
     - "{{hostvars.controller3.ansible_fqdn}}"
-    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller1.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller2.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller3.ansible_eth2.ipv4.address}}"
     - "{{keystone_host}}"
     - localhost
     - \%
@@ -66,9 +66,9 @@
     - "{{hostvars.controller1.ansible_fqdn}}"
     - "{{hostvars.controller2.ansible_fqdn}}"
     - "{{hostvars.controller3.ansible_fqdn}}"
-    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller1.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller2.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller3.ansible_eth2.ipv4.address}}"
     - localhost
     - \%
 
@@ -81,9 +81,9 @@
     - "{{hostvars.controller1.ansible_fqdn}}"
     - "{{hostvars.controller2.ansible_fqdn}}"
     - "{{hostvars.controller3.ansible_fqdn}}"
-    - "{{hostvars.controller1.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller2.ansible_default_ipv4.address}}"
-    - "{{hostvars.controller3.ansible_default_ipv4.address}}"
+    - "{{hostvars.controller1.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller2.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.controller3.ansible_eth2.ipv4.address}}"
     - localhost
     - \%
 

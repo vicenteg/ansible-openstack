@@ -4,6 +4,7 @@ controller2 ansible_ssh_host=server1
 controller3 ansible_ssh_host=server16
 compute1 ansible_ssh_host=server17
 compute2 ansible_ssh_host=server32
+logstash
 
 # Do not edit below this line unless you're pretty sure.
 
@@ -16,8 +17,6 @@ controller3
 
 [cinder_nodes]
 controller1
-controller2
-controller3
 
 [compute_nodes]
 compute1
@@ -45,7 +44,7 @@ controller3
 controller1
 
 [logger_nodes]
-controller1
+logstash
 
 [openstack_cluster]
 controller1
@@ -53,3 +52,4 @@ controller2
 controller3
 compute1
 compute2
+logstash
