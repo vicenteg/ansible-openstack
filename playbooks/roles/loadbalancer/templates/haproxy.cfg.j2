@@ -39,7 +39,7 @@ listen galera_cluster
   bind {{haproxy_vip}}:3306
   mode tcp
   option tcpka
-  balance roundrobin
+  balance source
   retries 3
   option redispatch
   timeout connect 5000ms
