@@ -25,8 +25,8 @@ if [ $ANSIBLE_PING_RC != 0 ]; then
 fi
 
 # It's the final countdown!
-echo "Ready to begin in T-10 seconds."
-for i in `seq 1 10 | sort -rn `; do echo -n "$i "; sleep 1; done
+echo "Ready to begin in T-5 seconds."
+for i in `seq 1 5 | sort -rn `; do echo -n "$i "; sleep 1; done
 
 # having added the public key, perform the install.
 ansible-playbook -i hosts playbooks/site.yml 

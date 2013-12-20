@@ -3,14 +3,14 @@
 horizon_debug: True
 
 # The network should be routable by the upstream network gear.
-br_ex_ip_address: 10.5.0.2
+br_ex_ip_address: 192.168.142.200
 br_ex_netmask:    255.255.255.0
-br_ex_gateway:    10.5.0.1
-haproxy_vip:      10.1.1.99
+br_ex_gateway:    192.168.142.1
+haproxy_vip:      192.168.142.99
 public_network_gateway: ${br_ex_gateway}
-public_network_cidr:   10.5.0.0/24
-floatingip_range_start: 10.5.0.10
-floatingip_range_end: 10.5.0.100
+public_network_cidr:   192.168.142.0/24
+floatingip_range_start: 192.168.142.200
+floatingip_range_end: 192.168.142.215
 
 # neutron: quantum # if grizzly
 neutron: neutron # if havana
@@ -27,8 +27,8 @@ proxy_env:
   # foo: bar is fake placeholder to make this a valid dictionary in case
   # we don't need/want to populate http_proxy. 
   foo: bar
-  http_proxy: http://10.1.1.254:3128
-  https_proxy: http://10.1.1.254:3128
+  http_proxy: http://192.168.142.254:3128
+  https_proxy: http://192.168.142.254:3128
 
 
 ###  Do not edit below unless you're pretty sure. ###
