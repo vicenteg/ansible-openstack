@@ -6,7 +6,7 @@ lock_path = $state_path/lock
 # log_date_format = %Y-%m-%d %H:%M:%S
 
 # Address to bind the API server
-bind_host = {{ansible_default_ipv4.address}}
+bind_host = {{ansible_eth2.ipv4.address}}
 
 # Port the bind the API server to
 bind_port = 9696
@@ -32,6 +32,7 @@ rabbit_port = 5672
 rabbit_hosts = {{rabbit_host}}:5672
 rabbit_userid = {{rabbit_user}}
 rabbit_virtual_host = {{rabbit_vhost}}
+rabbit_use_ssl = false
 # Maximum retries with trying to connect to RabbitMQ
 # (the default of 0 implies an infinite retry count)
 # rabbit_max_retries = 0

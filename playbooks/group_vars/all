@@ -97,7 +97,7 @@ clustername: galera
 glance_host: "{{haproxy_vip}}"
 keystone_host: "{{haproxy_vip}}"
 api_host: "{{haproxy_vip}}"
-rabbit_host: "{{controller_address}}"
+rabbit_host: "{{haproxy_vip}}"
 logstash_host: "{{controller_address}}"
 quantum_host: "{{haproxy_vip}}"
 
@@ -107,7 +107,7 @@ keystone_admin_token: 5aa7f0aad3c51b62c330c7f955ffcb5b
 
 # variables for initial_data.sh (roles/keystone/templates/initial_data.sh.j2)
 keystone_data:
-  CONTROLLER_PUBLIC_ADDRESS: ${keystone_host}
-  CONTROLLER_INTERNAL_ADDRESS: ${keystone_host}
-  CONTROLLER_ADMIN_ADDRESS: ${keystone_host}
+  CONTROLLER_PUBLIC_ADDRESS: '{{keystone_host}}'
+  CONTROLLER_INTERNAL_ADDRESS: '{{keystone_host}}'
+  CONTROLLER_ADMIN_ADDRESS: '{{keystone_host}}'
 

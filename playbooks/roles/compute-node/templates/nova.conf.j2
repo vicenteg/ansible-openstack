@@ -44,6 +44,9 @@ enabled_apis=ec2,osapi_compute,metadata
 # RABBITMQ
 rabbit_host={{rabbit_host}}
 rabbit_port=5672
+rabbit_userid = {{rabbit_user}}
+rabbit_virtual_host = {{rabbit_vhost}}
+rabbit_use_ssl = false
 
 # GLANCE
 image_service=nova.image.glance.GlanceImageService
@@ -69,13 +72,6 @@ fixed_ip_disassociate_timeout=10
 
 my_ip={{ansible_eth0.ipv4.address}}
 
-# NOVNC CONSOLE
-novncproxy_base_url=http://$my_ip:6080/vnc_auto.html
-# Change vncserver_proxyclient_address and vncserver_listen to match each compute host
-vncserver_proxyclient_address=$my_ip
-vncserver_listen=$my_ip
-novnc_enable=true
-
 # AUTHENTICATION
 auth_strategy=keystone
 [keystone_authtoken]
@@ -87,3 +83,26 @@ admin_user = {{nova_user}}
 admin_password = {{nova_password}}
 signing_dirname = /tmp/keystone-signing-nova
 
+[spice]
+
+## Options defined in nova.spice
+
+## location of spice html5 console proxy, in the form
+html5proxy_base_url=http://{{haproxy_vip}}:6080/spice_auto.html
+
+## IP address on which instance spice server should listen
+## (string value)
+server_listen='{{ansible_eth2.ipv4.address}}'
+
+## the address to which proxy clients (like nova-
+## spicehtml5proxy) should connect (string value)
+server_proxyclient_address='{{haproxy_vip}}'
+
+## enable spice related features (boolean value)
+enabled=true
+
+## enable spice guest agent support (boolean value)
+agent_enabled=true
+
+## keymap for spice (string value)
+keymap=en-us

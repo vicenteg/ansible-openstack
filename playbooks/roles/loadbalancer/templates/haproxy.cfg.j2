@@ -71,12 +71,15 @@ listen glance_registry_cluster
 
 listen rabbitmq_cluster 
   bind {{haproxy_vip}}:5672
-  balance source
-  option  tcpka
-  option  httpchk
+  mode tcp
+  option tcpka
+  srvtimeout 30000
+  clitimeout 150000
+  contimeout 5000
+  balance leastconn
   option  tcplog
 {% for host in groups['keystone_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5672 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5672 check inter 8000 rise 2 fall 5
 {% endfor %}
 
 listen keystone_admin_cluster 
@@ -146,13 +149,14 @@ listen cinder_api_cluster
 #  server controller1 10.0.0.1:8774 check inter 2000 rise 2 fall 5
 #  server controller2 10.0.0.2:8774 check inter 2000 rise 2 fall 5
 
-#listen spice_cluster
-#  bind {{haproxy_vip}}:6082
-#  balance  source
-#  option  tcpka
-#  option  tcplog
-#  server controller1 10.0.0.1:6080 check inter 2000 rise 2 fall 5
-#  server controller2 10.0.0.2:6080 check inter 2000 rise 2 fall 5
+listen spice_cluster
+  bind {{haproxy_vip}}:6080
+  balance source
+  option  tcpka
+  option  tcplog
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:6082 check inter 2000 rise 2 fall 5
+{% endfor %}
 
 listen neutron_api_cluster 
   bind {{haproxy_vip}}:9696

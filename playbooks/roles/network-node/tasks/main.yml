@@ -58,6 +58,9 @@
 - name: copy neutron plugin configuration
   template: src=ovs_{{neutron}}_plugin.ini.j2 dest='/etc/{{neutron}}/plugins/openvswitch/ovs_{{neutron}}_plugin.ini' mode=0644
 
+- name: copy l3-agent configuration
+  template: src=l3_agent.ini.j2 dest=/etc/neutron/l3_agent.ini mode=0644
+
 - name: copy neutron configuration
   template: src='{{neutron}}.conf.j2' dest='/etc/{{neutron}}/{{neutron}}.conf' mode=0644
 

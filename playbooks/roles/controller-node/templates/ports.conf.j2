@@ -5,8 +5,8 @@
 # Debian etch). See /usr/share/doc/apache2.2-common/NEWS.Debian.gz and
 # README.Debian.gz
 
-NameVirtualHost {{ansible_default_ipv4.address}}:80
-Listen {{ansible_default_ipv4.address}}:80
+NameVirtualHost {{ansible_eth2.ipv4.address}}:80
+Listen {{ansible_eth2.ipv4.address}}:80
 
 <IfModule mod_ssl.c>
     # If you add NameVirtualHost *:443 here, you will also have to change
