@@ -75,7 +75,7 @@ listen rabbitmq_cluster
   option tcpka
   srvtimeout 30000
   clitimeout 150000
-  contimeout 5000
+  contimeout 0
   balance leastconn
   option  tcplog
 {% for host in groups['keystone_nodes'] %}
