@@ -63,7 +63,7 @@
       debug: msg="{{public_network_cidr}}"
 
     - name: pause
-      pause: seconds=10
+      pause: seconds=3
 
     - name: create public/external subnet
       quantum_subnet:
