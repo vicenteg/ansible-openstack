@@ -5,7 +5,6 @@
 - name: install nova-controller packages
   apt: name={{item}} state=present
   with_items:
-    #- nova-novncproxy
     - nova-spiceproxy
     - novnc
     - nova-api
@@ -26,7 +25,6 @@
 - name: restart controller services to pick up configuration
   service: name={{item}} state=restarted
   with_items:
-    #- nova-novncproxy
     - nova-spiceproxy
     - nova-api
     - nova-cert
