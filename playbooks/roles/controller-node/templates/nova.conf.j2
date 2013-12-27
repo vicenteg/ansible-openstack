@@ -54,7 +54,7 @@ glance_api_servers={{glance_host}}:9292
 
 # METADATA
 metadata_listen={{ansible_eth2.ipv4.address}}
-metadata_listen_port=877
+metadata_listen_port=8775
 # NETWORK
 libvirt_use_virtio_for_bridges=True
 network_api_class=nova.network.quantumv2.api.API
@@ -68,9 +68,6 @@ firewall_driver=nova.virt.firewall.NoopFirewallDriver
 security_group_api={{neutron}}
 force_config_drive=True
 fixed_ip_disassociate_timeout=10
-
-my_ip={{ansible_eth0.ipv4.address}}
-
 
 # AUTHENTICATION
 auth_strategy=keystone
@@ -91,7 +88,7 @@ html5proxy_base_url=http://{{haproxy_vip}}:6080/spice_auto.html
 
 ## IP address on which instance spice server should listen
 ## (string value)
-server_listen='{{ansible_eth2.ipv4.address}}'
+server_listen={{ansible_eth2.ipv4.address}}
 
 ## the address to which proxy clients (like nova-
 ## spicehtml5proxy) should connect (string value)

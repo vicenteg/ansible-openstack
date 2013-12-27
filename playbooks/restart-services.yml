@@ -10,7 +10,7 @@
         - nova-cert
         - nova-consoleauth
         - nova-scheduler
-        - nova-novncproxy
+        - nova-spiceproxy
 
 - hosts: network_nodes
   user: root
