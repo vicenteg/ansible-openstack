@@ -1,10 +1,8 @@
-- name: install python-mysqldb
-  apt: name=python-mysqldb state=present 
-
 - name: install nova-compute packages
   apt: name={{item}} state=present
   with_items:
     - nova-compute
+    - python-mysqldb
 
 - name: ensure conductor is NOT installed
   apt: name=nova-conductor state=absent

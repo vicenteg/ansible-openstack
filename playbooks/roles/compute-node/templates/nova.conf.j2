@@ -23,8 +23,8 @@ sql_connection=mysql://{{nova_db_user}}:{{nova_db_pw}}@{{db_host}}/{{nova_db}}
 
 
 # COMPUTE
-libvirt_type=kvm
 compute_driver=libvirt.LibvirtDriver
+libvirt_type=kvm
 instance_name_template=instance-%08x
 api_paste_config=/etc/nova/api-paste.ini
 
