@@ -52,7 +52,7 @@ listen galera_cluster
 
 listen glance_api_cluster 
   bind {{haproxy_vip}}:9292
-  balance  source
+  balance  roundrobin
   option  tcpka
   option  httpchk
   option  tcplog
@@ -62,7 +62,7 @@ listen glance_api_cluster
 
 listen glance_registry_cluster 
   bind {{haproxy_vip}}:9191
-  balance  source
+  balance  roundrobin
   option  tcpka
   option  tcplog
 {% for host in groups['controller_nodes'] %}
