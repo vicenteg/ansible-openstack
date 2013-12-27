@@ -46,6 +46,9 @@
 - name: copy neutron plugin configuration
   template: src=ovs_{{neutron}}_plugin.ini.j2 dest='/etc/{{neutron}}/plugins/openvswitch/ovs_{{neutron}}_plugin.ini' mode=0644
 
+- name: copy neutron dhcp_agent.ini
+  template: src=dhcp_agent.ini.j2 dest=/etc/neutron/dhcp_agent.ini mode=0644
+
 - name: copy l3-agent configuration
   template: src=l3_agent.ini.j2 dest=/etc/neutron/l3_agent.ini mode=0644
 
@@ -84,6 +87,23 @@
 - name: add eth0 to the external bridge
   command: ovs-vsctl add-port br-ex eth0
   when: eth0_in_bridge|failed
+
+- name: check for br-eth1
+  command: ovs-vsctl br-exists br-eth1
+  register: vm_result
+  ignore_errors: true
+
+- name: create br-eth1
+  command: ovs-vsctl add-br br-eth1
+  when: vm_result|failed
+
+- name: check whether eth1 is attached to a bridge
+  command: ovs-vsctl iface-to-br eth1
+  register: eth1_in_bridge
+  ignore_errors: true
+
+- name: add eth1 to the vm bridge
+  command: ovs-vsctl add-port br-eth1 eth1
 
 - name: restart neutron services
   service: name={{item}} state=restarted
