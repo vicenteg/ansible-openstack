@@ -5,6 +5,8 @@ iface lo inet loopback
 auto eth0
 iface eth0 inet manual
   up ip link set $IFACE up
+  up ip link set $IFACE promisc on
+  down ip link set $IFACE promisc off
   down ip link set $IFACE down
 
 auto br-ex

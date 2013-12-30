@@ -10,7 +10,7 @@ admin_user = {{quantum_user}}
 admin_password = {{quantum_password}}
 
 # IP address used by Nova metadata server
-nova_metadata_ip = {{quantum_host}}
+nova_metadata_ip = {{ansible_eth2.ipv4.address}}
 
 # TCP Port used by Nova metadata server
 nova_metadata_port = 8775
@@ -19,4 +19,4 @@ nova_metadata_port = 8775
 # shared secret to prevent spoofing.  You may select any string for a secret,
 # but it must match here and in the configuration used by the Nova Metadata
 # Server. NOTE: Nova uses a different key: quantum_metadata_proxy_shared_secret
-# metadata_proxy_shared_secret =
+metadata_proxy_shared_secret = 

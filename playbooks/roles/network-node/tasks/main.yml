@@ -12,9 +12,6 @@
 - name: disable reverse path filtering in sysctl.conf
   lineinfile: dest=/etc/sysctl.conf regexp="net.ipv4.conf.default.rp_filter" line="net.ipv4.conf.default.rp_filter = 0"
 
-- name: restart networking
-  service: name=networking state=restarted
-
 - name: reload sysctl
   command: sysctl -e -p /etc/sysctl.conf
 
@@ -22,8 +19,8 @@
   template: src=interfaces.j2 dest=/etc/network/interfaces mode=0644
   when: ansible_eth0.ipv4.address is defined
 
-- name: bring eth1 up
-  command: ifup eth1
+- name: restart networking
+  service: name=networking state=restarted
 
 - name: install openvswitch
   apt: name=openvswitch-switch state=present
@@ -31,20 +28,20 @@
 - name: install quantum/neutron packages
   apt: name={{item}} state=present
   with_items:
-     - '{{neutron}}-server'
-     - '{{neutron}}-plugin-openvswitch'
+     - 'neutron-server'
+     - 'neutron-plugin-openvswitch'
      - 'openvswitch-datapath-lts-raring-dkms'
      - 'python-quantumclient' # for ansible's quantum module
 
 - name: install neutron agents
   apt: name={{item}} state=present
   with_items:
-     - '{{neutron}}-plugin-openvswitch-agent'
-     - '{{neutron}}-dhcp-agent'
-     - '{{neutron}}-l3-agent'
+     - 'neutron-plugin-openvswitch-agent'
+     - 'neutron-dhcp-agent'
+     - 'neutron-l3-agent'
 
 - name: copy neutron plugin configuration
-  template: src=ovs_{{neutron}}_plugin.ini.j2 dest='/etc/{{neutron}}/plugins/openvswitch/ovs_{{neutron}}_plugin.ini' mode=0644
+  template: src=ovs_neutron_plugin.ini.j2 dest='/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini' mode=0644
 
 - name: copy neutron dhcp_agent.ini
   template: src=dhcp_agent.ini.j2 dest=/etc/neutron/dhcp_agent.ini mode=0644
@@ -53,62 +50,44 @@
   template: src=l3_agent.ini.j2 dest=/etc/neutron/l3_agent.ini mode=0644
 
 - name: copy neutron configuration
-  template: src='{{neutron}}.conf.j2' dest='/etc/{{neutron}}/{{neutron}}.conf' mode=0644
+  template: src='neutron.conf.j2' dest='/etc/neutron/neutron.conf' mode=0644
 
 - name: copy neutron metadata configuration
-  template: src=metadata_agent.ini.j2 dest=/etc/{{neutron}}/metadata_agent.ini mode=0644
+  template: src=metadata_agent.ini.j2 dest=/etc/neutron/metadata_agent.ini mode=0644
 
 - name: restart openvswitch
   service: name=openvswitch-switch state=restarted
 
-- name: check for br-int
-  command: ovs-vsctl br-exists br-int
-  register: int_result
-  ignore_errors: true
+- name: create interation bridge br-int
+  openvswitch_bridge: bridge=br-int state=present
 
-- name: create the openvswitch integration bridge
-  command: ovs-vsctl add-br br-int
-  when: int_result|failed
+- name: create external bridge br-ex
+  openvswitch_bridge: bridge=br-ex state=present
 
-- name: check for br-ext
-  command: ovs-vsctl br-exists br-ex
-  register: ex_result
-  ignore_errors: true
+- name: add eth0 to br-ex
+  openvswitch_port: bridge=br-ex port=eth0 state=present
 
-- name: create the external openvswitch bridge
-  command: ovs-vsctl add-br br-ex
-  when: ex_result|failed
+- name: remove ip address from eth0
+  command: ip addr del {{ansible_eth0.ipv4.address}} dev eth0
+  when: ansible_eth0.ipv4.address is defined
 
-- name: check whether eth0 is attached to a bridge
-  command: ovs-vsctl iface-to-br eth0
-  register: eth0_in_bridge
-  ignore_errors: true
+#- name: create br-eth1
+#  command: ovs-vsctl add-br br-eth1
+#  when: vm_result|failed
 
-- name: add eth0 to the external bridge
-  command: ovs-vsctl add-port br-ex eth0
-  when: eth0_in_bridge|failed
+#- name: check whether eth1 is attached to a bridge
+#  command: ovs-vsctl iface-to-br eth1
+#  register: eth1_in_bridge
+#  ignore_errors: true
 
-- name: check for br-eth1
-  command: ovs-vsctl br-exists br-eth1
-  register: vm_result
-  ignore_errors: true
-
-- name: create br-eth1
-  command: ovs-vsctl add-br br-eth1
-  when: vm_result|failed
-
-- name: check whether eth1 is attached to a bridge
-  command: ovs-vsctl iface-to-br eth1
-  register: eth1_in_bridge
-  ignore_errors: true
-
-- name: add eth1 to the vm bridge
-  command: ovs-vsctl add-port br-eth1 eth1
+#- name: add eth1 to the vm bridge
+#  command: ovs-vsctl add-port br-eth1 eth1
+#  when: eth1_in_bridge|failed
 
 - name: restart neutron services
   service: name={{item}} state=restarted
   with_items:
-    - '{{neutron}}-server'
-    - '{{neutron}}-plugin-openvswitch-agent'
-    - '{{neutron}}-dhcp-agent'
-    - '{{neutron}}-l3-agent'
+    - 'neutron-server'
+    - 'neutron-plugin-openvswitch-agent'
+    - 'neutron-dhcp-agent'
+    - 'neutron-l3-agent'
