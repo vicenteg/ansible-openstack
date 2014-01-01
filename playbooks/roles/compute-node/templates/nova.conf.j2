@@ -83,26 +83,7 @@ admin_user = {{nova_user}}
 admin_password = {{nova_password}}
 signing_dirname = /tmp/keystone-signing-nova
 
-[spice]
-
-## Options defined in nova.spice
-
-## location of spice html5 console proxy, in the form
-html5proxy_base_url=http://{{haproxy_vip}}:6080/spice_auto.html
-
-## IP address on which instance spice server should listen
-## (string value)
-server_listen='{{ansible_eth2.ipv4.address}}'
-
-## the address to which proxy clients (like nova-
-## spicehtml5proxy) should connect (string value)
-server_proxyclient_address='{{haproxy_vip}}'
-
-## enable spice related features (boolean value)
-enabled=true
-
-## enable spice guest agent support (boolean value)
-agent_enabled=true
-
-## keymap for spice (string value)
-keymap=en-us
+vnc_enabled=True
+novncproxy_base_url=http://{{haproxy_vip}}:6080/vnc_auto.html
+vncserver_listen=0.0.0.0
+vncserver_proxyclient_address=

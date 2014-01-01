@@ -1,0 +1,22 @@
+
+---
+- hosts: openstack_cluster
+  user: root
+  handlers:
+    - name: reboot
+      command: shutdown -r now
+
+  tasks:
+    - name: use 3.2.0-56 kernel - 3.2.0-57 has sone OVS crash bugs
+      apt: name={{item}} state=present
+      with_items:
+        - linux-image-3.2.0-56-generic
+        - linux-headers-3.2.0-56-generic
+      notify: reboot
+
+    - name: remove 3.2.0-57
+      apt: purge=yes state=absent name={{item}}
+      with_items: 
+        - linux-image-3.2.0-57-generic
+        - linux-headers-3.2.0.57-generic
+      notify: reboot

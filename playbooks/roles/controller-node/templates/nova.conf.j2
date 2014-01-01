@@ -38,6 +38,7 @@ osapi_compute_listen_port=8774
 
 osapi_compute_extension=nova.api.openstack.compute.contrib.standard_extensions
 ec2_dmz_host={{api_host}}
+ec2_listen={{ansible_eth2.ipv4.address}}
 s3_host={{api_host}}
 enabled_apis=ec2,osapi_compute,metadata
 
@@ -57,15 +58,16 @@ metadata_listen={{ansible_eth2.ipv4.address}}
 metadata_listen_port=8775
 # NETWORK
 libvirt_use_virtio_for_bridges=True
-network_api_class=nova.network.quantumv2.api.API
-{{neutron}}_url=http://{{quantum_host}}:9696
-{{neutron}}_auth_strategy=keystone
-{{neutron}}_admin_tenant_name={{service_tenant}}
-{{neutron}}_admin_username={{quantum_user}}
-{{neutron}}_admin_password={{quantum_password}}
-{{neutron}}_admin_auth_url=http://{{keystone_host}}:35357/v2.0
+network_api_class=nova.network.neutronv2.api.API
+neutron_url=http://{{quantum_host}}:9696
+neutron_auth_strategy=keystone
+neutron_admin_tenant_name={{service_tenant}}
+neutron_admin_username={{quantum_user}}
+neutron_admin_password={{quantum_password}}
+neutron_admin_auth_url=http://{{keystone_host}}:35357/v2.0
+linuxnet_interface_driver = nova.network.linux_net.LinuxOVSInterfaceDriver
 firewall_driver=nova.virt.firewall.NoopFirewallDriver
-security_group_api={{neutron}}
+security_group_api=neutron
 force_config_drive=True
 fixed_ip_disassociate_timeout=10
 
@@ -80,25 +82,11 @@ admin_user = {{nova_user}}
 admin_password = {{nova_password}}
 signing_dirname = /tmp/keystone-signing-nova
 
-[spice]
-
-## Options defined in nova.spice
-## location of spice html5 console proxy, in the form
-html5proxy_base_url=http://{{haproxy_vip}}:6080/spice_auto.html
-
-## IP address on which instance spice server should listen
-## (string value)
-server_listen={{ansible_eth2.ipv4.address}}
-
-## the address to which proxy clients (like nova-
-## spicehtml5proxy) should connect (string value)
-server_proxyclient_address={{haproxy_vip}}
-
-## enable spice related features (boolean value)
-enabled=false
-
-## enable spice guest agent support (boolean value)
-agent_enabled=true
-
-## keymap for spice (string value)
-keymap=en-us
+vnc_enabled=True
+novnc_enabled=True
+vncproxy_base_url=http://{{haproxy_vip}}:6080/vnc_auto.html
+novncproxy_base_url=http://{{haproxy_vip}}:6080/vnc_auto.html
+vncproxy_port=6080
+novncproxy_port=6080
+vncserver_listen=0.0.0.0
+novncserver_listen=0.0.0.0

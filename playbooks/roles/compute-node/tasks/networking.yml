@@ -1,3 +1,6 @@
+- name: create /etc/network/interfaces
+  template: src=interfaces.j2 dest=/etc/network/interfaces mode=0644 
+
 - name: disable reverse path filtering per http://docs.openstack.org/grizzly/basic-install/apt/content/basic-install_compute.html
   lineinfile: dest=/etc/sysctl.conf regexp="^#net.ipv4.conf.default.rp_filter=1" line=net.ipv4.conf.default.rp_filter=0 state=present
 
@@ -29,15 +32,15 @@
   when: int_result|failed
 
 - name: install quantum-plugin-openvswitch-agent
-  apt: name='{{neutron}}-plugin-openvswitch-agent'
+  apt: name='neutron-plugin-openvswitch-agent'
 
 - name: install quantum.conf
-  template: src='{{neutron}}.conf.j2' dest='/etc/{{neutron}}/{{neutron}}.conf' mode=0644
+  template: src='neutron.conf.j2' dest='/etc/neutron/neutron.conf' mode=0644
 
 - name: copy quantum plugin configuration
-  template: src='ovs_{{neutron}}_plugin.ini.j2' dest='/etc/{{neutron}}/plugins/openvswitch/ovs_{{neutron}}_plugin.ini' mode=0644
+  template: src='ovs_neutron_plugin.ini.j2' dest='/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini' mode=0644
 
 - name: restart ovs agent plugin
   service: name={{item}} state=restarted
   with_items:
-    - '{{neutron}}-plugin-openvswitch-agent'
+    - 'neutron-plugin-openvswitch-agent'

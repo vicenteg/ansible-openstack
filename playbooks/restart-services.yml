@@ -10,7 +10,7 @@
         - nova-cert
         - nova-consoleauth
         - nova-scheduler
-        - nova-spiceproxy
+        - nova-novncproxy
 
 - hosts: network_nodes
   user: root
@@ -18,9 +18,9 @@
     - name: restart network services
       service: name={{item}} state=restarted
       with_items:
-        - '{{neutron}}-server'
-        - '{{neutron}}-l3-agent'
-        - '{{neutron}}-plugin-openvswitch-agent'
+        - 'neutron-server'
+        - 'neutron-l3-agent'
+        - 'neutron-plugin-openvswitch-agent'
 
 - hosts: cinder_nodes
   user: root
@@ -35,10 +35,10 @@
 
 - hosts: compute_nodes
   user: root
-  serial: 1
   tasks:
     - name: restart compute
       service: name={{item}} state=restarted
       with_items:
         - nova-compute
+        - libvirt-bin
 

@@ -1,7 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
 trap "echo Stopping; exit" SIGHUP SIGINT SIGTERM
-
 
 PUBLIC_KEY_PATH="$HOME/.ssh/id_dsa.pub"
 test -f $PUBLIC_KEY_PATH || echo nope
@@ -28,6 +27,25 @@ fi
 echo "Ready to begin in T-5 seconds."
 for i in `seq 1 5 | sort -rn `; do echo -n "$i "; sleep 1; done
 
+ansible-playbook -i hosts playbooks/kernel.yml
+
+# if the above succeeded, poll the servers using a ping before
+# continuting on to the main playbook.
+attempt=1
+if [ "$?" == 0 ]; then
+        while :;
+        do
+          echo "Ping attempt: $attempt"
+          ansible openstack_cluster -i hosts -m ping -u root > /dev/null 2>&1
+          [ "$?" -eq 0 ] && break
+          sleep 2
+          ((attempt++))
+        done
+fi
+
+# generate and execute IP assignments for eth1-eth3
+python assign_ips.py | sh -
+
 # having added the public key, perform the install.
 ansible-playbook -i hosts playbooks/site.yml 
 
@@ -36,7 +54,7 @@ ansible-playbook -i hosts playbooks/site.yml
 if [ "$?" == 0 ]; then
 	while :;
 	do
-	  ansible openstack_cluster -m ping -u root 
+	  ansible openstack_cluster -i hosts -m ping -u root 
 	  [ "$?" -eq 0 ] && break
 	  sleep 2
 	done

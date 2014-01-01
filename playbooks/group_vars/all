@@ -20,7 +20,8 @@ neutron: neutron # if havana
 # /dev/mapper/mpath0 will use a multipathed device.
 # Set this to /dev/sdb or some such if not using
 # MPIO.
-cinder_device: /dev/mapper/mpath0
+#cinder_device: /dev/mapper/mpath0
+cinder_device: /dev/sdb
 
 # Configure HTTP and HTTPS proxies here if needed.
 proxy_env:
@@ -98,7 +99,7 @@ glance_host: "{{haproxy_vip}}"
 keystone_host: "{{haproxy_vip}}"
 api_host: "{{haproxy_vip}}"
 rabbit_host: "{{haproxy_vip}}"
-logstash_host: "{{controller_address}}"
+logstash_host: "{{haproxy_vip}}"
 quantum_host: "{{haproxy_vip}}"
 
 # generate the admin token with something like:

@@ -19,4 +19,7 @@
 - name: copy openrc to /root
   template: src=openrc.j2 dest=/root/openrc mode=0600
 
+- name: ensure libvirt knows to have VNC listen on mgmt port
+  lineinfile: regexp="^#vnc_listen" line='vnc_listen="{{ansible_eth2.ipv4.address}}"' dest=/etc/libvirt/qemu.conf
+
 - include: networking.yml
