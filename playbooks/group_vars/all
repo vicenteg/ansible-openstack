@@ -7,14 +7,12 @@ br_ex_ip_address: 192.168.142.200
 br_ex_netmask:    255.255.255.0
 br_ex_gateway:    192.168.142.1
 haproxy_vip:      192.168.142.99
-public_network_gateway: ${br_ex_gateway}
+public_network_gateway: '{{br_ex_gateway}}'
 public_network_cidr:   192.168.142.0/24
 floatingip_range_start: 192.168.142.200
 floatingip_range_end: 192.168.142.215
 
-# neutron: quantum # if grizzly
-neutron: neutron # if havana
-
+neutron: neutron 
 
 # the block device to use underneath cinder-volume.
 # /dev/mapper/mpath0 will use a multipathed device.
@@ -28,6 +26,8 @@ proxy_env:
   # foo: bar is fake placeholder to make this a valid dictionary in case
   # we don't need/want to populate http_proxy. 
   foo: bar
+
+  # comment these lines out if you don't need/want a proxy.
   http_proxy: http://192.168.142.254:3128
   https_proxy: http://192.168.142.254:3128
 
