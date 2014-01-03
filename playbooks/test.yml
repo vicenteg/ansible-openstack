@@ -82,9 +82,6 @@
     - name: debug public_network
       debug: msg="{{public_network_cidr}}"
 
-    - name: pause
-      pause: seconds=3
-
     - name: create public/external subnet
       quantum_subnet:
         auth_url="http://{{haproxy_vip}}:35357/v2.0/"
