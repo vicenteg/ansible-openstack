@@ -1,3 +1,6 @@
+- name: copy /etc/network/interfaces
+  template: src=interfaces.j2 dest=/etc/network/interfaces mode=0644 
+
 - name: install haproxy
   apt: name=haproxy state=present
   notify: restart haproxy
