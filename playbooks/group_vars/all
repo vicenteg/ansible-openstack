@@ -19,7 +19,9 @@ neutron: neutron
 # Set this to /dev/sdb or some such if not using
 # MPIO.
 #cinder_device: /dev/mapper/mpath0
+#cinder_partition: /dev/mapper/mpath0-part1
 cinder_device: /dev/sdb
+cinder_partition: /dev/sdb1
 
 # Configure HTTP and HTTPS proxies here if needed.
 proxy_env:
@@ -99,7 +101,7 @@ glance_host: "{{haproxy_vip}}"
 keystone_host: "{{haproxy_vip}}"
 api_host: "{{haproxy_vip}}"
 rabbit_host: "{{haproxy_vip}}"
-logstash_host: "{{haproxy_vip}}"
+logstash_host: "{{hostvars['controller1'].ansible_eth2.ipv4.address}}"
 quantum_host: "{{haproxy_vip}}"
 
 # generate the admin token with something like:
