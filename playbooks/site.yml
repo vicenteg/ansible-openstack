@@ -22,7 +22,7 @@
     - name: update apt
       apt: update_cache=yes
 
-#- include: logstash.yml
+- include: logstash.yml
 - include: loadbalancer.yml
 - include: galera.yml
 - include: database.yml
