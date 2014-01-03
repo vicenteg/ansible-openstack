@@ -1,7 +1,10 @@
+#
+## network node interfaces
+#
 auto lo
 iface lo inet loopback
 
-# The primary network interface
+# The public interface connected to br-ex
 auto eth0
 iface eth0 inet manual
   up ip link set $IFACE up
@@ -9,18 +12,29 @@ iface eth0 inet manual
   down ip link set $IFACE promisc off
   down ip link set $IFACE down
 
+# the external bridge
 auto br-ex
 iface br-ex inet static
   address {{ansible_br_ex.ipv4.address}}
   netmask {{ansible_br_ex.ipv4.netmask}}
   gateway {{ansible_default_ipv4.gateway}}
 
+# the VM network
 auto eth1
 iface eth1 inet static
   address {{ansible_eth1.ipv4.address}}
   netmask {{ansible_eth1.ipv4.netmask}}
 
+# the management network
 auto eth2
 iface eth2 inet static
   address {{ansible_eth2.ipv4.address}}
   netmask {{ansible_eth2.ipv4.netmask}}
+
+
+# the storage network
+auto eth3
+iface eth3 inet static
+  address {{ansible_eth2.ipv4.address}}
+  netmask {{ansible_eth2.ipv4.netmask}}
+

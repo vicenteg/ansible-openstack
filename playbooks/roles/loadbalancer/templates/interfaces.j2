@@ -1,32 +1,26 @@
 #
-## controller node interfaces
+## loadbalancer interfaces
 #
-
 
 auto lo
 iface lo inet loopback
 
-# The public network
+# The public interface
 auto eth0
 iface eth0 inet static
   address {{ansible_eth0.ipv4.address}}
   netmask {{ansible_eth0.ipv4.netmask}}
   gateway {{ansible_default_ipv4.gateway}}
 
-# The VM network
+# "data" or VM network
 auto eth1
 iface eth1 inet static
   address {{ansible_eth1.ipv4.address}}
   netmask {{ansible_eth1.ipv4.netmask}}
 
-# the management network
+# management network
 auto eth2
 iface eth2 inet static
   address {{ansible_eth2.ipv4.address}}
   netmask {{ansible_eth2.ipv4.netmask}}
 
-# the storage network
-auto eth3
-iface eth3 inet static
-  address {{ansible_eth3.ipv4.address}}
-  netmask {{ansible_eth3.ipv4.netmask}}
