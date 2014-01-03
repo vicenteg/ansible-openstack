@@ -25,6 +25,14 @@ listen haproxy_status {{haproxy_vip}}:8888
     stats realm Private
     stats auth haproxy:secrete
 
+listen logstash
+  bind {{haproxy_vip}}:8080
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{hostvars['controller1']['ansible_eth2']['ipv4']['address']}} {{hostvars['controller1']['ansible_eth2']['ipv4']['address']}}:8080 check inter 10s rise 2 fall 5
+
 listen dashboard_cluster 
   bind {{haproxy_vip}}:80
   balance  source
@@ -42,9 +50,8 @@ listen galera_cluster
   balance source
   retries 3
   option redispatch
-  timeout connect 5000ms
-  timeout client 50000ms
-  timeout server 50000ms
+  timeout client 60000ms
+  timeout server 60000ms
   option mysql-check user haproxy
 {% for host in groups['database_servers'] %}
   server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:33306 check inter 3000 maxconn 20 rise 2 fall 5
