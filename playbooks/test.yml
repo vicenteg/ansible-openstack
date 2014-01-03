@@ -11,13 +11,20 @@
       command: chdir=/tmp creates=/tmp/precise-server-cloudimg-amd64-disk1.img wget http://cloud-images.ubuntu.com/precise/current/precise-server-cloudimg-amd64-disk1.img
       environment: proxy_env
 
+    - name: download CoreOS image
+      command: chdir=/tmp creates=/tmp/coreos_production_openstack_image.img.bz2 wget http://storage.core-os.net/coreos/amd64-generic/dev-channel/coreos_production_openstack_image.img.bz2
+      environment: proxy_env
+
+    - name: uncompress CoreOS image
+      command: chdir=/tmp creates=coreos_production_openstack_image.img bunzip2 coreos_production_openstack_image.img.bz2
+
     - name: create Cirros image
       glance_image:
         name: 'Cirros 0.3.1'
         container_format: 'bare'
         disk_format: 'qcow2'
         login_tenant_name: '{{os_tenant_name}}'
-        auth_url: 'http://{{keystone_host}}:35357/v2.0/'
+        auth_url: 'http://{{haproxy_vip}}:35357/v2.0/'
         login_password: '{{os_password}}'
         login_username: '{{os_username}}'
         state: 'present'
@@ -27,7 +34,7 @@
     - name: create Ubuntu image
       glance_image:
         name: 'Ubuntu 12.04.3 Precise'
-        auth_url: 'http://{{keystone_host}}:35357/v2.0/'
+        auth_url: 'http://{{haproxy_vip}}:35357/v2.0/'
         container_format: 'bare'
         disk_format: 'qcow2'
         login_tenant_name: '{{os_tenant_name}}'
@@ -37,9 +44,22 @@
         file: '/tmp/precise-server-cloudimg-amd64-disk1.img'
       register: ubuntu_image
 
+    - name: create CoreOS image
+      glance_image:
+        name: 'CoreOS'
+        auth_url: 'http://{{haproxy_vip}}:35357/v2.0/'
+        container_format: 'ovf'
+        disk_format: 'qcow2'
+        login_tenant_name: '{{os_tenant_name}}'
+        login_password: '{{os_password}}'
+        login_username: '{{os_username}}'
+        state: present
+        file: '/tmp/coreos_production_openstack_image.img'
+      register: coreos_image
+
     - name: create a tenant network
       quantum_network: name="{{os_tenant_name}}"-net1 tenant_name="{{os_tenant_name}}" state=present
-                auth_url="http://{{keystone_host}}:35357/v2.0/"
+                auth_url="http://{{haproxy_vip}}:35357/v2.0/"
                 login_username="{{os_username}}"
                 login_password="{{os_password}}"
                 login_tenant_name="{{os_tenant_name}}"
@@ -50,13 +70,13 @@
 
     - name: create a public/external network
       quantum_network: name=external shared=yes tenant_name=service router_external=yes state=present
-        auth_url="http://{{keystone_host}}:35357/v2.0/"
+        auth_url="http://{{haproxy_vip}}:35357/v2.0/"
         login_username="{{os_username}}" login_password="{{os_password}}" login_tenant_name="{{os_tenant_name}}"
       register: public_network
 
     - name: create tenant subnet
       quantum_subnet: state=present network_name="{{os_tenant_name}}"-net1 name="{{os_tenant_name}}"-net1-subnet1 cidr="172.16.0.0/24"
-        auth_url="http://{{keystone_host}}:35357/v2.0/"
+        auth_url="http://{{haproxy_vip}}:35357/v2.0/"
         login_username="{{os_username}}" login_password="{{os_password}}" login_tenant_name="{{os_tenant_name}}"
 
     - name: debug public_network
@@ -67,7 +87,7 @@
 
     - name: create public/external subnet
       quantum_subnet:
-        auth_url="http://{{keystone_host}}:35357/v2.0/"
+        auth_url="http://{{haproxy_vip}}:35357/v2.0/"
         state=present 
         tenant_name=service 
         network_name=external 
@@ -80,7 +100,7 @@
 
     - name: create a router
       quantum_router: name="{{os_tenant_name}}"-router state=present
-        auth_url="http://{{keystone_host}}:35357/v2.0/"
+        auth_url="http://{{haproxy_vip}}:35357/v2.0/"
         login_username="{{os_username}}" login_password="{{os_password}}" login_tenant_name="{{os_tenant_name}}"
 
     - name: set gateway
@@ -88,7 +108,7 @@
         state: present
         router_name: '{{os_tenant_name}}-router'
         network_name: external
-        auth_url: 'http://{{keystone_host}}:35357/v2.0/'
+        auth_url: 'http://{{haproxy_vip}}:35357/v2.0/'
         login_username: "{{os_username}}" 
         login_password: "{{os_password}}" 
         login_tenant_name: "{{os_tenant_name}}"
@@ -98,29 +118,43 @@
         state: present 
         router_name: '{{os_tenant_name}}-router'
         subnet_name: '{{os_tenant_name}}-net1-subnet1'
-        auth_url: 'http://{{keystone_host}}:35357/v2.0/'
+        auth_url: 'http://{{haproxy_vip}}:35357/v2.0/'
         login_username: '{{os_username}}' 
         login_password: '{{os_password}}' 
         login_tenant_name: '{{os_tenant_name}}'
 
     - name: create a cirros instance
       nova_compute: 
-        auth_url: 'http://{{keystone_host}}:35357/v2.0/'
+        auth_url: 'http://{{haproxy_vip}}:35357/v2.0/'
         login_username: '{{os_username}}'
         login_password: '{{os_password}}' 
         login_tenant_name: '{{os_tenant_name}}'
         image_id: '{{cirros_image.id}}'
-        name: test1
+        name: cirros
+        flavor_id: 1
         state: present 
         nics: 
           - net-id: '{{tenant_network.id}}'
 
     - name: create an ubuntu instance
       nova_compute:
-        auth_url: 'http://{{keystone_host}}:35357/v2.0/'
+        auth_url: 'http://{{haproxy_vip}}:35357/v2.0/'
         image_id: '{{ubuntu_image.id}}'
         flavor_id: 2
-        name: test2
+        name: ubuntu
+        state: present
+        nics:
+          - net-id: '{{tenant_network.id}}'
+        login_username: '{{os_username}}'
+        login_password: '{{os_password}}'
+        login_tenant_name: '{{os_tenant_name}}'
+
+    - name: create a CoreOS instance
+      nova_compute:
+        auth_url: 'http://{{haproxy_vip}}:35357/v2.0/'
+        image_id: '{{coreos_image.id}}'
+        flavor_id: 2
+        name: coreos
         state: present
         nics:
           - net-id: '{{tenant_network.id}}'
