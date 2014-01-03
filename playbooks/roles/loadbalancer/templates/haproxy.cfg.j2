@@ -29,9 +29,17 @@ listen logstash
   bind {{haproxy_vip}}:8080
   balance  source
   option  tcpka
-  option  httpchk
+  option  httpchk GET /index.html
   option  tcplog
-  server {{hostvars['controller1']['ansible_eth2']['ipv4']['address']}} {{hostvars['controller1']['ansible_eth2']['ipv4']['address']}}:8080 check inter 10s rise 2 fall 5
+  server {{logstash_host}} {{logstash_host}}:8080 check inter 10s rise 2 fall 5
+
+listen elasticsearch
+  bind {{haproxy_vip}}:9200
+  balance source
+  option tcpka
+  option httpchk
+  option tcplog
+  server {{logstash_host}} {{logstash_host}}:9200 check inter 10s rise 2 fall 5
 
 listen dashboard_cluster 
   bind {{haproxy_vip}}:80
