@@ -19,7 +19,7 @@ chdir /home/logstash
 script
 
   # This runs logstash agent as the 'logstash' user
-  su -s /bin/sh -c 'exec "$0" "$@"' logstash -- /usr/bin/java -jar /opt/logstash/logstash-1.2.1-flatjar.jar agent --config /opt/logstash/logstash.conf -- web --port 8080 &
+  su -s /bin/sh -c 'exec "$0" "$@"' logstash -- /usr/bin/java -jar /opt/logstash/logstash-1.3.2-flatjar.jar agent --config /opt/logstash/logstash.conf -- web --port 8080 &
   
   emit logstash-agent-running
 end script
