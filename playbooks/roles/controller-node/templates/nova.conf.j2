@@ -71,6 +71,10 @@ security_group_api=neutron
 force_config_drive=True
 fixed_ip_disassociate_timeout=10
 
+novnc_enabled=true
+novncproxy_base_url=http://{{haproxy_vip}}:6080/vnc_auto.html
+novncproxy_port=6080
+
 # AUTHENTICATION
 auth_strategy=keystone
 [keystone_authtoken]
@@ -82,11 +86,3 @@ admin_user = {{nova_user}}
 admin_password = {{nova_password}}
 signing_dirname = /tmp/keystone-signing-nova
 
-vnc_enabled=True
-novnc_enabled=True
-vncproxy_base_url=http://{{haproxy_vip}}:6080/vnc_auto.html
-novncproxy_base_url=http://{{haproxy_vip}}:6080/vnc_auto.html
-vncproxy_port=6080
-novncproxy_port=6080
-vncserver_listen=0.0.0.0
-novncserver_listen=0.0.0.0
