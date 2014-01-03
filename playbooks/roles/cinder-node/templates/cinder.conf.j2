@@ -5,6 +5,7 @@ sql_connection=mysql://{{cinder_db_user}}:{{cinder_db_pw}}@{{db_host}}/cinder
 rootwrap_config = /etc/cinder/rootwrap.conf
 api_paste_confg = /etc/cinder/api-paste.ini
 iscsi_helper = tgtadm
+iscsi_ip_address = {{ansible_eth3.ipv4.address}}
 volume_name_template = volume-%s
 volume_group = {{cinder_volume_group}}
 verbose = True

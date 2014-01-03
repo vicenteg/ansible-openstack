@@ -29,7 +29,7 @@
   ignore_errors: yes
 
 - name: create cinder volume group
-  lvg: pvs={{cinder_device}}-part1 vg={{cinder_volume_group}} state=present force=yes
+  lvg: pvs={{cinder_partition}} vg={{cinder_volume_group}} state=present force=yes
   when: vgdisplay.rc != 0
   notify:
     - restart cinder
