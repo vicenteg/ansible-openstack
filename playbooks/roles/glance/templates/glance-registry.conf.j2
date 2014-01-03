@@ -72,8 +72,8 @@ limit_param_default = 25
 #ca_file = /path/to/cafile
 
 [keystone_authtoken]
-auth_host = {{keystone_host}}
-auth_port = 35357
+auth_host = {{haproxy_vip}}
+auth_port = 5000
 auth_protocol = http
 admin_tenant_name = {{service_tenant}}
 admin_user = {{glance_user}}

@@ -3,7 +3,7 @@
 verbose = True
 
 # Show debugging output in logs (sets DEBUG log level output)
-debug = True
+debug = False
 
 # Which backend scheme should Glance use by default is not specified
 # in a request to add a new image to Glance? Known schemes are determined
@@ -258,7 +258,7 @@ scrubber_datadir = /var/lib/glance/scrubber
 image_cache_dir = /var/lib/glance/image-cache/
 
 [keystone_authtoken]
-auth_host = {{keystone_host}}
+auth_host = {{haproxy_vip}}
 auth_port = 35357
 auth_protocol = http
 admin_tenant_name = {{service_tenant}}
