@@ -3,7 +3,7 @@
 trap "echo Stopping; exit" SIGHUP SIGINT SIGTERM
 
 PUBLIC_KEY_PATH="$HOME/.ssh/id_dsa.pub"
-test -f $PUBLIC_KEY_PATH || echo nope
+test -f $PUBLIC_KEY_PATH || (echo "Public key does not exist at $PUBLIC_KEY_PATH." && exit 1)
 KEY=`cat $PUBLIC_KEY_PATH`
 if [ -z "$KEY" ];
 then
