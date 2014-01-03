@@ -28,6 +28,8 @@
     - "{{hostvars.controller1.ansible_eth2.ipv4.address}}"
     - "{{hostvars.controller2.ansible_eth2.ipv4.address}}"
     - "{{hostvars.controller3.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.lb1.ansible_eth2.ipv4.address}}"
+    - "{{hostvars.lb2.ansible_eth2.ipv4.address}}"
     - 127.0.0.1
     - ::1
     - localhost
