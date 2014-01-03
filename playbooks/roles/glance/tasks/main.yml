@@ -15,6 +15,9 @@
 - name: copy glance-registry-paste.ini 
   template: src=glance-registry-paste.ini.j2 dest=/etc/glance/glance-registry-paste.ini mode=0644 owner=root group=root
 
+- name: copy glance-scrubber.conf
+  template: src=glance-scrubber.conf.j2 dest=/etc/glance/glance-scrubber.conf mode=0644 owner=root group=root
+
 - name: restart glance-api
   service: name=glance-api state=restarted
 
