@@ -19,6 +19,10 @@
   template: src=interfaces.j2 dest=/etc/network/interfaces mode=0644
   when: ansible_eth0.ipv4.address is defined
 
+- name: copy /etc/network/interfaces into place
+  template: src=interfaces-br-ex.j2 dest=/etc/network/interfaces mode=0644
+  when: ansible_br_ex.ipv4.address is defined
+
 - name: restart networking
   service: name=networking state=restarted
 
