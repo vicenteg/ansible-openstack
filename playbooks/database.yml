@@ -1,6 +1,6 @@
 # collect facts from all nodes
 #
-- hosts: database_servers
+- hosts: [database_servers,loadbalancers]
   user: root
   tasks:
     - name: get facts so we can use hostvars in the next play
