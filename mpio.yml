@@ -1,5 +1,0 @@
-- hosts: cinder-nodes
-  user: root
-  roles:
-    - mpio    
-

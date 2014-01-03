@@ -1,0 +1,4 @@
+- hosts: network_nodes
+  user: root
+  roles:
+    - network-node

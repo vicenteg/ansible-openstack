@@ -1,0 +1,6 @@
+- hosts: messaging_servers
+  user: root
+
+  roles:
+#    - common
+    - messaging

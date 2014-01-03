@@ -1,0 +1,184 @@
+global
+        log 127.0.0.1   local0
+        log 127.0.0.1   local1 notice
+        #log loghost    local0 info
+        maxconn 4096
+        user haproxy
+        group haproxy
+        daemon
+
+defaults
+        log     global
+        mode    http
+        option  dontlognull
+        retries 3
+        option redispatch
+        maxconn 2000
+        contimeout      5000
+        clitimeout      50000
+        srvtimeout      50000
+
+listen haproxy_status {{haproxy_vip}}:8888
+    mode http
+    stats enable
+    stats uri /haproxy?stats
+    stats realm Private
+    stats auth haproxy:secrete
+
+listen logstash
+  bind {{haproxy_vip}}:8080
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{hostvars['controller1']['ansible_eth2']['ipv4']['address']}} {{hostvars['controller1']['ansible_eth2']['ipv4']['address']}}:8080 check inter 10s rise 2 fall 5
+
+listen dashboard_cluster 
+  bind {{haproxy_vip}}:80
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:80 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+listen galera_cluster 
+  bind {{haproxy_vip}}:3306
+  mode tcp
+  option tcpka
+  balance source
+  retries 3
+  option redispatch
+  timeout client 60000ms
+  timeout server 60000ms
+  option mysql-check user haproxy
+{% for host in groups['database_servers'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:33306 check inter 3000 maxconn 20 rise 2 fall 5
+{% endfor %}
+
+listen glance_api_cluster 
+  bind {{haproxy_vip}}:9292
+  balance  roundrobin
+  option  tcpka
+  option  httpchk
+  option  tcplog
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9292 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+listen glance_registry_cluster 
+  bind {{haproxy_vip}}:9191
+  balance  roundrobin
+  option  tcpka
+  option  tcplog
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9191 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+listen rabbitmq_cluster 
+  bind {{haproxy_vip}}:5672
+  mode tcp
+  option tcpka
+  srvtimeout 0
+  clitimeout 0
+  contimeout 0
+  balance leastconn
+  option  tcplog
+{% for host in groups['keystone_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5672 check inter 8000 rise 2 fall 5
+{% endfor %}
+
+listen keystone_admin_cluster 
+  bind {{haproxy_vip}}:35357
+  balance source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+{% for host in groups['keystone_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:35357 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+listen keystone_public_internal_cluster 
+  bind {{haproxy_vip}}:5000
+  balance source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+{% for host in groups['keystone_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5000 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+#listen nova_ec2_api_cluster 
+#  bind {{haproxy_vip}}:8773
+#  balance  source
+#  option  tcpka
+#  option  tcplog
+#{% for host in groups['controller_nodes'] %}
+#  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8773 check inter 2000 rise 2 fall 5
+#{% endfor %}
+
+listen nova_compute_api_cluster 
+  bind {{haproxy_vip}}:8774
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8774 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+#listen nova_metadata_api_cluster 
+#  bind {{haproxy_vip}}:8775
+#  balance  source
+#  option  tcpka
+#  option  tcplog
+#{% for host,vars in hostvars.items() %}
+#  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{vars['ansible_eth2']['ipv4']['address']}}:8775 check inter 2000 rise 2 fall 5
+#{% endfor %}
+
+listen cinder_api_cluster 
+  bind {{haproxy_vip}}:8776
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+{% for host in groups['cinder_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8776 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+#listen ceilometer_api_cluster
+#  bind {{haproxy_vip}}:8777
+#  balance  source
+#  option  tcpka
+#  option  httpchk
+#  option  tcplog
+#  server controller1 10.0.0.1:8774 check inter 2000 rise 2 fall 5
+#  server controller2 10.0.0.2:8774 check inter 2000 rise 2 fall 5
+
+listen spice_cluster
+  bind {{haproxy_vip}}:6080
+  balance source
+  option  tcpka
+  option  tcplog
+{% for host in groups['controller_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:6080 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+listen neutron_api_cluster 
+  bind {{haproxy_vip}}:9696
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+{% for host in groups['network_nodes'] %}
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9696 check inter 2000 rise 2 fall 5
+{% endfor %}
+
+#listen swift_proxy_cluster
+#  bind {{haproxy_vip}}:8080
+#  balance  source
+#  option  tcplog
+#  option  tcpka
+#  server controller1 10.0.0.1:8080 check inter 2000 rise 2 fall 5
+#  server controller2 10.0.0.2:8080 check inter 2000 rise 2 fall 5

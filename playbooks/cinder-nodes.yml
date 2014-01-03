@@ -1,0 +1,11 @@
+- hosts: cinder_nodes
+  user: root
+
+  roles:
+    - cinder-node
+
+- hosts: cinder_nodes[0]
+  user: root
+  tasks:
+  - name: initialize cinder database
+    command: cinder-manage db sync

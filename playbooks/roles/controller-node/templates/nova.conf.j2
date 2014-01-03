@@ -1,0 +1,92 @@
+[DEFAULT]
+
+# LOGS/STATE
+verbose=True
+logdir=/var/log/nova
+state_path=/var/lib/nova
+lock_path=/var/lock/nova
+rootwrap_config=/etc/nova/rootwrap.conf
+
+# SCHEDULER
+compute_scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler
+
+# VOLUMES
+volume_manager=cinder.volume.manager.VolumeManager
+volume_api_class=nova.volume.cinder.API
+volume_driver=nova.volume.driver.ISCSIDriver
+volume_group=cinder-volumes
+volume_name_template=volume-%s
+iscsi_helper=tgtadm
+
+# DATABASE
+sql_connection=mysql://{{nova_db_user}}:{{nova_db_pw}}@{{db_host}}/{{nova_db}}
+
+
+# COMPUTE
+libvirt_type=kvm
+compute_driver=libvirt.LibvirtDriver
+instance_name_template=instance-%08x
+api_paste_config=/etc/nova/api-paste.ini
+
+# COMPUTE/APIS: if you have separate configs for separate services
+# this flag is required for both nova-api and nova-compute
+allow_resize_to_same_host=True
+
+# APIS
+osapi_compute_listen={{ansible_eth2.ipv4.address}}
+osapi_compute_listen_port=8774
+
+osapi_compute_extension=nova.api.openstack.compute.contrib.standard_extensions
+ec2_dmz_host={{api_host}}
+ec2_listen={{ansible_eth2.ipv4.address}}
+s3_host={{api_host}}
+enabled_apis=ec2,osapi_compute,metadata
+
+# RABBITMQ
+rabbit_host={{rabbit_host}}
+rabbit_port=5672
+rabbit_userid = {{rabbit_user}}
+rabbit_virtual_host = {{rabbit_vhost}}
+rabbit_use_ssl = false
+
+# GLANCE
+image_service=nova.image.glance.GlanceImageService
+glance_api_servers={{glance_host}}:9292
+
+# METADATA
+metadata_listen={{ansible_eth2.ipv4.address}}
+metadata_listen_port=8775
+# NETWORK
+libvirt_use_virtio_for_bridges=True
+network_api_class=nova.network.neutronv2.api.API
+neutron_url=http://{{quantum_host}}:9696
+neutron_auth_strategy=keystone
+neutron_admin_tenant_name={{service_tenant}}
+neutron_admin_username={{quantum_user}}
+neutron_admin_password={{quantum_password}}
+neutron_admin_auth_url=http://{{keystone_host}}:35357/v2.0
+linuxnet_interface_driver = nova.network.linux_net.LinuxOVSInterfaceDriver
+firewall_driver=nova.virt.firewall.NoopFirewallDriver
+security_group_api=neutron
+force_config_drive=True
+fixed_ip_disassociate_timeout=10
+
+# AUTHENTICATION
+auth_strategy=keystone
+[keystone_authtoken]
+auth_host = {{keystone_host}}
+auth_port = 35357
+auth_protocol = http
+admin_tenant_name = {{service_tenant}}
+admin_user = {{nova_user}}
+admin_password = {{nova_password}}
+signing_dirname = /tmp/keystone-signing-nova
+
+vnc_enabled=True
+novnc_enabled=True
+vncproxy_base_url=http://{{haproxy_vip}}:6080/vnc_auto.html
+novncproxy_base_url=http://{{haproxy_vip}}:6080/vnc_auto.html
+vncproxy_port=6080
+novncproxy_port=6080
+vncserver_listen=0.0.0.0
+novncserver_listen=0.0.0.0

@@ -1,0 +1,3 @@
+- name: restart openstack-dashboard
+  service: name=apache2 state=restarted
+

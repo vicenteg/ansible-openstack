@@ -1,6 +1,0 @@
-- hosts: controller-nodes
-  user: root
-
-  roles:
-    - common
-    - network-node

@@ -1,0 +1,29 @@
+[DEFAULT]
+osapi_volume_listen = {{ansible_eth2.ipv4.address}}
+
+sql_connection=mysql://{{cinder_db_user}}:{{cinder_db_pw}}@{{db_host}}/cinder
+rootwrap_config = /etc/cinder/rootwrap.conf
+api_paste_confg = /etc/cinder/api-paste.ini
+iscsi_helper = tgtadm
+iscsi_ip_address = {{ansible_eth3.ipv4.address}}
+volume_name_template = volume-%s
+volume_group = {{cinder_volume_group}}
+verbose = True
+auth_strategy = keystone
+state_path = /var/lib/cinder
+lock_path = /var/lock/cinder
+volumes_dir = /var/lib/cinder/volumes
+
+rabbit_host = {{rabbit_host}}
+rabbit_port = 5672
+rabbit_userid = {{rabbit_user}}
+rabbit_password = {{rabbit_password}}
+rabbit_virtual_host = {{rabbit_vhost}}
+
+enabled_backends=lvmdriver-1
+[lvmdriver-1]
+volume_group=cinder-volumes
+volume_driver=cinder.volume.drivers.lvm.LVMISCSIDriver
+volume_backend_name=LVM_iSCSI
+
+scheduler_driver=cinder.scheduler.filter_scheduler.FilterScheduler

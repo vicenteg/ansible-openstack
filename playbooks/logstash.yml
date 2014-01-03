@@ -1,0 +1,6 @@
+- hosts: logger_nodes
+  user: root
+
+  roles:
+#    - common
+    - logstash

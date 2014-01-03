@@ -1,0 +1,48 @@
+- hosts: controller_nodes
+  user: root
+  serial: 1
+  tasks:
+    - name: restart controller services
+      service: name={{item}} state=restarted
+      with_items:
+        - nova-conductor
+        - nova-api
+        - nova-cert
+        - nova-consoleauth
+        - nova-scheduler
+        - nova-novncproxy
+        - glance-registry
+        - glance-api
+
+- hosts: network_nodes
+  user: root
+  tasks:
+    - name: restart network services
+      service: name={{item}} state=restarted
+      with_items:
+        - openvswitch-switch
+        - 'neutron-server'
+        - 'neutron-server'
+        - 'neutron-l3-agent'
+        - 'neutron-plugin-openvswitch-agent'
+
+- hosts: cinder_nodes
+  user: root
+  serial: 1
+  tasks:
+    - name: restart cinder
+      service: name={{item}} state=restarted
+      with_items:
+        - cinder-api
+        - cinder-volume
+        - cinder-scheduler
+
+- hosts: compute_nodes
+  user: root
+  tasks:
+    - name: restart compute
+      service: name={{item}} state=restarted
+      with_items:
+        - libvirt-bin
+        - nova-compute
+

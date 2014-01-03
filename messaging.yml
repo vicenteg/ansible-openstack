@@ -1,6 +1,0 @@
-- hosts: messaging-servers
-  user: root
-
-  roles:
-    - common
-    - messaging

@@ -1,6 +1,0 @@
-- hosts: keystone-nodes
-  user: root
-
-  roles:
-    - common
-    - keystone

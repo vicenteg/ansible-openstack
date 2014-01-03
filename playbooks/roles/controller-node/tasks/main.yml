@@ -1,0 +1,35 @@
+- name: copy /etc/network/interfaces into place
+  template: src=interfaces.j2 dest=/etc/network/interfaces mode=0644 
+  when: ansible_eth0.ipv4.address is defined
+
+- name: install nova-controller packages
+  apt: name={{item}} state=present
+  with_items:
+    - nova-novncproxy
+    - novnc
+    - nova-api
+    - nova-ajax-console-proxy
+    - nova-cert
+    - nova-conductor
+    - nova-consoleauth
+    - nova-doc
+    - nova-scheduler
+    - python-novaclient
+
+- name: install nova.conf
+  template: src=nova.conf.j2 dest=/etc/nova/nova.conf
+
+- name: copy api-paste.ini 
+  template: src=api-paste.ini.j2 dest=/etc/nova/api-paste.ini
+
+- name: restart controller services to pick up configuration
+  service: name={{item}} state=restarted
+  with_items:
+    - nova-novncproxy
+    - nova-api
+    - nova-cert
+    - nova-conductor
+    - nova-consoleauth
+    - nova-scheduler
+
+- include: dashboard.yml

@@ -1,0 +1,5 @@
+- hosts: controller_nodes
+  user: root
+
+  roles:
+    - controller-node

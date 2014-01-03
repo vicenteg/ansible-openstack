@@ -1,0 +1,97 @@
+# NB: lineinfile is tedious but a better idea for sysctl.conf. Don't want to wholesale replace the file if
+# other plays are updating lines. 
+- name: configure ip forwarding in sysctl.conf
+  lineinfile: dest=/etc/sysctl.conf regexp="net.ipv4.ip_forward" line="net.ipv4.ip_forward = 1"
+
+- name: configure forwarding of all protocols in sysctl.conf
+  lineinfile: dest=/etc/sysctl.conf regexp="net.ipv4.conf.all.forwarding" line="net.ipv4.conf.all.forwarding = 1"
+
+- name: disable reverse path filtering in sysctl.conf
+  lineinfile: dest=/etc/sysctl.conf regexp="net.ipv4.conf.all.rp_filter" line="net.ipv4.conf.all.rp_filter = 0"
+
+- name: disable reverse path filtering in sysctl.conf
+  lineinfile: dest=/etc/sysctl.conf regexp="net.ipv4.conf.default.rp_filter" line="net.ipv4.conf.default.rp_filter = 0"
+
+- name: reload sysctl
+  command: sysctl -e -p /etc/sysctl.conf
+
+- name: copy /etc/network/interfaces into place
+  template: src=interfaces.j2 dest=/etc/network/interfaces mode=0644
+  when: ansible_eth0.ipv4.address is defined
+
+- name: copy /etc/network/interfaces into place
+  template: src=interfaces-br-ex.j2 dest=/etc/network/interfaces mode=0644
+  when: ansible_br_ex.ipv4.address is defined
+
+- name: restart networking
+  service: name=networking state=restarted
+
+- name: install openvswitch
+  apt: name=openvswitch-switch state=present
+
+- name: install quantum/neutron packages
+  apt: name={{item}} state=present
+  with_items:
+     - 'neutron-server'
+     - 'neutron-plugin-openvswitch'
+     - 'openvswitch-datapath-lts-raring-dkms'
+     - 'python-quantumclient' # for ansible's quantum module
+
+- name: install neutron agents
+  apt: name={{item}} state=present
+  with_items:
+     - 'neutron-plugin-openvswitch-agent'
+     - 'neutron-dhcp-agent'
+     - 'neutron-l3-agent'
+
+- name: copy neutron plugin configuration
+  template: src=ovs_neutron_plugin.ini.j2 dest='/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini' mode=0644
+
+- name: copy neutron dhcp_agent.ini
+  template: src=dhcp_agent.ini.j2 dest=/etc/neutron/dhcp_agent.ini mode=0644
+
+- name: copy l3-agent configuration
+  template: src=l3_agent.ini.j2 dest=/etc/neutron/l3_agent.ini mode=0644
+
+- name: copy neutron configuration
+  template: src='neutron.conf.j2' dest='/etc/neutron/neutron.conf' mode=0644
+
+- name: copy neutron metadata configuration
+  template: src=metadata_agent.ini.j2 dest=/etc/neutron/metadata_agent.ini mode=0644
+
+- name: restart openvswitch
+  service: name=openvswitch-switch state=restarted
+
+- name: create interation bridge br-int
+  openvswitch_bridge: bridge=br-int state=present
+
+- name: create external bridge br-ex
+  openvswitch_bridge: bridge=br-ex state=present
+
+- name: add eth0 to br-ex
+  openvswitch_port: bridge=br-ex port=eth0 state=present
+
+- name: remove ip address from eth0
+  command: ip addr del {{ansible_eth0.ipv4.address}} dev eth0
+  when: ansible_eth0.ipv4.address is defined
+
+#- name: create br-eth1
+#  command: ovs-vsctl add-br br-eth1
+#  when: vm_result|failed
+
+#- name: check whether eth1 is attached to a bridge
+#  command: ovs-vsctl iface-to-br eth1
+#  register: eth1_in_bridge
+#  ignore_errors: true
+
+#- name: add eth1 to the vm bridge
+#  command: ovs-vsctl add-port br-eth1 eth1
+#  when: eth1_in_bridge|failed
+
+- name: restart neutron services
+  service: name={{item}} state=restarted
+  with_items:
+    - 'neutron-server'
+    - 'neutron-plugin-openvswitch-agent'
+    - 'neutron-dhcp-agent'
+    - 'neutron-l3-agent'

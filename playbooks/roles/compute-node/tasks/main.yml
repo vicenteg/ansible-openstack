@@ -1,0 +1,25 @@
+- name: install nova-compute packages
+  apt: name={{item}} state=present
+  with_items:
+    - nova-compute
+    - python-mysqldb
+
+- name: ensure conductor is NOT installed
+  apt: name=nova-conductor state=absent
+
+- name: copy nova.conf to compute nodes
+  template: src=nova.conf.j2 dest=/etc/nova/nova.conf
+
+- name: copy nova-paste.ini to compute nodes
+  template: src=nova-paste.ini.j2 dest=/etc/nova/nova-paste.ini
+
+- name: copy api-paste.ini to compute nodes
+  template: src=api-paste.ini.j2 dest=/etc/nova/api-paste.ini
+
+- name: copy openrc to /root
+  template: src=openrc.j2 dest=/root/openrc mode=0600
+
+- name: ensure libvirt knows to have VNC listen on mgmt port
+  lineinfile: regexp="^#vnc_listen" line='vnc_listen="{{ansible_eth2.ipv4.address}}"' dest=/etc/libvirt/qemu.conf
+
+- include: networking.yml

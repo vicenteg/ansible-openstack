@@ -1,0 +1,23 @@
+- name: install glance packages
+  apt: name={{item}} state=present
+  with_items:
+    - glance
+
+- name: remove default sqlite database file
+  file: state=absent path=/var/lib/glance/glance.sqlite
+
+- name: copy glance-api.conf
+  template: src=glance-api.conf.j2 dest=/etc/glance/glance-api.conf mode=0644 owner=root group=root
+
+- name: copy glance-registry.conf
+  template: src=glance-registry.conf.j2 dest=/etc/glance/glance-registry.conf mode=0644 owner=root group=root
+
+- name: copy glance-registry-paste.ini 
+  template: src=glance-registry-paste.ini.j2 dest=/etc/glance/glance-registry-paste.ini mode=0644 owner=root group=root
+
+- name: restart glance-api
+  service: name=glance-api state=restarted
+
+- name: restart glance-registry 
+  service: name=glance-registry state=restarted
+

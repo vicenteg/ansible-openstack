@@ -1,6 +1,0 @@
-- hosts: glance-nodes
-  user: root
-
-  roles:
-    - common
-    - glance

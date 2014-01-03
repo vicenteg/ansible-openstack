@@ -1,35 +1,64 @@
 # Edit the IP addresses, but do not edit the names.
 controller1 ansible_ssh_host=server0
-compute1 ansible_ssh_host=server1
-compute2 ansible_ssh_host=server16
+controller2 ansible_ssh_host=server1
+controller3 ansible_ssh_host=server16
+compute1 ansible_ssh_host=server17
+compute2 ansible_ssh_host=server32
+compute3 ansible_ssh_host=server33
+lb1 ansible_ssh_host=server48
+lb2 ansible_ssh_host=server49
 
 # Do not edit below this line unless you're pretty sure.
-[controller-nodes]
+
+local ansible_connection=local
+
+[loadbalancers]
+lb1
+lb2
+
+[controller_nodes]
+controller1
+controller2
+controller3
+
+[cinder_nodes]
 controller1
 
-[cinder-nodes]
-controller1
-
-[compute-nodes]
+[compute_nodes]
 compute1
 compute2
+compute3
 
-[database-servers]
+[network_nodes]
 controller1
 
-[keystone-nodes]
+[database_servers]
+controller1
+controller2
+controller3
+
+[keystone_nodes]
+controller1
+controller2
+controller3
+
+[glance_nodes]
+controller1
+controller2
+controller3
+
+[messaging_servers]
 controller1
 
-[glance-nodes]
+[logger_nodes]
 controller1
 
-[messaging-servers]
+[openstack_cluster]
 controller1
-
-[logger-nodes]
-controller1
-
-[openstack-cluster]
-controller1
+controller2
+controller3
 compute1
 compute2
+compute3
+lb1
+lb2

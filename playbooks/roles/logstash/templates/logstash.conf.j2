@@ -1,0 +1,9 @@
+input {
+  syslog {
+    type => syslog
+    port => 5544
+  }
+}
+output {
+  elasticsearch { embedded => true }
+}

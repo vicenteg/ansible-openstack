@@ -1,7 +1,0 @@
-- hosts: controller-nodes
-  user: root
-  serial: 1
-
-  roles:
-    - common
-    - controller-node

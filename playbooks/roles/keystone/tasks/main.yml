@@ -1,0 +1,18 @@
+- name: install keystone packages
+  apt: name={{item}} state=present
+  with_items:
+    - keystone
+    - python-keystone
+    - python-keystoneclient
+
+- name: remove the default keystone database file
+  file: state=absent path=/var/lib/keystone/keystone.db 
+
+- name: copy the keystone configuration file
+  template: src=keystone.conf.j2 dest=/etc/keystone/keystone.conf mode=0644
+
+- name: copy script that creates some initial roles/users
+  template: src=initial_data.sh.j2 dest=/root/initial_data.sh mode=0700 owner=root group=root
+  notify:
+    - create keystonerc for root
+  environment: keystone_data

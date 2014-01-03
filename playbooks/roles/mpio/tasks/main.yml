@@ -1,0 +1,28 @@
+- name: install multipath-tools and sg3-utils
+  apt: name={{item}} state=present
+  with_items:
+    - multipath-tools
+    - sg3-utils
+
+- name: install multipath.conf
+  template: dest=/etc/multipath.conf src=multipath.conf.j2
+  register: multipath_conf
+
+- name: restart multpath-tools
+  service: name=multipath-tools state=restarted
+  when: multipath_conf.changed == True
+
+- name: wait a couple seconds
+  pause: seconds=2
+
+- name: grab the multipath -ll output
+  command: multipath -ll -v2
+  register: multipath_ll
+
+- name: debug multipath output
+  debug: msg={{multipath_ll.stdout_lines}}
+
+#- name: reboot server if multipath output is empty
+#  command: shutdown -r now
+#  when: multipath_ll.stdout_lines == [ ]
+#  register: reboot

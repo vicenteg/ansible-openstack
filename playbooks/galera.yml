@@ -1,0 +1,19 @@
+- hosts: [database_servers,loadbalancers]
+  user: root
+
+- hosts: database_servers
+  user: root
+  roles:
+    - galera-common
+
+# start up the first node, bootstrapping a new cluster
+- hosts: database_servers[0]
+  user: root
+  roles:
+    - galera-bootstrap
+
+# start up the other nodes, joining the cluster
+- hosts: database_servers[1]:database_servers[2]
+  user: root
+  roles:
+    - galera-nodes

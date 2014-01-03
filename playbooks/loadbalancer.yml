@@ -1,0 +1,22 @@
+# MUST gather facts from controllers in case this play is run
+# independently.
+- hosts: controller_nodes
+  user: root
+
+- hosts: loadbalancers
+  user: root
+  roles:
+    - keepalived
+    - loadbalancer
+
+- hosts: loadbalancers[0]
+  user: root
+  tasks:
+  - name: update priority of backup
+    lineinfile: dest=/etc/keepalived/keepalived.conf regexp="priority" line="priority 100" state=present
+
+- hosts: loadbalancers
+  user: root
+  tasks:
+  - name: start keeplived
+    service: name=keepalived state=started enabled=yes

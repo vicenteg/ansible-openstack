@@ -1,0 +1,37 @@
+---
+- hosts: openstack_cluster
+  user: root
+  tasks:
+    - name: ensure required packages are installed
+      action: apt name={{item}} state=present
+      with_items:
+        - ntp
+        - bridge-utils
+        - python-pycurl
+        - sysstat
+        - dstat
+
+    - name: use the cloud archive when running on 12.04
+      apt: name=ubuntu-cloud-keyring state=present
+      when: ansible_distribution_release == "precise"
+
+    - name: install the cloud archive sources
+      lineinfile: dest=/etc/apt/sources.list regexp="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main" line="deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/havana main"
+      when: ansible_distribution_release == "precise"
+
+    - name: update apt
+      apt: update_cache=yes
+
+- include: logstash.yml
+- include: loadbalancer.yml
+- include: galera.yml
+- include: database.yml
+- include: messaging.yml
+- include: keystone-nodes.yml
+- include: glance-nodes.yml
+- include: network-nodes.yml
+- include: mpio.yml
+- include: cinder-nodes.yml
+- include: controller-nodes.yml
+- include: compute-nodes.yml
+- include: restart-services.yml
