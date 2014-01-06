@@ -1,3 +1,11 @@
+- name: change openstack log directories group to syslog so rsyslog can read files
+  file: path={{item}} group=syslog mode=0750 state=directory
+  with_items:
+    - /var/log/nova
+    - /var/log/glance
+    - /var/log/cinder
+    - /var/log/neutron
+    - /var/log/keystone
 
 - name: copy rsyslog.conf (run as root and ship logs to logstash)
   template: src=rsyslog.conf.j2 dest=/etc/rsyslogd.conf mode=0644
