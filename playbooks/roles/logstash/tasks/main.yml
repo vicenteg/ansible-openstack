@@ -19,16 +19,5 @@
     - name: copy logstash upstart configuration
       action: template src=logstash-agent.conf.j2 dest=/etc/init/logstash-agent.conf mode=0644 owner=root group=root
 
-#    - name: touch logstash log file
-#      copy: content="" dest=/var/log/logstash.log owner=logstash group=logstash mode=0644
-
     - name: enable logstash
       action: service name=logstash-agent state=started enabled=yes
-
-    - name: add rsyslog configuration for reading nova/keystone logs
-      template: src=60-nova-to-logstash.conf.j2 dest=/etc/rsyslog.d/60-nova-to-logstash.conf mode=0644
-      notify:
-        restart rsyslog
-
-    - name: make /var/log/nova readable by syslog group
-      file: state=directory path=/var/log/nova group=syslog mode=0750
