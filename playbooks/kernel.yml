@@ -14,9 +14,11 @@
         - linux-headers-3.2.0-56-generic
       notify: reboot
 
-    - name: remove 3.2.0-57
+    - name: remove 3.2.0-57 and/or 3.2.0-58
       apt: purge=yes state=absent name={{item}}
       with_items: 
         - linux-image-3.2.0-57-generic
         - linux-headers-3.2.0.57-generic
+        - linux-image-3.2.0-58-generic
+        - linux-headers-3.2.0.58-generic
       notify: reboot
