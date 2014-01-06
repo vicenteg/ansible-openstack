@@ -27,7 +27,9 @@ fi
 echo "Ready to begin in T-5 seconds."
 for i in `seq 1 5 | sort -rn `; do echo -n "$i "; sleep 1; done
 
+kernel_start_timestamp=`date +%s`
 ansible-playbook -i hosts playbooks/kernel.yml
+kernel_end_timestamp=`date +%s`
 
 # if the above succeeded, poll the servers using a ping before
 # continuting on to the main playbook.
