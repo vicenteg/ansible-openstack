@@ -73,9 +73,9 @@ listen glance_api_cluster
   option  tcpka
   option  httpchk
   option  tcplog
-{% for host in groups['controller_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9292 check inter 2000 rise 2 fall 5
-{% endfor %}
+  server {{hostvars['controller1']['ansible_eth2']['ipv4']['address']}} {{hostvars['controller1']['ansible_eth2']['ipv4']['address']}}:9292 check inter 5000 rise 2 fall 5
+  server {{hostvars['controller2']['ansible_eth2']['ipv4']['address']}} {{hostvars['controller2']['ansible_eth2']['ipv4']['address']}}:9292 check inter 5000 rise 2 fall 5 backup
+  server {{hostvars['controller3']['ansible_eth2']['ipv4']['address']}} {{hostvars['controller3']['ansible_eth2']['ipv4']['address']}}:9292 check inter 5000 rise 2 fall 5 backup
 
 listen glance_registry_cluster 
   bind {{haproxy_vip}}:9191
@@ -83,7 +83,7 @@ listen glance_registry_cluster
   option  tcpka
   option  tcplog
 {% for host in groups['controller_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9191 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9191 check inter 5000 rise 2 fall 5
 {% endfor %}
 
 listen rabbitmq_cluster 
@@ -106,7 +106,7 @@ listen keystone_admin_cluster
   option  httpchk
   option  tcplog
 {% for host in groups['keystone_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:35357 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:35357 check inter 5000 rise 2 fall 5
 {% endfor %}
 
 listen keystone_public_internal_cluster 
@@ -116,7 +116,7 @@ listen keystone_public_internal_cluster
   option  httpchk
   option  tcplog
 {% for host in groups['keystone_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5000 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5000 check inter 5000 rise 2 fall 5
 {% endfor %}
 
 #listen nova_ec2_api_cluster 
@@ -125,7 +125,7 @@ listen keystone_public_internal_cluster
 #  option  tcpka
 #  option  tcplog
 #{% for host in groups['controller_nodes'] %}
-#  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8773 check inter 2000 rise 2 fall 5
+#  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8773 check inter 5000 rise 2 fall 5
 #{% endfor %}
 
 listen nova_compute_api_cluster 
@@ -135,7 +135,7 @@ listen nova_compute_api_cluster
   option  httpchk
   option  tcplog
 {% for host in groups['controller_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8774 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8774 check inter 5000 rise 2 fall 5
 {% endfor %}
 
 #listen nova_metadata_api_cluster 
@@ -144,7 +144,7 @@ listen nova_compute_api_cluster
 #  option  tcpka
 #  option  tcplog
 #{% for host,vars in hostvars.items() %}
-#  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{vars['ansible_eth2']['ipv4']['address']}}:8775 check inter 2000 rise 2 fall 5
+#  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{vars['ansible_eth2']['ipv4']['address']}}:8775 check inter 5000 rise 2 fall 5
 #{% endfor %}
 
 listen cinder_api_cluster 
@@ -154,7 +154,7 @@ listen cinder_api_cluster
   option  httpchk
   option  tcplog
 {% for host in groups['cinder_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8776 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:8776 check inter 5000 rise 2 fall 5
 {% endfor %}
 
 #listen ceilometer_api_cluster
@@ -163,8 +163,8 @@ listen cinder_api_cluster
 #  option  tcpka
 #  option  httpchk
 #  option  tcplog
-#  server controller1 10.0.0.1:8774 check inter 2000 rise 2 fall 5
-#  server controller2 10.0.0.2:8774 check inter 2000 rise 2 fall 5
+#  server controller1 10.0.0.1:8774 check inter 5000 rise 2 fall 5
+#  server controller2 10.0.0.2:8774 check inter 5000 rise 2 fall 5
 
 listen spice_cluster
   bind {{haproxy_vip}}:6080
@@ -172,7 +172,7 @@ listen spice_cluster
   option  tcpka
   option  tcplog
 {% for host in groups['controller_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:6080 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:6080 check inter 5000 rise 2 fall 5
 {% endfor %}
 
 listen neutron_api_cluster 
@@ -182,7 +182,7 @@ listen neutron_api_cluster
   option  httpchk
   option  tcplog
 {% for host in groups['network_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9696 check inter 2000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9696 check inter 5000 rise 2 fall 5
 {% endfor %}
 
 #listen swift_proxy_cluster
@@ -190,5 +190,5 @@ listen neutron_api_cluster
 #  balance  source
 #  option  tcplog
 #  option  tcpka
-#  server controller1 10.0.0.1:8080 check inter 2000 rise 2 fall 5
-#  server controller2 10.0.0.2:8080 check inter 2000 rise 2 fall 5
+#  server controller1 10.0.0.1:8080 check inter 5000 rise 2 fall 5
+#  server controller2 10.0.0.2:8080 check inter 5000 rise 2 fall 5
