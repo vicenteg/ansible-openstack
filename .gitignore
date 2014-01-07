@@ -1,2 +1,4 @@
+hosts
+playbooks/group_vars/all
 .vagrant
 *.vdi
