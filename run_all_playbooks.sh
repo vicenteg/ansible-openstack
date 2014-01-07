@@ -61,7 +61,7 @@ if [ "$?" == 0 ]; then
 	  sleep 2
 	done
 
-	# do some quantum, nova operations to validate the basic env
+	# do some neutron, nova operations to validate the basic env
 	if [ "$?" == 0 ]; then
 		time ansible-playbook -i hosts playbooks/test.yml
 	fi
