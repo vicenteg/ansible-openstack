@@ -83,7 +83,9 @@ listen glance_registry_cluster
   option  tcpka
   option  tcplog
 {% for host in groups['controller_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9191 check inter 5000 rise 2 fall 5
+
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:9191 check inter 5000 rise 2 fall 5 {% if loop.index > 1 %} backup {% endif %}
+
 {% endfor %}
 
 listen rabbitmq_cluster 
@@ -95,18 +97,19 @@ listen rabbitmq_cluster
   contimeout 0
   balance leastconn
   option  tcplog
-{% for host in groups['keystone_nodes'] %}
+{% for host in groups['controller_nodes'] %}
   server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5672 check inter 8000 rise 2 fall 5
 {% endfor %}
 
 listen keystone_admin_cluster 
   bind {{haproxy_vip}}:35357
-  balance source
+  balance leastconn
   option  tcpka
   option  httpchk
   option  tcplog
 {% for host in groups['keystone_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:35357 check inter 5000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:35357 check inter 5000 rise 2 fall 5 {% if loop.index > 1 %} backup {% endif %}
+
 {% endfor %}
 
 listen keystone_public_internal_cluster 
@@ -116,7 +119,8 @@ listen keystone_public_internal_cluster
   option  httpchk
   option  tcplog
 {% for host in groups['keystone_nodes'] %}
-  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5000 check inter 5000 rise 2 fall 5
+  server {{hostvars[host]['ansible_eth2']['ipv4']['address']}} {{hostvars[host]['ansible_eth2']['ipv4']['address']}}:5000 check inter 5000 rise 2 fall 5 {% if loop.index > 1 %} backup {% endif %}
+
 {% endfor %}
 
 #listen nova_ec2_api_cluster 

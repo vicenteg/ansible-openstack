@@ -5,6 +5,7 @@
     - name: restart controller services
       service: name={{item}} state=restarted
       with_items:
+        - keystone
         - nova-conductor
         - nova-api
         - nova-cert

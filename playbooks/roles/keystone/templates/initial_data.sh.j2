@@ -45,7 +45,7 @@
 ADMIN_PASSWORD=${ADMIN_PASSWORD:-secrete}
 NOVA_PASSWORD=${NOVA_PASSWORD:-${SERVICE_PASSWORD:-nova}}
 GLANCE_PASSWORD=${GLANCE_PASSWORD:-${SERVICE_PASSWORD:-glance}}
-QUANTUM_PASSWORD=${QUANTUM_PASSWORD:-${SERVICE_PASSWORD:-quantum}}
+NEUTRON_PASSWORD=${NEUTRON_PASSWORD:-${SERVICE_PASSWORD:-neutron}}
 EC2_PASSWORD=${EC2_PASSWORD:-${SERVICE_PASSWORD:-ec2}}
 SWIFT_PASSWORD=${SWIFT_PASSWORD:-${SERVICE_PASSWORD:-swiftpass}}
 CINDER_PASSWORD=${CINDER_PASSWORD:-${SERVICE_PASSWORD:-cinder}}
@@ -122,10 +122,10 @@ keystone user-role-add --user-id $GLANCE_USER \
                        --role-id $ADMIN_ROLE \
                        --tenant-id $SERVICE_TENANT
 
-QUANTUM_USER=$(get_id keystone user-create --name=quantum \
-                                          --pass="${QUANTUM_PASSWORD}")
+NEUTRON_USER=$(get_id keystone user-create --name=neutron \
+                                          --pass="${NEUTRON_PASSWORD}")
 
-keystone user-role-add --user-id $QUANTUM_USER \
+keystone user-role-add --user-id $NEUTRON_USER \
                        --role-id $ADMIN_ROLE \
                        --tenant-id $SERVICE_TENANT
 
@@ -211,14 +211,14 @@ if [[ -z "$DISABLE_ENDPOINTS" ]]; then
 fi
 
 #
-# Quantum service
+# Neutron service
 # 
-QUANTUM_SERVICE=$(get_id \
-keystone service-create --name=quantum \
+NEUTRON_SERVICE=$(get_id \
+keystone service-create --name=neutron \
                         --type=network \
-                        --description="Quantum Network Service")
+                        --description="Neutron Network Service")
 if [[ -z "$DISABLE_ENDPOINTS" ]]; then
-    keystone endpoint-create --region RegionOne --service-id $QUANTUM_SERVICE \
+    keystone endpoint-create --region RegionOne --service-id $NEUTRON_SERVICE \
         --publicurl "http://$CONTROLLER_PUBLIC_ADDRESS:9696" \
         --adminurl "http://$CONTROLLER_ADMIN_ADDRESS:9696" \
         --internalurl "http://$CONTROLLER_INTERNAL_ADDRESS:9696"

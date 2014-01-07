@@ -82,11 +82,11 @@
     - localhost
     - \%
 
-- name: create quantum database
-  mysql_db: name={{quantum_db}} state=present
+- name: create neutron database
+  mysql_db: name={{neutron_db}} state=present
 
-- name: create quantum database user
-  mysql_user: name={{quantum_db_user}} password={{quantum_db_pw}} state=present host={{item}} priv={{quantum_db}}.*:ALL login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
+- name: create neutron database user
+  mysql_user: name={{neutron_db_user}} password={{neutron_db_pw}} state=present host={{item}} priv={{neutron_db}}.*:ALL login_user="{{db_root_user}}" login_password="{{db_root_pw}}"
   with_items:
     - "{{hostvars.controller1.ansible_fqdn}}"
     - "{{hostvars.controller2.ansible_fqdn}}"

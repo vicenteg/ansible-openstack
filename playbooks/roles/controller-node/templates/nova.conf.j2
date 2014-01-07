@@ -59,11 +59,11 @@ metadata_listen_port=8775
 # NETWORK
 libvirt_use_virtio_for_bridges=True
 network_api_class=nova.network.neutronv2.api.API
-neutron_url=http://{{quantum_host}}:9696
+neutron_url=http://{{neutron_host}}:9696
 neutron_auth_strategy=keystone
 neutron_admin_tenant_name={{service_tenant}}
-neutron_admin_username={{quantum_user}}
-neutron_admin_password={{quantum_password}}
+neutron_admin_username={{neutron_user}}
+neutron_admin_password={{neutron_password}}
 neutron_admin_auth_url=http://{{keystone_host}}:35357/v2.0
 linuxnet_interface_driver = nova.network.linux_net.LinuxOVSInterfaceDriver
 firewall_driver=nova.virt.firewall.NoopFirewallDriver

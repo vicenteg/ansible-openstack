@@ -29,12 +29,13 @@
 - name: install openvswitch
   apt: name=openvswitch-switch state=present
 
-- name: install quantum/neutron packages
+- name: install neutron packages
   apt: name={{item}} state=present
   with_items:
      - 'neutron-server'
      - 'neutron-plugin-openvswitch'
      - 'openvswitch-datapath-lts-raring-dkms'
+     - 'python-neutronclient' 
      - 'python-quantumclient' # for ansible's quantum module
 
 - name: install neutron agents

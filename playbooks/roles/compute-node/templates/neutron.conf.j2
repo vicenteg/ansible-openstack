@@ -1,1 +1,159 @@
-../../network-node/templates/quantum.conf.j2
+[DEFAULT]
+verbose = True
+
+lock_path = $state_path/lock
+# log_format = %(asctime)s %(levelname)8s [%(name)s] %(message)s
+# log_date_format = %Y-%m-%d %H:%M:%S
+
+# Address to bind the API server
+bind_host = {{ansible_eth2.ipv4.address}}
+
+# Port the bind the API server to
+bind_port = 9696
+
+core_plugin = neutron.plugins.openvswitch.ovs_neutron_plugin.OVS{{neutron|capitalize}}PluginV2
+
+# Paste configuration file
+api_paste_config = /etc/neutron/api-paste.ini
+
+auth_strategy = keystone
+
+# AMQP exchange to connect to if using RabbitMQ or QPID
+control_exchange = neutron
+
+# IP address of the RabbitMQ installation
+rabbit_host = {{rabbit_host}}
+# Password of the RabbitMQ server
+rabbit_password = guest
+# Port where RabbitMQ server is running/listening
+rabbit_port = 5672
+
+# RabbitMQ single or HA cluster (host:port pairs i.e: host1:5672, host2:5672)
+rabbit_hosts = {{rabbit_host}}:5672
+rabbit_userid = {{rabbit_user}}
+rabbit_virtual_host = {{rabbit_vhost}}
+rabbit_use_ssl = false
+# Maximum retries with trying to connect to RabbitMQ
+# (the default of 0 implies an infinite retry count)
+# rabbit_max_retries = 0
+# RabbitMQ connection retry interval
+# rabbit_retry_interval = 1
+# Use HA queues in RabbitMQ (x-ha-policy: all).You need to
+# wipe RabbitMQ database when changing this option. (boolean value)
+# rabbit_ha_queues = false
+
+# ============ Notification System Options =====================
+
+# Notifications can be sent when network/subnet/port are create, updated or deleted.
+# There are three methods of sending notifications: logging (via the
+# log_file directive), rpc (via a message queue) and
+# noop (no notifications sent, the default)
+
+# Notification_driver can be defined multiple times
+# Do nothing driver
+# notification_driver = neutron.openstack.common.notifier.no_op_notifier
+# Logging driver
+# notification_driver = neutron.openstack.common.notifier.log_notifier
+# RPC driver. DHCP agents needs it.
+notification_driver = neutron.openstack.common.notifier.rpc_notifier
+
+# default_notification_level is used to form actual topic name(s) or to set logging level
+default_notification_level = INFO
+
+
+# Defined in rpc_notifier, can be comma separated values.
+# The actual topic names will be %s.%(default_notification_level)s
+notification_topics = notifications
+
+# Default maximum number of items returned in a single response,
+# value == infinite and value < 0 means no max limit, and value must
+# greater than 0. If the number of items requested is greater than
+# pagination_max_limit, server will just return pagination_max_limit
+# of number of items.
+# pagination_max_limit = -1
+
+# Maximum number of DNS nameservers per subnet
+# max_dns_nameservers = 5
+
+# Maximum number of host routes per subnet
+# max_subnet_host_routes = 20
+
+# Maximum number of fixed ips per port
+# max_fixed_ips_per_port = 5
+
+# =========== items for agent management extension =============
+# Seconds to regard the agent as down.
+# agent_down_time = 5
+# ===========  end of items for agent management extension =====
+
+# =========== items for agent scheduler extension =============
+# Driver to use for scheduling network to DHCP agent
+# network_scheduler_driver = neutron.scheduler.dhcp_agent_scheduler.ChanceScheduler
+# Driver to use for scheduling router to a default L3 agent
+# router_scheduler_driver = neutron.scheduler.l3_agent_scheduler.ChanceScheduler
+
+# Allow auto scheduling networks to DHCP agent. It will schedule non-hosted
+# networks to first DHCP agent which sends get_active_networks message to
+# neutron server
+# network_auto_schedule = True
+
+# Allow auto scheduling routers to L3 agent. It will schedule non-hosted
+# routers to first L3 agent which sends sync_routers message to neutron server
+# router_auto_schedule = True
+# ===========  end of items for agent scheduler extension =====
+
+[QUOTAS]
+# resource name(s) that are supported in quota features
+# quota_items = network,subnet,port
+
+# default number of resource allowed per tenant, minus for unlimited
+# default_quota = -1
+
+# number of networks allowed per tenant, and minus means unlimited
+# quota_network = 10
+
+# number of subnets allowed per tenant, and minus means unlimited
+# quota_subnet = 10
+
+# number of ports allowed per tenant, and minus means unlimited
+# quota_port = 50
+
+# number of security groups allowed per tenant, and minus means unlimited
+# quota_security_group = 10
+
+# number of security group rules allowed per tenant, and minus means unlimited
+# quota_security_group_rule = 100
+
+# default driver to use for quota checks
+# quota_driver = neutron.quota.ConfDriver
+
+[DEFAULT_SERVICETYPE]
+# Description of the default service type (optional)
+# description = "default service type"
+# Enter a service definition line for each advanced service provided
+# by the default service type.
+# Each service definition should be in the following format:
+# <service>:<plugin>[:driver]
+
+[AGENT]
+# Use "sudo neutron-rootwrap /etc/neutron/rootwrap.conf" to use the real
+# root filter facility.
+# Change to "sudo" to skip the filtering and just run the comand directly
+# root_helper = sudo
+root_helper = sudo neutron-rootwrap /etc/neutron/rootwrap.conf
+
+# =========== items for agent management extension =============
+# seconds between nodes reporting state to server, should be less than
+# agent_down_time
+# report_interval = 4
+
+# ===========  end of items for agent management extension =====
+
+[keystone_authtoken]
+auth_host = {{keystone_host}}
+auth_port = 35357
+auth_protocol = http
+admin_tenant_name = {{service_tenant}}
+admin_user = {{neutron_user}}
+admin_password = {{neutron_password}}
+signing_dir = /var/lib/neutron/keystone-signing
