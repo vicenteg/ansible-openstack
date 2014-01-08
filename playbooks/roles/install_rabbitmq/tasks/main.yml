@@ -1,0 +1,34 @@
+- name: ensure all three hosts are in all three hosts files
+  lineinfile: regexp="^{{item.ansible_eth2.ipv4.address}}" line="{{item.ansible_eth2.ipv4.address}} {{item.ansible_hostname}}" dest=/etc/hosts
+  with_items:
+    - '{{hostvars.controller1}}'
+    - '{{hostvars.controller2}}'
+    - '{{hostvars.controller3}}'
+
+- name: trust rabbit repository
+  apt_key: url=http://www.rabbitmq.com/rabbitmq-signing-key-public.asc state=present
+
+- name: add rabbit repository
+  apt_repository: repo='deb http://www.rabbitmq.com/debian/ testing main' state=present update_cache=yes
+
+- name: install rabbitmq
+  apt: name=rabbitmq-server state=present
+  register: rabbit_installed
+
+- name: stop rabbitmq
+  service: name=rabbitmq-server state=stopped
+  when: rabbit_installed.changed
+
+- name: copy erlang cookie
+  copy: src=erlang.cookie dest=/var/lib/rabbitmq/.erlang.cookie mode=0400 owner=rabbitmq group=rabbitmq
+
+- name: create config directory
+  file: state=directory path=/etc/rabbitmq/rabbitmq.conf.d mode=0755 owner=root
+
+- name: create config file to define RABBITMQ_NODE_IP_ADDRESS
+  template: src=LISTEN.j2 dest=/etc/rabbitmq/rabbitmq.conf.d/LISTEN mode=0644 owner=root
+  notify:
+    - restart rabbitmq-server
+
+- name: start rabbitmq
+  service: name=rabbitmq-server state=started

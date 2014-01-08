@@ -1,6 +1,16 @@
+---
 - hosts: messaging_servers
   user: root
-
   roles:
-#    - common
-    - messaging
+    - install_rabbitmq
+
+- hosts: messaging_servers[1];messaging_servers[2]
+  user: root
+  roles:
+    - cluster_rabbitmq
+
+- hosts: messaging_servers[0]
+  user: root
+  tasks:
+    - name: enable mirroring on all exchanges and queues
+      command: rabbitmqctl set_policy ha-all ".*" '{"ha-mode":"all"}'

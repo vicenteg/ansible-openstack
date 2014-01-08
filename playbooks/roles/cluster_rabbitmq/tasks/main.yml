@@ -1,0 +1,8 @@
+- name: stop rabbitmq
+  command: rabbitmqctl stop_app
+
+- name: join to rabbit1
+  command: rabbitmqctl join_cluster rabbit@"{{hostvars.controller1.ansible_hostname}}"
+
+- name: start rabbitmq 
+  command: rabbitmqctl start_app

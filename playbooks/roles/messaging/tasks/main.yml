@@ -1,8 +1,0 @@
-- name: install rabbitmq
-  apt: name=rabbitmq-server state=present
-
-- name: create config file to define RABBITMQ_NODE_IP_ADDRESS
-  template: src=LISTEN.j2 dest=/etc/rabbitmq/rabbitmq.conf.d/LISTEN mode=0644 owner=root 
-
-- name: restart rabbitmq
-  service: name=rabbitmq-server state=restarted

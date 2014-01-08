@@ -49,6 +49,8 @@ controller3
 
 [messaging_servers]
 controller1
+controller2
+controller3
 
 [logger_nodes]
 controller1
